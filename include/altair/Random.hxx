@@ -117,3 +117,6 @@ END_NAMESPACE_ALTAIR
 
 
 #endif  /* altair_Random_hxx */
+// Local Variables:
+//   coding: utf-8
+// End:

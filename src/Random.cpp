@@ -91,3 +91,6 @@ void Random::setSeed(int an_integer)
     }
     put( size() - 1, 0 );
 }
+// Local Variables:
+//   coding: utf-8
+// End:
