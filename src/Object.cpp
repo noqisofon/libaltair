@@ -1,9 +1,9 @@
-#include "Class.hxx"
-#include "Symbol.hxx"
-#include "ObjectMemory.hxx"
-#include "WeakKeyIdentityDictionary.hxx"
+#include <altair/Class.hxx>
+#include <altair/Symbol.hxx>
+#include <altair/ObjectMemory.hxx>
+#include <altair/WeakKeyIdentityDictionary.hxx>
 
-#include "Object.hxx"
+#include <Object.hxx>
 USING_NAMESPACE_ALTAIR;
 
 
@@ -19,7 +19,7 @@ class Object_class : public Class
     /**
      * 
      */
-    static Object* const initialize(Object* const& self) {
+    Object* const initialize(Object* const& self) {
         if ( !self->( Object_class::getInstance() ) )
             return self;
 

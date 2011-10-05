@@ -431,8 +431,16 @@ class Object
 
     /**
      * \ingroup built ins
+     * レシーバを参照するオブジェクトの配列を返します。
      */
     Collection* const allOwnsers() const;
+
+
+    /**
+     * 
+     */
+    Object* const changeClassTo(Behavior* const& a_behavior);
+    
 };
 
 
