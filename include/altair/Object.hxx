@@ -192,6 +192,7 @@ class Object
     virtual Object* yourself() const { return this; }
 
 
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
     /**
      * 依存関係を持つオブジェクトを追加します。
      */
@@ -208,6 +209,7 @@ class Object
      * 
      */
     virtual OrderedCollection* const dependants() const;
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
     /**
@@ -216,6 +218,7 @@ class Object
     virtual void release();
 
 
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
     /**
      * 
      */
@@ -232,6 +235,7 @@ class Object
      * 何もしません。
      */
     virtual void mourn() {}
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
     /**
@@ -239,7 +243,8 @@ class Object
      */
     virtual void finalize() {}
 
-
+    
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
     /**
      * 
      */
@@ -270,6 +275,7 @@ class Object
      * 
      */
     virtual void broadcastWithArray(const Symbol* const& a_symbol, const Array* const& an_array);
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
     /**
@@ -278,6 +284,7 @@ class Object
     virtual Association* const createAssociation(Object* const& an_object) const;
 
 
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
     /**
      * 
      */
@@ -300,6 +307,7 @@ class Object
      * 
      */
     virtual void displayNl() const;
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
     /**
@@ -338,6 +346,7 @@ class Object
     void basicPrintNl() const;
 
 
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
     /**
      * \ingroup storing
      */
@@ -399,13 +408,7 @@ class Object
      * \ingroup saving and loading
      */
     virtual void reconstructOriginalObject();
-
-
-    /**
-     * トランスクリプトにレシーバの全てのインスタンス変数をプリントします。
-     * \ingroup debugging
-     */
-    virtual void examine() const;
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
     /**
@@ -413,6 +416,14 @@ class Object
      * \ingroup debugging
      */
     virtual void inspect() const;
+
+
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+    /**
+     * トランスクリプトにレシーバの全てのインスタンス変数をプリントします。
+     * \ingroup debugging
+     */
+    virtual void examine() const;
 
 
     /**
@@ -430,8 +441,8 @@ class Object
 
 
     /**
-     * \ingroup built ins
      * レシーバを参照するオブジェクトの配列を返します。
+     * \ingroup built ins
      */
     Collection* const allOwnsers() const;
 
@@ -440,7 +451,28 @@ class Object
      * 
      */
     Object* const changeClassTo(Behavior* const& a_behavior);
-    
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+
+
+    /**
+     *
+     * \ingroup built ins
+     */
+    virtual bool equals(const Object* const& arg) const { return this == arg; }
+
+
+    /**
+     *
+     * \ingroup built ins
+     */
+    virtual bool identityEquals(const Object* const& arg) const { return this == arg; }
+
+
+    /**
+     *
+     * \ingroup built ins
+     */
+    virtual Class* const getClass() const;
 };
 
 

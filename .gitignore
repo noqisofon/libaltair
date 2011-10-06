@@ -5,3 +5,7 @@
 *.log
 configure
 Makefile
+TODO.tasks
+*.anjuta
+.anjuta/*
+.*.db

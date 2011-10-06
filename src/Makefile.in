@@ -47,7 +47,8 @@ AR = ar
 ARFLAGS = cru
 libaltair_a_AR = $(AR) $(ARFLAGS)
 libaltair_a_LIBADD =
-am_libaltair_a_OBJECTS = Object.$(OBJEXT) Random.$(OBJEXT) \
+am_libaltair_a_OBJECTS = Collection.$(OBJEXT) Iterable.$(OBJEXT) \
+	Object.$(OBJEXT) ObjectMemory.$(OBJEXT) Random.$(OBJEXT) \
 	String.$(OBJEXT)
 libaltair_a_OBJECTS = $(am_libaltair_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include
@@ -157,7 +158,10 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LIBRARIES = libaltair.a
 libaltair_a_SOURCES = \
+	Collection.cpp \
+	Iterable.cpp \
 	Object.cpp \
+	ObjectMemory.cpp \
 	Random.cpp \
 	String.cpp
 
@@ -209,7 +213,10 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Collection.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Iterable.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Object.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ObjectMemory.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Random.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/String.Po@am__quote@
 

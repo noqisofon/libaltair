@@ -76,6 +76,9 @@ class Object_class : public Class
 };
 
 
+const Object_class Object_class::OBJECT_CLASS
+
+
 Object::Object()
 {
     getClass()->initialize( this );
@@ -141,6 +144,7 @@ Object* const Object::deepCopy() const
 }
 
 
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
 void Object::addDependent(Object* const& an_object)
 {
     Dictionary* const all_dependencies = getClass()->dependencies();
@@ -189,17 +193,21 @@ OrderedCollection* const Object::dependants() const
 
     return dependencies;
 }
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
 void Object::release()
 {
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
     Dictionary* const all_dependencies = getClass()->dependencies();
 
     if ( all_dependencies->isHasKey( this ) )
         all_dependencies->removeKey( this );
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 }
 
 
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
 void Object::addToBeFinalized()
 {
     Collection* finalizable_objects = getClass()->finalizableObjects();
@@ -313,6 +321,7 @@ void Object::broadcastWithArray(const Symbol* const& a_symbol, const Array* cons
         it->release();
     }
 }
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
 Association* const Object::createAssociation(Object* const& an_object) const
@@ -321,6 +330,7 @@ Association* const Object::createAssociation(Object* const& an_object) const
 }
 
 
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
 String* const Object::displayString() const
 {
     Stream* stream = WriteStream::on( new String() );
@@ -357,6 +367,7 @@ void Object::displayNl() const
 
     display_string->release();
 }
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
 String* const Object::printString() const
@@ -419,6 +430,7 @@ void Object::basicPrintNl() const
 }
 
 
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
 String* const Object::storeString() const
 {
     Stream* const& write_stream = WriteStream::on( new String() );
@@ -498,7 +510,7 @@ void Object::storeNl() const
 
 void Object::binaryRepresentationObject()
 {
-    if ( ObjectDumper::proxyClassFor( this ) == CLASS_OF(PluggableProxy) )
+    if ( ObjectDumper::proxyClassFor( this ) == ALTA_CLASS_OF(PluggableProxy) )
         subclassResponsibility();
     else
         shouldNotImplement();
@@ -509,24 +521,67 @@ void Object::reconstructOriginalObject()
 {
     subclassResponsibility();
 }
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
 void Object::examine() const
 {
     /*
      * st なコードではクラスをそのまま渡しているが、C++ ではそんなことは無理なので、CLASS_INSTANCE_OF を使う。
      * CLASS_INSTANCE_OF マクロは、指定されたクラスの静的メンバ関数、getInsance() を呼び出す。
      */
-    examineOn( CLASS_INSTANCE_OF(Transcript) );
+    examineOn( ALTAIR_CLASS_INSTANCE_OF(Transcript) );
 }
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
 void Object::inspect() const
 {
-    examineOn( CLASS_INSTANCE_OF(Transcript) );
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+    examineOn( ALTAIR_CLASS_INSTANCE_OF(Transcript) );
+#else
+    Class* const self_class = getClass();
+
+    Transcript::nextPutAll( "An instance of " );
+    Transcript::print( self_class );
+    Transcript::nl();
+
+    Collection* const instance_variables = self_class->allInstVarNames();
+    int iv_size = instance_variables->size();
+    int iv_valid_size = instance_variables->validSize();
+
+    String* output_text = nil;
+
+    for ( int i = 0; i < (iv_size + iv_valid_size); ++ i ) {
+        Object* object = instVarAt( i );
+
+        try {
+            output_text = object->printingString();
+        } catch ( Error& ex ) {
+            output_text =  String::format( "%1 %2",
+                                           object->getClass()->article(),
+                                           object->getClass()->name()->asString() );
+        }
+
+        if ( i <= instance_variables->size() ) {
+            Transcript::nextPutAll( "  " );
+            Transcript::nextPutAll( instance_variables->at( i ) );
+            Transcript::nextPutAll( ": " );
+        } else {
+            Transcript::nextPutAll( " [" );
+            Transcript::print( Integer::valueOf( i - instance_variables->size() ) );
+            Transcript::nextPutAll( "]: " );
+        }
+
+        Transcript::nextPutAll( output_text );
+        Transcript::nl();
+    }
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 }
 
 
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
 void Object::examineOn(Stream* const& a_stream) const
 {
     Class* const self_class = getClass();
@@ -566,6 +621,15 @@ void Object::examineOn(Stream* const& a_stream) const
         a_stream->nl();
     }
 }
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+
+
+
+Class* const Object::getClass() const
+{
+    return ALTAIR_GET_CLASS(Object);
+}
+
 // Local Variables:
 //   coding: utf-8
 // End:
