@@ -9,3 +9,4 @@ TODO.tasks
 *.anjuta
 .anjuta/*
 .*.db
+autom4te.cache/*
