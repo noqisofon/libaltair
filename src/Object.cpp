@@ -1,7 +1,9 @@
 #include "config.h"
 
+#include "altair/Collection.hxx"
 #include "altair/Class.hxx"
 #include "altair/Symbol.hxx"
+#include "altair/String.hxx"
 #include "altair/ObjectMemory.hxx"
 #include "altair/WeakKeyIdentityDictionary.hxx"
 
@@ -83,11 +85,11 @@ const Object_class Object_class::OBJECT_CLASS
 
 Object::Object()
 {
-    getClass()->initialize( this );
+    //getClass()->initialize( this );
 }
 Object::Object(const Object& other)
 {
-    getClass()->initialize( this );
+    //getClass()->initialize( this );
 }
 
 

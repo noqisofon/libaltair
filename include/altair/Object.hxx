@@ -195,6 +195,10 @@ class Object
      * レシーバーを返します。
      */
     virtual const Object* const& yourself() const { return this; }
+    /**
+     * レシーバーを返します。
+     */
+    virtual Object* const& yourself() { return this; }
 
 
 #if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
@@ -457,6 +461,18 @@ class Object
      */
     Object* const changeClassTo(Behavior* const& a_behavior);
 #endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+
+
+    /*!
+     * 
+     */
+    virtual size_t size() { return basicSize(); }
+
+
+    /*!
+     * 
+     */
+    virtual size_t basicSize() { return 0; }
 
 
     /**

@@ -1,7 +1,9 @@
 #include "config.h"
 
 #include "altair/altair_prefix.h"
+#include "altair/OrderedCollection.hxx"
 #include "altair/Array.hxx"
+#include "altair/Iterator.hxx"
 
 #include "altair/Collection.hxx"
 USING_NAMESPACE_ALTAIR;
@@ -15,39 +17,65 @@ Collection* Collection::from(Array* const& an_array)
 
 Collection* Collection::with(Object* const& an_object)
 {
-    return new Array()
-        ->add( an_object )
-        ->yourself();
+    // return new OrderedCollection()
+    //     ->add( an_object )
+    //     ->yourself();
+    Collection* ret = new OrderedCollection();
+
+    ret->add( an_object );
+
+    return ret;
 }
 Collection* Collection::with(Object* const& first_object, Object* const& second_object)
 {
-    Collection* ret = new Array();
+    Collection* ret = new OrderedCollection();
 
-    return ret
+    // return ret
+    //     ->add( first_object )
+    //     ->add( second_object )
+    //     ->yourself();
+    ret
         ->add( first_object )
-        ->add( second_object )
-        ->yourself();
+        ->add( second_object );
+
+    return ret;
 
 }
 Collection* Collection::with(Object* const& first_object, Object* const& second_object, Object* const& third_object)
 {
-    return new Array()
+    Collection* ret = new OrderedCollection();
+    // return new OrderedCollection()
+    //     ->add( first_object )
+    //     ->add( second_object )
+    //     ->add( third_object )
+    //     ->yourself();
+
+    ret
         ->add( first_object )
         ->add( second_object )
-        ->add( third_object )
-        ->yourself();
+        ->add( third_object );
+
+    return ret;
 }
 Collection* Collection::with( Object* const& first_object,
                               Object* const& second_object,
                               Object* const& third_object,
                               Object* const& fourth_object)
 {
-    return new Array()
+    Collection* ret = new OrderedCollection();
+    // return new OrderedCollection()
+    //     ->add( first_object )
+    //     ->add( second_object )
+    //     ->add( third_object )
+    //     ->add( fourth_object )
+    //     ->yourself();
+    ret
         ->add( first_object )
         ->add( second_object )
         ->add( third_object )
-        ->add( fourth_object )
-        ->yourself();
+        ->add( fourth_object );
+
+    return ret;
 }
 Collection* Collection::with( Object* const& first_object,
                               Object* const& second_object,
@@ -55,20 +83,33 @@ Collection* Collection::with( Object* const& first_object,
                               Object* const& fourth_object,
                               Object* const& fifth_object)
 {
-    return new Array()
+    Collection* ret = new OrderedCollection();
+    // return new OrderedCollection()
+    //     ->add( first_object )
+    //     ->add( second_object )
+    //     ->add( third_object )
+    //     ->add( fourth_object )
+    //     ->add( fifth_object )
+    //     ->yourself();
+    ret
         ->add( first_object )
         ->add( second_object )
         ->add( third_object )
         ->add( fourth_object )
-        ->add( fifth_object )
-        ->yourself();
+        ->add( fifth_object );
+
+    return ret;
 }
 
 
 Collection* Collection::withAll(Collection* const& an_collection)
 {
-    return new Array()
-        ->addAll( an_collection );
+    Collection* ret = new OrderedCollection();
+    // return new OrderedCollection()
+    //     ->addAll( an_collection );
+    ret->addAll( an_collection );
+
+    return ret;
 }
 
 
@@ -96,12 +137,13 @@ Collection* Collection::withJoin(Collection* const& a_collection)
 Collection* const Collection::addAll(const Collection* const& a_collection)
 {
     Iterator* it = a_collection->iterator();
+
     for ( ; it->finished(); it->next() ) {
         add( it->current() );
     }
     it->release();
 
-    return a_collection;
+    return this;
 }
 
 
@@ -123,6 +165,7 @@ Object* const Collection::remove(Object* const& old_object)
 Collection* const Collection::removeAll(const Collection* const& a_collection)
 {
     Iterator* it = a_collection->iterator();
+
     for ( ; it->finished(); it->next() ) {
         remove( it->current() );
     }
@@ -132,11 +175,14 @@ Collection* const Collection::removeAll(const Collection* const& a_collection)
 }
 
 
+size_t Collection::capacity() const { return basicSize(); }
+
+
 int Collection::size() const
 {
     int count = 0;
-
     Iterator* it = iterator();
+
     for ( ; it->finished(); it->next() ) {
         ++ count;
     }
@@ -149,8 +195,8 @@ int Collection::size() const
 bool Collection::includes(const Object* const& an_object) const
 {
     bool ret = false;
-
     Iterator* it = iterator();
+
     for ( ; it->finished(); it->next() ) {
         Object* element = it->current();
 
@@ -169,8 +215,8 @@ bool Collection::includes(const Object* const& an_object) const
 bool Collection::identityIncludes(const Object* const& an_object) const
 {
     bool ret = false;
-
     Iterator* it = iterator();
+
     for ( ; it->finished(); it->next() ) {
         Object* element = it->current();
 
@@ -192,6 +238,7 @@ bool Collection::includesAllOf(const Collection* const& a_collection) const
     int count = 0;
 
     Iterator* it = iterator();
+
     for ( ; it->finished(); it->next() ) {
         Object* element = it->current();
 
@@ -210,6 +257,7 @@ bool Collection::includesAnyOf(const Collection* const& a_collection) const
     int count = 0;
 
     Iterator* it = iterator();
+
     for ( ; it->finished(); it->next() ) {
         Object* element = it->current();
 

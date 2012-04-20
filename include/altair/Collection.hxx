@@ -108,13 +108,13 @@ class Collection : public Iteratable
      * レシーバがどれだけの要素を保持できるかを返します。
      * \ingroup testing collections
      */
-    virtual int capacity() const { return basicSize(); }
+    virtual size_t capacity() const;
 
 
     /**
      * レシーバに保持されている要素の数を返します。
      */
-    virtual int size() const;
+    virtual size_t size() const;
 
 
     /**

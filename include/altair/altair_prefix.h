@@ -1,6 +1,9 @@
 #ifndef altair_altair_prefix_hxx
 #define altair_altair_prefix_hxx
 
+#include <stdint.h>
+#include <stddef.h>
+
 #include "altair/platform.h"
 #include "altair/transplant.h"
 #include "altair/macro.h"
