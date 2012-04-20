@@ -1,10 +1,6 @@
 #ifndef altair_Object_hxx
 #define altair_Object_hxx
 
-#ifdef HAVE_CONFIG_H
-#   include "config.h"
-#endif  /* HAVE_CONFIG_H */
-
 
 BEGIN_NAMESPACE_ALTAIR
 
@@ -13,6 +9,7 @@ class Association;
 class Class;
 class OrderedCollection;
 class String;
+class Stream;
 class Symbol;
 
 
@@ -169,8 +166,16 @@ class Object
     /**
      * 
      */
-    virtual Object* const postCopy() const {
+    virtual const Object* const& postCopy() const {
         return this;
+    }
+
+
+    /*!
+     * 
+     */
+    virtual Object* const shallowCopy(const Object* const& other) const {
+        return new Object( *other );
     }
 
 
@@ -189,7 +194,7 @@ class Object
     /**
      * レシーバーを返します。
      */
-    virtual Object* yourself() const { return this; }
+    virtual const Object* const& yourself() const { return this; }
 
 
 #if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)

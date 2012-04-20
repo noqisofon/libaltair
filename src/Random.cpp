@@ -1,3 +1,8 @@
+#include "config.h"
+
+#include "altair/Random.hxx"
+
+USING_NAMESPACE_ALTAIR;
 
 
 Random* const Random::seed(int an_integer)

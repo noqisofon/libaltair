@@ -1,16 +1,18 @@
-#include <altair/Object.hxx>
-#include <altair/Processor.hxx>
-#include <altair/Symbol.hxx>
-#include <altair/Semaphone.hxx>
-#include <altair/Fraction.hxx>
-#include <altair/LargeInteger.hxx>
-#include <altair/Date.hxx>
-#include <altair/Time.hxx>
-#include <altair/FileDescriptor.hxx>
-#include <altair/Namespace.hxx>
-#include <altair/SystemDirectory.hxx>
+#include "config.h"
 
-#include <altair/ObjectMemory.hxx>
+#include "altair/Object.hxx"
+#include "altair/Processor.hxx"
+#include "altair/Symbol.hxx"
+#include "altair/Semaphone.hxx"
+#include "altair/Fraction.hxx"
+#include "altair/LargeInteger.hxx"
+#include "altair/Date.hxx"
+#include "altair/Time.hxx"
+#include "altair/FileDescriptor.hxx"
+#include "altair/Namespace.hxx"
+#include "altair/SystemDirectory.hxx"
+
+#include "altair/ObjectMemory.hxx"
 USING_NAMESPACE_ALTAIR;
 
 

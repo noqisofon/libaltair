@@ -1,4 +1,5 @@
-
+#ifndef altair_transplant_h
+#define altair_transplant_h
 
 
 /**
@@ -27,3 +28,6 @@
  * </p>
  */
 #define    LT_MINIMUM_TRANSPLANT_RATE              1000
+
+
+#endif  /* altair_transplant_h */

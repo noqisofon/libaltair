@@ -1,3 +1,8 @@
+#include "config.h"
+
+#include "altair/String.hxx"
+
+USING_NAMESPACE_ALTAIR;
 
 
 Encoding* const String::encoding() const

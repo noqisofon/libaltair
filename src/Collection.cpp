@@ -1,4 +1,10 @@
-#include <altair/Collection.hxx>
+#include "config.h"
+
+#include "altair/altair_prefix.h"
+#include "altair/Array.hxx"
+
+#include "altair/Collection.hxx"
+USING_NAMESPACE_ALTAIR;
 
 
 Collection* Collection::from(Array* const& an_array)
@@ -25,7 +31,7 @@ Collection* Collection::with(Object* const& first_object, Object* const& second_
 }
 Collection* Collection::with(Object* const& first_object, Object* const& second_object, Object* const& third_object)
 {
-    return  new Array()
+    return new Array()
         ->add( first_object )
         ->add( second_object )
         ->add( third_object )

@@ -1,18 +1,19 @@
 #ifndef altair_Collection_hxx
 #define altair_Collection_hxx
 
-#ifdef HAVE_CONFIG_H
-#   include "config.h"
-#endif  /* HAVE_CONFIG_H */
+#include "altair/Iteratable.hxx"
 
 
 BEGIN_NAMESPACE_ALTAIR
 
 
+class Array;
+
+
 /**
  * 
  */
-class Collection : public Iteratorable
+class Collection : public Iteratable
 {
  public:
     /**

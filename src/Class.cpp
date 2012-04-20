@@ -1,16 +1,21 @@
-#include <altair/Object.hxx>
-#include <altair/List.hxx>
-#include <altair/Error.hxx>
-#include <altair/InvalidValueError.hxx>
-#include <altair/IdentitySet.hxx>
-#include <altair/OrderedCollection.hxx>
+#include "config.h"
+
+#include "altair/altair_prefix.h"
+#include "altair/Object.hxx"
+#include "altair/List.hxx"
+#include "altair/Error.hxx"
+#include "altair/InvalidValueError.hxx"
+#include "altair/IdentitySet.hxx"
+#include "altair/OrderedCollection.hxx"
+#include "altair/String.hxx"
 #   if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
-#       include <altair/Namespace.hxx>
-#       include <altair/Metaclass.hxx>
+#       include "altair/Namespace.hxx"
+#       include "altair/Metaclass.hxx"
 #   endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
-#include <altair/Class.hxx>
+#include "altair/Class.hxx"
 USING_NAMESPACE_ALTAIR;
+
 
 #if defined(ALTAIR_TRANSPLANTLY)
 #   if ALTAIR_TRANSPLANTLY > LT_STANDARD_TRANSPLANT_RATE
@@ -62,7 +67,7 @@ void Class::allPoolDictionaries(List* const& list, Error* const& in_white, const
 
 
 Class::Class(const char* const& class_name)
-    : name_(class_name)
+    : name_( new String( class_name ) )
 #if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
 #endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 {

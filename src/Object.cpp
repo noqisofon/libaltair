@@ -1,9 +1,11 @@
-#include <altair/Class.hxx>
-#include <altair/Symbol.hxx>
-#include <altair/ObjectMemory.hxx>
-#include <altair/WeakKeyIdentityDictionary.hxx>
+#include "config.h"
 
-#include <Object.hxx>
+#include "altair/Class.hxx"
+#include "altair/Symbol.hxx"
+#include "altair/ObjectMemory.hxx"
+#include "altair/WeakKeyIdentityDictionary.hxx"
+
+#include "altair/Object.hxx"
 USING_NAMESPACE_ALTAIR;
 
 

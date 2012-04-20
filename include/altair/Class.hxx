@@ -1,16 +1,21 @@
 #ifndef altair_Class_hxx
 #define altair_Class_hxx
 
-#include <altair/ClassDescription.hxx>
+#include "altair/ClassDescription.hxx"
 
 
 BEGIN_NAMESPACE_ALTAIR
 
 
+class CompiledBlock;
+class List;
+class Error;
+
+
 /**
  * 
  */
-class Class : ClassDescription
+class Class : public ClassDescription
 {
  protected:
     /**
@@ -52,7 +57,7 @@ class Class : ClassDescription
     /**
      * \ingroup private
      */
-    static void allPoolDictionaries(List* const& list, Error* const& in_white, const DoBlock& a_block);
+    static void allPoolDictionaries(List* const& list, Error* const& in_white, const CompiledBlock& a_block);
 
  private:
     String* name_;

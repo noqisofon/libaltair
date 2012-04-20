@@ -1,7 +1,11 @@
+#include "config.h"
+
+#include "altair/Iterable.hxx"
+
+USING_NAMESPACE_ALTAIR;
 
 
-
-Object* const Iterable::inject(Object* const& this_value, BinaryBlock& binary_block)
+Object* const Iteratable::inject(Object* const& this_value, BinaryBlock& binary_block)
 {
     Object* result = this_value;
 
