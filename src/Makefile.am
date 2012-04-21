@@ -9,4 +9,4 @@ lib_LTLIBRARIES = libaltair.la
 # 	ObjectMemory.cpp \
 # 	Random.cpp \
 # 	String.cpp
-libaltair_la_SOURCES = Class.cpp  Collection.cpp  Iteratable.cpp  Object.cpp  ObjectMemory.cpp  Random.cpp  String.cpp
+libaltair_la_SOURCES = Class.cpp  Collection.cpp  Iteratable.cpp  Object.cpp  ObjectMemory.cpp  Random.cpp  SequenceableCollection.cpp  String.cpp

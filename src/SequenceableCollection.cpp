@@ -14,7 +14,7 @@ Object* const SequenceableCollection::at(int an_index, AbsentBlock& a_block) con
     size_t self_size = size();
 
     if ( 0 <= an_index &&  an_index < (int)self_size )
-        return a_block();
+        return a_block( this );
 
     return at( an_index );
 }
@@ -187,7 +187,7 @@ bool SequenceableCollection::identityIncludes(const Object* const& an_object) co
 }
 
 
-static int null_exception_block(void)
+static int null_exception_block(const Object* const& self)
 {
     return -1;
 }
@@ -222,7 +222,7 @@ int SequenceableCollection::indexOf(const Object* const& an_element, int an_inde
         if ( at( i )->equals( an_element ) )
             return i;
     }
-    return exception_block();
+    return exception_block( this );
 }
 
 
@@ -234,7 +234,7 @@ int SequenceableCollection::indexOfLast(const Object* const& an_element, Excepti
         if ( at( i )->equals( an_element ) )
             return i;
     }
-    return exception_block();
+    return exception_block( this );
 }
 
 
@@ -267,7 +267,7 @@ int SequenceableCollection::identityIndexOf(const Object* const& an_element, int
         if ( at( i ) == an_element )
             return i;
     }
-    return exception_block();
+    return exception_block( this );
 }
 
 
@@ -279,7 +279,7 @@ int SequenceableCollection::identityIndexOfLast(const Object* const& an_element,
         if ( at( i )->identityEquals( an_element ) )
             return i;
     }
-    return exception_block();
+    return exception_block( this );
 }
 
 
@@ -315,7 +315,7 @@ int SequenceableCollection::indexOfSubCollection( const SequenceableCollection* 
             }
         }
     }
-    return exception_block();
+    return exception_block( this );
 }
 
 
@@ -406,6 +406,26 @@ bool SequenceableCollection::endsWith(const SequenceableCollection* const& other
 }
 
 
+static int gain_self_size_exception_block(const Object* const& self)
+{
+    return (int)self->size();
+}
+
+
+SequenceableCollection const* SequenceableCollection::copyAfter(const Object* const& an_object) const
+{
+    return copyFrom( indexOf( an_object,
+                              gain_self_size_exception_block( this ) ) );
+}
+
+
+SequenceableCollection const* SequenceableCollection::copyAfterLast(const Object* const& an_object) const
+{
+    return copyFrom( indexOfLast( an_object,
+                                  gain_self_size_exception_block( this ) ) );
+}
+
+
 void SequenceableCollection::replaceAll(const Object* const& an_object, Object* const& another_object)
 {
     int self_size = (int)size();
@@ -419,4 +439,37 @@ void SequenceableCollection::replaceAll(const Object* const& an_object, Object* 
 
 void SequenceableCollection::replaceFrom(int start, int stop, Collection* const& replacement_collection, int rep_start)
 {
+    int min_stop = start - 1;
+    int max_stop = ALTAIR_MIN((int)size(), min_stop + (int)replacement_collection->size());
+
+    if ( !(min_stop <= stop && stop <= max_stop) ) {
+        ArgumentOutOfRangeError::signalOn( stop,
+                                           min_stop,
+                                           max_stop );
+    }
+
+    int delta = start - rep_start;
+
+    if ( rep_start > start ) {
+        for ( int i = start; i < stop; ++ i ) {
+            put( i, replacement_collection->at( i - delta ) );
+        }
+    } else {
+        for ( int i = stop; i >= start; -- i ) {
+            put( i, replacement_collection->at( i - delta ) );
+        }
+    }
+}
+void SequenceableCollection::replaceFrom(int an_index, int stop_index, Object* const& replace_object)
+{
+    if ( an_index - stop_index < -1 ) {
+        ArgumentOutOfRangeError::signalOn( stop_index,
+                                           an_index,
+                                           (int)size() );
+    }
+
+    if ( int i = 0; i < stop_index; ++ i ) {
+        put( i, replace_object );
+    }
+        
 }

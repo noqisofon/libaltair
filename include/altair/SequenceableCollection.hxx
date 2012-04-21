@@ -208,29 +208,6 @@ class SequenceableCollection : public Collection
 
 
     /*!
-     \name testing
-     */
-    /*! @{ */
-    /*!
-     * 
-     */
-    virtual bool isSequenceable() const { return true; }
-
-
-    /*!
-     * 
-     */
-    virtual bool equals(const Collection* const& a_collection) const;
-
-
-    /*!
-     * 
-     */
-    virtual int hash() const;
-    /*! @} */
-
-
-    /*!
      \name comparing
      */
     /*! @{ */
@@ -260,6 +237,46 @@ class SequenceableCollection : public Collection
 
 
     /*!
+     \name copying SequenceableCollections
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual SequenceableCollection const* copyAfter(const Object* const& an_object) const;
+
+
+    /*!
+     * 
+     */
+    virtual SequenceableCollection const* copyAfterLast(const Object* const& an_object) const;
+    /*! @} */
+
+
+    /*!
+     \name testing
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual bool isSequenceable() const { return true; }
+
+
+    /*!
+     * 
+     */
+    virtual bool equals(const Collection* const& a_collection) const;
+
+
+    /*!
+     * 
+     */
+    virtual int hash() const;
+    /*! @} */
+
+
+    /*!
      \name replacing items
      */
     /*! @{ */
@@ -272,11 +289,11 @@ class SequenceableCollection : public Collection
     /*!
      * 
      */
-    virtual void replaceFrom(int start, int stop, Collection* const& replacement_collection);
+    virtual void replaceFrom(int start, int stop, Collection* const& replacement_collection, int rep_start);
     /*!
      * 
      */
-    virtual void replaceFrom(int start, int stop, Collection* const& replacement_collection, int rep_start);
+    virtual void replaceFrom(int an_index, int stop_index, Object* const& an_object);
     /*! @} */
 };
 
