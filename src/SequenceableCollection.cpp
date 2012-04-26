@@ -9,7 +9,7 @@
 USING_NAMESPACE_ALTAIR;
 
 
-Object* const SequenceableCollection::at(int an_index, AbsentBlock& a_block) const
+Object* const SequenceableCollection::at(int an_index, Object* const (*a_block)(const Object* const&)) const
 {
     size_t self_size = size();
 
@@ -32,8 +32,8 @@ Collection* const SequenceableCollection::atAll(const Collection* const& key_col
 
     Iterator* it = key_collection->iterator();
 
-    for ( ; it->finished(); it->next() ) {
-        Object* each = it->current();
+    while ( it->atEnd() ) {
+        Object* each = it->next();
         int key = 0;
 
         if ( each->isNumber() )
@@ -52,8 +52,8 @@ void SequenceableCollection::putAll(const Collection* const& a_collection, Objec
 {
     Iterator* it = a_collection->iterator();
 
-    for ( ; it->finished(); it->next() ) {
-        Object* each = it->current();
+    while ( it->atEnd() ) {
+        Object* each = it->next();
         int index = 0;
 
         if ( each->isNumber() )
@@ -205,7 +205,7 @@ int SequenceableCollection::indexOf(const Object* const& an_element, int an_inde
                     an_index,
                     null_exception_block );
 }
-int SequenceableCollection::indexOf(const Object* const& an_element, int an_index, ExceptionBlock& exception_block) const
+int SequenceableCollection::indexOf(const Object* const& an_element, int an_index, int (*exception_block)(const Object* const) ) const
 {
     size_t self_size = size();
 
@@ -226,7 +226,7 @@ int SequenceableCollection::indexOf(const Object* const& an_element, int an_inde
 }
 
 
-int SequenceableCollection::indexOfLast(const Object* const& an_element, ExceptionBlock& exception_block) const
+int SequenceableCollection::indexOfLast(const Object* const& an_element, int (*exception_block)(const Object* const) ) const
 {
     size_t self_size = size();
 
@@ -250,7 +250,7 @@ int SequenceableCollection::identityIndexOf(const Object* const& an_element, int
                             an_index,
                             null_exception_block );
 }
-int SequenceableCollection::identityIndexOf(const Object* const& an_element, int an_index, ExceptionBlock& exception_block) const
+int SequenceableCollection::identityIndexOf(const Object* const& an_element, int an_index, int (*exception_block)(const Object* const) ) const
 {
     size_t self_size = size();
 
@@ -271,7 +271,7 @@ int SequenceableCollection::identityIndexOf(const Object* const& an_element, int
 }
 
 
-int SequenceableCollection::identityIndexOfLast(const Object* const& an_element, ExceptionBlock& exception_block) const
+int SequenceableCollection::identityIndexOfLast(const Object* const& an_element, int (*exception_block)(const Object* const)) const
 {
     size_t self_size = size();
 
@@ -297,7 +297,7 @@ int SequenceableCollection::indexOfSubCollection(const SequenceableCollection* c
 }
 int SequenceableCollection::indexOfSubCollection( const SequenceableCollection* const& a_sub_collection,
                                                   int an_index,
-                                                  ExceptionBlock& exception_block ) const
+                                                  int (*exception_block)(const Object* const) ) const
 {
     
     size_t sub_size = a_sub_collection->size();
@@ -326,7 +326,7 @@ bool SequenceableCollection::equals(const Collection* const& a_collection) const
     if ( size() != a_collection->size() )
         return false;
 
-    size_t len = size();
+    int len = (int)size();
     for ( int i = 0; i < len; ++ i ) {
         if ( !at( i )->equals( a_collection->at( i ) ) )
             return false;
@@ -340,10 +340,10 @@ int SequenceableCollection::hash() const
     int ret_hash = (int)size();
     int carry = 0;
 
-    Iterator* it = iterator();
+    Stream* it = readStream();
 
-    for ( ; it->finished(); it->next() ) {
-        Object* element = it->current();
+    while ( it->atEnd() ) {
+        Object* element = it->next();
 
         carry = (ret_hash &   536870912) > 0;
         ret_hash = ret_hash & 536870911;
@@ -366,9 +366,9 @@ bool SequenceableCollection::startsWith(const SequenceableCollection* const& seq
         return true;
 
     bool ret = true;
-    Iterator* it = other->iterator();
-    for ( int i = 0; it->finished(); it->next(), ++ i ) {
-        Object* each = it->current();
+    Stream* it = other->readStream();
+    for ( int i = 0; it->atEnd(); ++ i ) {
+        Object* each = it->next();
 
         if ( !at( i )->equals( each ) ) {
             ret = false;
@@ -390,9 +390,9 @@ bool SequenceableCollection::endsWith(const SequenceableCollection* const& other
         return false;
 
     bool ret = true;
-    Iterator* it = other->iterator();
-    for ( int i = 0; it->finished(); it->next(), ++ i ) {
-        Object* each = it->current();
+    Stream* it = other->readStream();
+    for ( int i = 0; it->atEnd(); ++ i ) {
+        Object* each = it->next();
 
         if ( !at( i + delta )->equals( each ) ) {
             ret = false;
@@ -437,7 +437,7 @@ void SequenceableCollection::replaceAll(const Object* const& an_object, Object* 
 }
 
 
-void SequenceableCollection::replaceFrom(int start, int stop, Collection* const& replacement_collection, int rep_start)
+void SequenceableCollection::replaceFrom(int start, int stop, const Collection* const& replacement_collection, int rep_start)
 {
     int min_stop = start - 1;
     int max_stop = ALTAIR_MIN((int)size(), min_stop + (int)replacement_collection->size());
@@ -471,5 +471,7 @@ void SequenceableCollection::replaceFrom(int an_index, int stop_index, Object* c
     if ( int i = 0; i < stop_index; ++ i ) {
         put( i, replace_object );
     }
-        
 }
+// Local Variables:
+//   coding: utf-8
+// End:

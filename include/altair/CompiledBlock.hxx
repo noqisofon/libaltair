@@ -2,10 +2,17 @@
 #define altair_CompiledBlock_hxx
 
 
+BEGIN_NAMESPACE_ALTAIR
 
-typedef int (*AbsentBlock)(const altair::Object* const&);
-typedef int (*ExceptionBlock)(const altair::Object* const&);
 
+class Object;
+
+
+typedef int (*AbsentBlock)(const Object* const&);
+typedef int (*ExceptionBlock)(const Object* const&);
+
+
+END_NAMESPACE_ALTAIR
 
 
 #endif  /* altair_CompiledBlock_hxx */

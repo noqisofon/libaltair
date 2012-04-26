@@ -22,7 +22,7 @@ class String : public CharacterArray
     /*!
      * 
      */
-    String();
+    String(size_t size);
     /*!
      * 
      */

@@ -2,6 +2,22 @@
 libaltairincludedir = $(includedir)/altair
 
 libaltairinclude_HEADERS = macro.h  transplant.h  \
-	Array.hxx              Class.hxx             Error.hxx              Iteratable.hxx  ObjectMemory.hxx       SequenceableCollection.hxx \
-	ArrayedCollection.hxx  ClassDescription.hxx  IdentitySet.hxx        List.hxx        OrderedCollection.hxx  String.hxx \
-	CharacterArray.hxx     Collection.hxx        InvalidValueError.hxx  Object.hxx      Random.hxx       
+	Array.hxx  \
+	ArrayedCollection.hxx  \
+	CharacterArray.hxx  \
+	Class.hxx  \
+	ClassDescription.hxx  \
+	Collection.hxx  \
+	CompiledBlock.hxx  \
+	Error.hxx  \
+	IdentitySet.hxx  \
+	InvalidValueError.hxx  \
+	Iteratable.hxx  \
+	Iterator.hxx  \
+	List.hxx  \
+	Object.hxx  \
+	ObjectMemory.hxx  \
+	OrderedCollection.hxx  \
+	Random.hxx  \
+	SequenceableCollection.hxx  \
+	String.hxx

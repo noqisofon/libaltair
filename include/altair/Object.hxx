@@ -6,7 +6,11 @@ BEGIN_NAMESPACE_ALTAIR
 
 
 class Association;
+class Array;
+class Behavior;
 class Class;
+class Message;
+class Collection;
 class OrderedCollection;
 class String;
 class Stream;
@@ -35,465 +39,812 @@ class Object
     virtual ~Object();
 
  public:
-    /**
-     * 偽を返します。
+    /*!
+      \name relational operators
      */
-    virtual bool isNil() const { return false; }
-
-
-    /**
-     * 真を返します。
-     */
-    virtual bool notNil() const { return true; }
-
-
-    /**
-     * レシーバが指定されたクラスのインスタンスであるか、その派生クラスのインスタンスだった場合、真を返します。
-     */
-    virtual bool isKindOf(const Class* klass) const;
-
-
-    /**
-     * レシーバが指定されたクラスのインスタンスである場合、真を返します。
-     */
-    virtual bool isInstanceOf(const Class* klass) const;
-
-
-    /**
+    /*! @{ */
+    /*!
      * 
      */
-    virtual bool respondsTo(const Symbol* const& asymbol) const;
-
-
-    /**
-     * 
-     */
-    virtual bool isCObject() const { return false; }
-
-
-    /**
-     * 
-     */
-    virtual bool isString() const { return false; }
-
-
-    /**
-     * 
-     */
-    virtual bool isCharacterArray() const { return false; }
-
-
-    /**
-     * 
-     */
-    virtual bool isSymbol() const { return false; }
-
-
-    /**
-     * 
-     */
-    virtual bool isCharacter() const { return false; }
-
-
-    /**
-     * 
-     */
-    virtual bool isNumber() const { return false; }
-
-
-    /**
-     * 
-     */
-    virtual bool isFloat() const { return false; }
-
-
-    /**
-     * 
-     */
-    virtual bool isInteger() const { return false; }
-
-
-    /**
-     * 
-     */
-    virtual bool isSmallInteger() const { return false; }
-
-
-    /**
-     * 
-     */
-    virtual bool isNumespace() const { return false; }
-
-
-    /**
-     * 
-     */
-    virtual bool isClass() const { return false; }
-
-
-    /**
-     * 
-     */
-    virtual bool isArray() const { return false; }
-
-
-    /**
-     * 
-     */
-    virtual bool isBehavior() const { return false; }
-
-
-    /**
-     * 
-     */
-    virtual bool isMeta() const { return isMetaClass(); }
-
-
-    /**
-     * 
-     */
-    virtual bool isMetaClass() const { return false; }
-
-
-    /**
-     * 
-     */
-    virtual Object* const copy() const {
-        return shallowCopy( postCopy() );
-    }
-
-
-    /**
-     * 
-     */
-    virtual const Object* const& postCopy() const {
-        return this;
+    virtual bool notEquals(const Object* const& an_object) const {
+        return equals( an_object ) == false;
     }
 
 
     /*!
      * 
      */
-    virtual Object* const shallowCopy(const Object* const& other) const {
-        return new Object( *other );
+    virtual bool notIdentityEquals(const Object* const& an_object) const {
+        return identityEquals( an_object ) == false;
     }
+    /*! @} */
 
 
-    /**
+    /*!
+      \name testing functionality
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual bool isKindOf(const Class* const& a_class) const;
+
+
+    /*!
+     * 
+     */
+    virtual bool isInstanceOf(const Class* const& a_class) const;
+
+
+    /*!
+     * 
+     */
+    virtual bool respondsTo(const Symbol* const& a_symbol) const;
+
+
+    /*!
+     * 
+     */
+    virtual bool isNil() const { return false; }
+
+
+    /*!
+     * 
+     */
+    virtual bool notNil() const { return true; }
+
+
+    /*!
+     * 
+     */
+    virtual bool isCObject() const { return false; }
+
+
+    /*!
+     * 
+     */
+    virtual bool isString() const { return false; }
+
+
+    /*!
+     * 
+     */
+    virtual bool isCharacterArray() const { return false; }
+
+
+    /*!
+     * 
+     */
+    virtual bool isSymbol() const { return false; }
+
+
+    /*!
+     * 
+     */
+    virtual bool isCharacter() const { return false; }
+
+
+    /*!
+     * 
+     */
+    virtual bool isNumber() const { return false; }
+
+
+    /*!
+     * 
+     */
+    virtual bool isFloat() const { return false; }
+
+
+    /*!
+     * 
+     */
+    virtual bool isInteger() const { return false; }
+
+
+    /*!
+     * 
+     */
+    virtual bool isSmallInteger() const { return false; }
+
+
+    /*!
+     * 
+     */
+    virtual bool isNameSpace() const { return false; }
+
+
+    /*!
+     * 
+     */
+    virtual bool isClass() const { return false; }
+
+
+    /*!
+     * 
+     */
+    virtual bool isArray() const { return false; }
+
+
+    /*!
+     * 
+     */
+    virtual bool isBehavior() const { return false; }
+
+
+    /*!
+     * 
+     */
+    virtual bool isMeta() const { return isMetaClass(); }
+
+
+    /*!
+     * 
+     */
+    virtual bool isMetaClass() const { return false; }
+    /*! @} */
+
+
+    /*!
+      \name copying
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Object* const copy() const;
+
+
+    /*!
+     * 
+     */
+    virtual const Object* const& postCopy() const { return this; }
+
+
+    /*!
      * 
      */
     virtual Object* const deepCopy() const;
+    /*! @} */
 
 
-    /**
+    /*!
+      \name class type methods
+     */
+    /*! @{ */
+    /*!
      * 
      */
-    virtual Class* const species() const { return getClass(); }
+    virtual Class* const species() const {
+        return getClass();
+    }
 
 
-    /**
-     * レシーバーを返します。
+    /*!
+     * 
      */
     virtual const Object* const& yourself() const { return this; }
-    /**
-     * レシーバーを返します。
+    /*! @} */
+
+
+    /*!
+      \name dependents access
      */
-    virtual Object* const& yourself() { return this; }
-
-
+    /*! @{ */
 #if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
-    /**
-     * 依存関係を持つオブジェクトを追加します。
+    /*!
+     * 
      */
     virtual void addDependent(Object* const& an_object);
 
 
-    /**
-     * 依存関係を持つオブジェクトの中から指定されたオブジェクトを削除します。
+    /*!
+     * 
      */
     virtual Object* const removeDependent(Object* const& an_object);
 
 
-    /**
+    /*!
      * 
      */
     virtual OrderedCollection* const dependants() const;
 #endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
-    /**
+    /*!
      * 
      */
     virtual void release();
+    /*! @} */
 
 
+    /*!
+      \name finalization
+     */
+    /*! @{ */
 #if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
-    /**
+    /*!
      * 
      */
     virtual void addToBeFinalized();
 
 
-    /**
+    /*!
      * 
      */
     virtual void removeToBeFinalized();
 
 
-    /**
-     * 何もしません。
+    /*!
+     * 
      */
     virtual void mourn() {}
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
-    /**
+    /*!
      * 
      */
     virtual void finalize() {}
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+    /*! @} */
 
-    
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
-    /**
+
+    /*!
+      \name change and update
+     */
+    /*! @{ */
+    /*!
      * 
      */
-    virtual void changed() { changed( this ); }
-    /**
+    virtual void changed() {
+        changed( this );
+    }
+    /*!
      * 
      */
     virtual void changed(Object* const& a_parameter);
 
 
-    /**
-     * changed メンバ関数が呼び出されたときに呼び出されますが、Object では何もしません。
+    /*!
+     *
      */
     virtual void update(Object* const& a_parameter) {}
 
 
-    /**
+    /*!
      * 
      */
     virtual void broadcast(const Symbol* const& a_symbol);
-    /**
+    /*!
+     * 
+     */
+    virtual void broadcast(const Symbol* const& a_symbol, Object* const& an_object);
+    /*!
      * 
      */
     virtual void broadcast(const Symbol* const& a_symbol, Object* const& arg1, Object* const& arg2);
 
 
-    /**
+    /*!
      * 
      */
-    virtual void broadcastWithArray(const Symbol* const& a_symbol, const Array* const& an_array);
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+    virtual void broadcastWithArguments(const Symbol* const& a_symbol, const Array* const& an_array);
+    /*! @} */
 
 
-    /**
+    /*!
+      \name syntax shortcuts
+     */
+    /*! @{ */
+    /*!
      * 
      */
-    virtual Association* const createAssociation(Object* const& an_object) const;
+    Association* const createAssociation(Object* const& an_object) const;
+    /*! @} */
 
 
+    /*!
+      \name printing
+     */
+    /*! @{ */
 #if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
-    /**
+    /*!
      * 
      */
     virtual String* const displayString() const;
 
 
-    /**
+    /*!
      * 
      */
     virtual void displayOn(Stream* const& a_stream) const;
 
 
-    /**
+    /*!
      * 
      */
     virtual void display() const;
 
 
-    /**
+    /*!
      * 
      */
-    virtual void displayNl() const;
+    void displayNl() const;
 #endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
-    /**
+    /*!
      * 
      */
     virtual String* const printString() const;
 
 
-    /**
+    /*!
      * 
      */
     virtual void printOn(Stream* const& a_stream) const;
 
 
-    /**
+    /*!
      * 
      */
-    void basicPrintOn(Stream* const& a_stream) const;
+    virtual void basicPrintOn(Stream* const& a_stream) const;
 
 
-    /**
+    /*!
      * 
      */
     virtual void print() const;
 
 
-    /**
+    /*!
      * 
      */
     virtual void printNl() const;
 
 
-    /**
+    /*!
      * 
      */
-    void basicPrintNl() const;
+    virtual void basicPrintNl() const;
+    /*! @} */
 
 
 #if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
-    /**
-     * \ingroup storing
+    /*!
+      \name storing
+     */
+    /*! @{ */
+    /*!
+     * 
      */
     virtual String* const storeString() const;
 
 
-    /**
-     * \ingroup storing
+    /*!
+     *
      */
     virtual void storeLiteralOn(Stream* const& a_stream) const;
 
 
-    /**
-     * \ingroup storing
+    /*!
+     * 
      */
     virtual void storeOn(Stream* const& a_stream) const;
 
 
-    /**
-     * \ingroup storing
+    /*!
+     * 
      */
     virtual void store() const;
 
 
-    /**
-     * \ingroup storing
+    /*!
+     * 
      */
-    virtual void storeNl() const;
+    virtual void store() const;
+    /*! @} */
 
 
-    /**
-     * \ingroup saving and loading
+    /*!
+      \name saving and loading
+     */
+    /*! @{ */
+    /*!
+     * 
      */
     virtual void binaryRepresentationObject();
 
 
-    /**
-     * \ingroup saving and loading
+    /*!
+     * 
      */
     virtual void postLoad() {}
 
 
-    /**
-     * デフォルトではメンバ関数 postLoad を呼び出すだけです。
-     * \ingroup saving and loading
+    /*!
+     * 
      */
     virtual void postStore() { postLoad(); }
 
 
-    /**
-     * オブジェクトをダンプする前に呼び出されます。デフォルトでは何もしません。
-     * \ingroup saving and loading
+    /*!
+     * 
      */
-    virtual void preStore() {}
+    virtual void preLoad() {}
 
 
-    /**
-     * デフォルトでは例外を発生させます。
-     * \ingroup saving and loading
+    /*!
+     * 
      */
     virtual void reconstructOriginalObject();
+    /*! @} */
 #endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
-    /**
-     * examine メンバ関数と同じです。
-     * \ingroup debugging
+
+    /*!
+      \name debugging
+     */
+    /*! @{ */
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+    /*!
+     * 
+     */
+    virtual void examine() const;
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+
+
+    /*!
+     * 
      */
     virtual void inspect() const;
 
 
 #if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
-    /**
-     * トランスクリプトにレシーバの全てのインスタンス変数をプリントします。
-     * \ingroup debugging
-     */
-    virtual void examine() const;
-
-
-    /**
-     *
-     * \ingroup debugging
-     */
-    virtual void examineOn(Stream* const& a_stream) const;
-
-
-    /**
-     * レシーバの検査すべき要素の数を返します。
-     * \ingroup debugging
-     */
-    virtual int validSize() const { return basicSize(); }
-
-
-    /**
-     * レシーバを参照するオブジェクトの配列を返します。
-     * \ingroup built ins
-     */
-    Collection* const allOwnsers() const;
-
-
-    /**
+    /*!
      * 
      */
-    Object* const changeClassTo(Behavior* const& a_behavior);
+    virtual void examineOn(Stream* const& a_stream) const;
 #endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
     /*!
      * 
      */
-    virtual size_t size() { return basicSize(); }
+    virtual int validSize() const { return basicSize(); }
+    /*! @} */
+
+
+    /*!
+      \name built ins
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Collection* const allOwners() const { return NULL; }
+
+
+#ifdef LT_NEAR_COMPLETE_TRANSPLANT_RATE
+    /*!
+     * 
+     */
+    virtual void changeClassTo(const Behavior* const& a_behavior);
+#endif  /* def LT_NEAR_COMPLETE_TRANSPLANT_RATE */
 
 
     /*!
      * 
      */
-    virtual size_t basicSize() { return 0; }
-
-
-    /**
-     *
-     * \ingroup built ins
+    virtual Object* const checkIndexableBounds(int index) const;
+    /*!
+     * 
      */
-    virtual bool equals(const Object* const& arg) const { return this == arg; }
+    virtual Object* const checkIndexableBounds(int index, Object* const (*a_block)(const Object* const&)) const;
 
 
-    /**
-     *
-     * \ingroup built ins
+    /*!
+     * 
      */
-    virtual bool identityEquals(const Object* const& arg) const { return this == arg; }
+    virtual void putCheckIndexableBounds(int index, Object* const& object);
 
 
-    /**
-     *
-     * \ingroup built ins
+    /*!
+     * 
+     */
+    virtual Object* const at(int index) const {
+        return checkIndexableBounds( index );
+    }
+
+
+    /*!
+     * 
+     */
+    virtual Object* const basicAt(int index) const {
+        return checkIndexableBounds( index );
+    }
+
+
+    /*!
+     * 
+     */
+    virtual void put(int index, Object* const& value) {
+        putCheckIndexableBounds( index, value );
+    }
+
+
+    /*!
+     * 
+     */
+    virtual void basicPut(int index, Object* const& value) {
+        putCheckIndexableBounds( index, value );
+    }
+
+
+    /*!
+     * 
+     */
+    virtual size_t size() const { return sizeof(*this); }
+
+
+    /*!
+     * 
+     */
+    virtual size_t basicSize() const { return sizeof(*this); }
+
+
+    /*!
+     * 
+     */
+    virtual Object* const become(const Object* const& other_object);
+
+
+    /*!
+     * 
+     */
+    virtual Object* const becomeForward(const Object* const& other_object);
+
+
+    /*!
+     * 
+     */
+    virtual Object* const shallowCopy() const;
+
+
+    /*!
+     * 
+     */
+    virtual void makeFixed();
+
+
+    /*!
+     * 
+     */
+    virtual void tenure() {}
+
+
+    /*!
+     * 
+     */
+    virtual Object* const instVarAt(int index) const;
+
+
+    /*!
+     * 
+     */
+    virtual void instVarPut(int index, Object* const value);
+
+
+    /*!
+     * 
+     */
+    virtual bool isReadOnly() const { return false; }
+
+
+    /*!
+     * 
+     */
+    virtual bool isUntrusted() const { return false; }
+
+
+    /*!
+     * 
+     */
+    virtual void makeReadOnly(bool a_boolean);
+
+
+    /*!
+     * 
+     */
+    virtual void makeUntrusted(bool a_boolean);
+
+
+    /*!
+     * 
+     */
+    virtual void makeWeak() {}
+
+
+    /*!
+     * 
+     */
+    virtual void makeEphemeron();
+
+
+    /*!
+     * 
+     */
+    virtual Object* const asOop() const;
+
+
+    /*!
+     * 
+     */
+    int identityHash() const;
+
+
+    /*!
+     * 
+     */
+    virtual int hash() const;
+
+
+    /*!
+     * 
+     */
+    virtual Object* const nextInstance() const { return NULL; }
+
+
+    /*!
+     * 
+     */
+    virtual Object* const perform(const Object* const& selector_or_message_or_method) const;
+    /*!
+     * 
+     */
+    virtual Object* const perform(const Object* const& selector_or_method, Object* const& arg1) const;
+    /*!
+     * 
+     */
+    virtual Object* const perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2) const;
+    /*!
+     * 
+     */
+    virtual Object* const perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2, Object* const& arg3) const;
+    /*!
+     * 
+     */
+    virtual Object* const perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2, Object* const& arg3, Object* const& arg4) const;
+
+
+    /*!
+     * 
+     */
+    virtual Object* const performWithArguments(const Object* const& selector_or_method, const Array* const& arguments_array) const;
+
+
+    /*!
+     * 
+     */
+    virtual bool equals(const Object* const& arg) const;
+
+
+    /*!
+     * 
+     */
+    virtual bool identityEquals(const Object* const& arg) const;
+
+
+    /*!
+     * 
      */
     virtual Class* const getClass() const;
+
+
+    /*!
+     * 
+     */
+    virtual Object* const error(const String* const& message) const;
+
+
+    /*!
+     * 
+     */
+    virtual void basicPrint() const;
+
+
+    /*!
+     * 
+     */
+    virtual Object* const halt();
+    /*!
+     * 
+     */
+    virtual Object* const halt(const String* const& a_string);
+
+
+    /*!
+     * 
+     */
+    virtual void mark(const Symbol* const& a_symbol) {}
+
+
+    /*!
+     * 
+     */
+    virtual Object* const primitiveFailed() const;
+
+
+    /*!
+     * 
+     */
+    virtual Object* const shouldNotImplement() const;
+
+
+    /*!
+     * 
+     */
+    virtual Object* const subclassResponsibility() const;
+
+
+    /*!
+     * 
+     */
+    virtual Object* const notYetImplemented() const;
+    /*! @} */
+
+
+    /*!
+      \name introspection
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Object* const instVarNamed(const String* const& a_string) const;
+
+
+    /*!
+     * 
+     */
+    virtual void instVarNamedPut(const String* const& a_string, Object* const& an_object);
+    /*! @} */
+
+
+    /*!
+      \name VM callbacks
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Object* const doseNotUnderstand(const Message* const& message) const;
+
+
+    /*!
+     * 
+     */
+    virtual Object* const badReturnError() const;
+
+
+    /*!
+     * 
+     */
+    virtual bool mustBeBoolean() const;
+
+
+    /*!
+     * 
+     */
+    virtual Object* const noRunnableProcess() const;
+
+
+    /*!
+     * 
+     */
+    virtual Object* const userInterrupt() const;
+    /*! @} */
 };
 
 

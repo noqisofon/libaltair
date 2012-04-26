@@ -1,0 +1,240 @@
+commit dfa3ba7cb27434c0f9c186bf9c34ad9e8d1138d7
+Author: ned rihine <ned.rihine@gmail.com>
+Date:   Sat Apr 21 17:05:00 2012 +0900
+
+    add CompiledBlock.hxx
+
+ include/altair/CompiledBlock.hxx          |   11 +++++
+ include/altair/Makefile.am                |    5 ++-
+ include/altair/SequenceableCollection.hxx |   51 ++++++++++++++--------
+ src/Class.cpp                             |    1 +
+ src/Makefile.am                           |    2 +-
+ src/SequenceableCollection.cpp            |   67 ++++++++++++++++++++++++++---
+ 6 files changed, 111 insertions(+), 26 deletions(-)
+
+commit ca859135ae790b62ceafe5e1cadb623331d027eb
+Author: ned rihine <ned.rihine@gmail.com>
+Date:   Sat Apr 21 00:51:34 2012 +0900
+
+    SequenceableCollection を書いています。
+
+ include/altair/Collection.hxx             |    4 +-
+ include/altair/Object.hxx                 |   16 ++
+ include/altair/OrderedCollection.hxx      |    9 +-
+ include/altair/SequenceableCollection.hxx |  266 ++++++++++++++++++
+ include/altair/altair_prefix.h            |    3 +
+ src/Collection.cpp                        |   92 +++++--
+ src/Object.cpp                            |    6 +-
+ src/SequenceableCollection.cpp            |  422 +++++++++++++++++++++++++++++
+ 8 files changed, 791 insertions(+), 27 deletions(-)
+
+commit 9433a740de3c03013afd893e330643c2deee3098
+Author: ned rihine <ned.rihine@gmail.com>
+Date:   Fri Apr 20 18:29:42 2012 +0900
+
+    ビルドのため依存関係を満たすようにしました。
+
+ Makefile.am                               |   17 +-
+ configure.ac                              |   31 ----
+ configure.in                              |   57 +++++++
+ include/Makefile.am                       |    2 +
+ include/altair/Array.hxx                  |   24 +++
+ include/altair/ArrayedCollection.hxx      |   24 +++
+ include/altair/CharacterArray.hxx         |   21 +++
+ include/altair/Class.hxx                  |   11 +-
+ include/altair/ClassDescription.hxx       |   19 +++
+ include/altair/Collection.hxx             |    9 +-
+ include/altair/Error.hxx                  |   14 ++
+ include/altair/IdentitySet.hxx            |   14 ++
+ include/altair/InvalidValueError.hxx      |   14 ++
+ include/altair/Iteratable.hxx             |   21 +++
+ include/altair/List.hxx                   |   14 ++
+ include/altair/Makefile.am                |    4 +
+ include/altair/Object.hxx                 |   17 +-
+ include/altair/OrderedCollection.hxx      |   14 ++
+ include/altair/SequenceableCollection.hxx |   24 +++
+ include/altair/String.hxx                 |   34 +++-
+ include/altair/altair_prefix.h            |   16 ++
+ include/altair/platform.h                 |  260 +++++++++++++++++++++++++++++
+ include/altair/transplant.h               |   33 ++++
+ include/transplant.h                      |   29 ----
+ src/Class.cpp                             |   25 +--
+ src/Collection.cpp                        |   10 +-
+ src/Iterable.cpp                          |   17 --
+ src/Iteratable.cpp                        |   21 +++
+ src/Makefile.am                           |   20 ++-
+ src/Object.cpp                            |   12 +-
+ src/ObjectMemory.cpp                      |   26 +--
+ src/Random.cpp                            |    5 +
+ src/String.cpp                            |    5 +
+ 33 files changed, 734 insertions(+), 130 deletions(-)
+
+commit e3710f307d7b60e8f68f68a68520f5cb3f8a9225
+Author: ned rihine <ned.rihine@gmail.com>
+Date:   Fri Apr 20 17:19:20 2012 +0900
+
+    .gitignore を編集しました。
+
+ .gitignore          |   65 +++-
+ Makefile.in         |  679 ------------------------------------
+ aclocal.m4          |  951 ---------------------------------------------------
+ depcomp             |  630 ----------------------------------
+ include/config.h.in |   99 ------
+ install-sh          |    1 -
+ missing             |    1 -
+ src/Makefile.in     |  437 -----------------------
+ 8 files changed, 57 insertions(+), 2806 deletions(-)
+
+commit 4a84110206d03b5b5620db826c8c051de7ccb963
+Author: ned rihine <ned.rihine@gmail.com>
+Date:   Sat Oct 8 14:37:02 2011 +0900
+
+    * remove autom4te.cache/
+    
+    + include/altair/Class.hxx
+      src/Class.cpp:
+    ++ add Class class.
+    
+    + include/transplant.h:
+    ++ add transplant.h.
+
+ .gitignore               |    1 +
+ autom4te.cache/output.0  | 4540 ---------------------------------
+ autom4te.cache/output.1  | 5128 -------------------------------------
+ autom4te.cache/output.2  | 6274 ----------------------------------------------
+ autom4te.cache/output.3  | 6274 ----------------------------------------------
+ autom4te.cache/requests  |  260 --
+ autom4te.cache/traces.0  |  257 --
+ autom4te.cache/traces.1  |  312 ---
+ autom4te.cache/traces.2  |  774 ------
+ autom4te.cache/traces.3  |  461 ----
+ include/altair/Class.hxx |   73 +
+ include/transplant.h     |   29 +
+ src/Class.cpp            |   93 +
+ src/Makefile.am          |    1 +
+ src/Makefile.in          |    8 +-
+ 15 files changed, 202 insertions(+), 24283 deletions(-)
+
+commit ce752220e2eb517d89baa2ab1c77e8812288c475
+Merge: e8b2fdf f6654cf
+Author: ned rihine <ned.rihine@gmail.com>
+Date:   Fri Oct 7 19:51:15 2011 +0900
+
+    Merge branch 'master' of github.com:noqisofon/libaltair
+
+commit e8b2fdf20c2d187aa26437126f08b0a6ebd7bcbe
+Author: ned rihine <ned.rihine@gmail.com>
+Date:   Fri Oct 7 00:08:03 2011 +0900
+
+    * add flag ALTAIR_ENABLE_REDUNDANT_METHODS.
+    
+    + include/altair/Object.hxx, src/Object.cpp:
+    ++ add flag ALTAIR_ENABLE_REDUNDANT_METHODS.
+    
+    + include/altair/macro.h:
+    ++ add macro.h.
+
+ .gitignore                |    4 +++
+ include/altair/Object.hxx |   46 ++++++++++++++++++++++++-----
+ include/altair/macro.h    |   12 ++++++++
+ src/Makefile.am           |    3 ++
+ src/Makefile.in           |    9 +++++-
+ src/Object.cpp            |   70 +++++++++++++++++++++++++++++++++++++++++++--
+ 6 files changed, 133 insertions(+), 11 deletions(-)
+
+commit f6654cfb49bb25f38fc1a9d685896a0e2ee904fd
+Author: ned rihine <ned.rihine@gmail.com>
+Date:   Fri Oct 7 00:08:03 2011 +0900
+
+    * add flag ALTAIR_ENABLE_REDUNDANT_METHODS.
+    
+    + include/altair/Object.hxx, src/Object.cpp:
+    ++ add flag ALTAIR_ENABLE_REDUNDANT_METHODS.
+    
+    + include/altair/macro.h:
+    ++ add macro.h.
+
+ autom4te.cache/requests   |   76 ++++++++++++++++++++++-----------------------
+ include/altair/Object.hxx |   46 ++++++++++++++++++++++-----
+ src/Makefile.am           |    3 ++
+ src/Makefile.in           |    9 +++++-
+ src/Object.cpp            |   70 +++++++++++++++++++++++++++++++++++++++--
+ 5 files changed, 155 insertions(+), 49 deletions(-)
+
+commit 7af24415a755e8dc2d9d98e64f870ffe4a26a946
+Author: ned rihine <ned.rihine@gmail.com>
+Date:   Thu Oct 6 00:26:34 2011 +0900
+
+    add ObjectMemory, Iterable and Collection class.
+
+ include/altair/Collection.hxx   |  174 +++++++++++++++++++++++++++
+ include/altair/Object.hxx       |    8 ++
+ include/altair/ObjectMemory.hxx |   46 ++++++++
+ src/Collection.cpp              |  248 +++++++++++++++++++++++++++++++++++++++
+ src/Iterable.cpp                |   17 +++
+ src/Object.cpp                  |   12 +-
+ src/ObjectMemory.cpp            |   85 ++++++++++++++
+ 7 files changed, 584 insertions(+), 6 deletions(-)
+
+commit fd78781ca8a4d8178358c34125ec561e04d0b0cd
+Author: ned rihine <ned.rihine@gmail.com>
+Date:   Wed Oct 5 14:29:45 2011 +0900
+
+    use autotools.
+
+ .gitignore              |    2 +
+ COPYING                 |  674 +++++
+ INSTALL                 |  365 +++
+ Makefile.am             |    1 +
+ Makefile.in             |  679 +++++
+ aclocal.m4              |  951 +++++++
+ autom4te.cache/output.0 | 4540 ++++++++++++++++++++++++++++++++++
+ autom4te.cache/output.1 | 5128 ++++++++++++++++++++++++++++++++++++++
+ autom4te.cache/output.2 | 6274 +++++++++++++++++++++++++++++++++++++++++++++++
+ autom4te.cache/output.3 | 6274 +++++++++++++++++++++++++++++++++++++++++++++++
+ autom4te.cache/requests |  260 ++
+ autom4te.cache/traces.0 |  257 ++
+ autom4te.cache/traces.1 |  312 +++
+ autom4te.cache/traces.2 |  774 ++++++
+ autom4te.cache/traces.3 |  461 ++++
+ configure.ac            |   31 +
+ depcomp                 |  630 +++++
+ include/config.h.in     |   99 +
+ install-sh              |    1 +
+ missing                 |    1 +
+ src/Makefile.am         |    6 +
+ src/Makefile.in         |  428 ++++
+ 22 files changed, 28148 insertions(+)
+
+commit 50e0716d39dc42cad8fb4a1573d88e215d8643fe
+Author: ned rihine <ned.rihine@gmail.com>
+Date:   Tue Oct 4 12:47:18 2011 +0900
+
+    add Object and String class.
+
+ include/altair/Object.hxx |  445 +++++++++++++++++++++++++++++++++++
+ include/altair/Random.hxx |    3 +
+ include/altair/String.hxx |   43 ++++
+ src/Object.cpp            |  571 +++++++++++++++++++++++++++++++++++++++++++++
+ src/Random.cpp            |    3 +
+ src/String.cpp            |   37 +++
+ 6 files changed, 1102 insertions(+)
+
+commit 9e39a0b59587cbb072046a25838ced4be9759c0f
+Author: ned rihine <ned.rihine@gmail.com>
+Date:   Tue Oct 4 11:53:59 2011 +0900
+
+    add Random class.
+
+ .gitignore                |    5 ++
+ include/altair/Random.hxx |  119 +++++++++++++++++++++++++++++++++++++++++++++
+ src/Random.cpp            |   93 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 217 insertions(+)
+
+commit b70747169e5b4d526e1fda64aadd4ce03bb1fe5a
+Author: ned rihine <ned.rihine@gmail.com>
+Date:   Tue Sep 27 22:28:45 2011 +0900
+
+    first commit.
+
+ 0 files changed

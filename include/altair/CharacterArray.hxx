@@ -1,7 +1,7 @@
 #ifndef altair_CharacterCollection_hxx
 #define altair_CharacterCollection_hxx
 
-//#include "altair/ArrayedCollection.hxx"
+#include "altair/ArrayedCollection.hxx"
 
 
 BEGIN_NAMESPACE_ALTAIR
@@ -10,7 +10,7 @@ BEGIN_NAMESPACE_ALTAIR
 /*!
  *
  */
-class CharacterArray
+class CharacterArray : public ArrayedCollection
 {
 };
 

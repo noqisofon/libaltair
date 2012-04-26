@@ -1,6 +1,8 @@
 #ifndef altair_ClassDescription_hxx
 #define altair_ClassDescription_hxx
 
+#include "altair/Behavior.hxx"
+
 
 BEGIN_NAMESPACE_ALTAIR
 
@@ -8,7 +10,7 @@ BEGIN_NAMESPACE_ALTAIR
 /*!
  * 
  */
-class ClassDescription
+class ClassDescription : public Behavior
 {
 };
 

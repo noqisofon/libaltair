@@ -20,7 +20,7 @@ class SequenceableCollection : public Collection
     /*!
      * 
      */
-    virtual Object* const at(int an_index, AbsentBlock& a_block) const;
+    virtual Object* const at(int an_index, Object* const (*a_block)(const Object* const&)) const;
 
 
     /*!
@@ -147,19 +147,19 @@ class SequenceableCollection : public Collection
     /*!
      * 
      */
-    virtual int indexOf(const Object* const& an_element, ExceptionBlock& exception_block) const {
+    virtual int indexOf(const Object* const& an_element, int (*exception_block)(const Object* const) ) const {
         return indexOf( an_element, 0, exception_block );
     }
     /*!
      * 
      */
-    virtual int indexOf(const Object* const& an_element, int an_index, ExceptionBlock& exception_block) const;
+    virtual int indexOf(const Object* const& an_element, int an_index, int (*exception_block)(const Object* const) ) const;
 
 
     /*!
      * 
      */
-    virtual int indexOfLast(const Object* const& an_element, ExceptionBlock& exception_block) const;
+    virtual int indexOfLast(const Object* const& an_element, int (*exception_block)(const Object* const) ) const;
 
 
     /*!
@@ -173,13 +173,13 @@ class SequenceableCollection : public Collection
     /*!
      * 
      */
-    virtual int identityIndexOf(const Object* const& an_element, int an_index, ExceptionBlock& exception_block) const;
+    virtual int identityIndexOf(const Object* const& an_element, int an_index, int (*exception_block)(const Object* const) ) const;
 
 
     /*!
      * 
      */
-    virtual int identityIndexOfLast(const Object* const& an_element, ExceptionBlock& exception_block) const;
+    virtual int identityIndexOfLast(const Object* const& an_element, int (*exception_block)(const Object* const) ) const;
 
 
     /*!
@@ -189,7 +189,7 @@ class SequenceableCollection : public Collection
     /*!
      * 
      */
-    virtual int indexOfSubCollection( const SequenceableCollection* const& a_sub_collection, ExceptionBlock& exception_block ) const {
+    virtual int indexOfSubCollection( const SequenceableCollection* const& a_sub_collection, int (*exception_block)(const Object* const) ) const {
         return indexOfSubCollection( a_sub_collection,
                                      0,
                                      exception_block );
@@ -203,8 +203,8 @@ class SequenceableCollection : public Collection
      */
     virtual int indexOfSubCollection( const SequenceableCollection* const& a_sub_collection,
                                       int an_index,
-                                      ExceptionBlock& exception_block ) const;
-    /*! @{ */
+                                      int (*exception_block)(const Object* const) ) const;
+    /*! @} */
 
 
     /*!
@@ -289,7 +289,13 @@ class SequenceableCollection : public Collection
     /*!
      * 
      */
-    virtual void replaceFrom(int start, int stop, Collection* const& replacement_collection, int rep_start);
+    virtual void replaceFrom(int start, int stop, const Collection* const& replacement_collection) {
+        replaceFrom( start, stop, replacement_collection, 0 );
+    }
+    /*!
+     * 
+     */
+    virtual void replaceFrom(int start, int stop, const Collection* const& replacement_collection, int rep_start);
     /*!
      * 
      */

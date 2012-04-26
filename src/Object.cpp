@@ -1,5 +1,6 @@
 #include "config.h"
 
+#include "altair/altair_prefix.h"
 #include "altair/Collection.hxx"
 #include "altair/Class.hxx"
 #include "altair/Symbol.hxx"
@@ -98,23 +99,29 @@ Object::~Object()
 }
 
 
-bool Object::isKindOf(const Class* klass) const
+bool Object::isKindOf(const Class* const& a_class) const
 {
+    bool ret
     Class* const self_class = getClass();
-    bool ret = self_class == klass || self_class->inheritFrom( klass );
+
+    ret = self_class->identityEquals( a_class ) || self_class->inheritFrom( a_class );
 
     // self_class がどーなっているのかわからないが、解放する必要がある。
+    self_class->release();
 
     return ret;
 }
 
 
-bool Object::isInstanceOf(const Class* klass) const
+bool Object::isInstanceOf(const Class* const& a_class) const
 {
+    bool ret
     Class* const self_class = getClass();
-    bool ret = self_class == klass;
+
+    ret = self_class->identityEquals( a_class );
 
     // self_class がどーなっているのかわからないが、解放する必要がある。
+    self_class->release();
 
     return ret;
 }
@@ -122,24 +129,34 @@ bool Object::isInstanceOf(const Class* klass) const
 
 bool Object::respondsTo(const Symbol* const& a_symbol) const
 {
+    bool ret;
     Class* const self_class = getClass();
-    bool ret = self_class->canUnderstand( a_symbol );
+
+    ret = self_class->canUnderstand( a_symbol );
+
+    // self_class がどーなっているのかわからないが、解放する必要がある。
+    self_class->release();
 
     return ret;
 }
 
 
+Object* const Object::copy() const
+{
+    return shallowCopy( postCopy() );
+}
+
+
 Object* const Object::deepCopy() const
 {
+    int num = 0;
     Class* self_class = getClass();
     Object* a_copy = shallowCopy();
-    int num = 0;
 
-    if ( self_class->isPointers() ) {
+    if ( self_class->isPointers() )
         num = self_class->instanceSize() + self_class->basicSize();
-    } else {
+    else
         num = self_class->instanceSize();
-    }
 
     for ( int i = 0; i < num; ++ i ) {
         a_copy->instVarPut( i, instVarAt( i )->copy() );
@@ -304,7 +321,7 @@ void Object::broadcast(const Symbol* const& a_symbol, Object* const& arg1, Objec
 }
 
 
-void Object::broadcastWithArray(const Symbol* const& a_symbol, const Array* const& an_array)
+void Object::broadcastWithArguments(const Symbol* const& a_symbol, const Array* const& an_array)
 {
     Dictionary* const all_dependencies = getClass()->dependencies();
     OrderedCollection* const dependencies;
@@ -517,7 +534,7 @@ void Object::binaryRepresentationObject()
     if ( ObjectDumper::proxyClassFor( this ) == ALTA_CLASS_OF(PluggableProxy) )
         subclassResponsibility();
     else
-        shouldNotImplement();
+        shouldNotYetImplement();
 }
 
 
@@ -629,10 +646,516 @@ void Object::examineOn(Stream* const& a_stream) const
 
 
 
+Object* const Object::checkIndexableBounds(int index) const
+{
+    Class* self_class = getClass();
+
+    if ( self_class->isFixed() ) {
+        self_class->release();
+        NotIndexableError::signalOn( this );
+
+        return NULL;
+    }
+
+    self_class->release();
+
+    if ( index < 0 ) {
+        IndexOutOfRangeError::signalOn( this, index );
+
+        return NULL;
+    }
+    if ( index > basicSize() ) {
+        IndexOutOfRangeError::signalOn( this, index );
+
+        return NULL;
+    }
+    return NULL;
+}
+Object* const Object::checkIndexableBounds(int index, Object* const (*a_block)(const Object* const&)) const
+{
+    Class* self_class = getClass();
+
+    if ( self_class->isFixed() ) {
+        self_class->release();
+        NotIndexableError::signalOn( this );
+
+        return NULL;
+    }
+    self_class->release();
+
+    return a_block( this );
+}
+
+
+void Object::putCheckIndexableBounds(int index, Object* const& object)
+{
+    Class* self_class = getClass();
+
+    if ( self_class->isFixed() ) {
+        self_class->release();
+        NotIndexableError::signalOn( this );
+
+        return;
+    }
+
+    if ( isReadOnly() ) {
+        ReadOnlyObjectError::signal();
+
+        return;
+    }
+
+    if ( index < 0 ) {
+        IndexOutOfRangeError::signalOn( this, index );
+
+        return;
+    }
+    if ( index > basicSize() ) {
+        IndexOutOfRangeError::signalOn( this, index );
+
+        return;
+    }
+
+    Symbol* shape = self_class->getShape();
+
+    if ( shape->identityEquals( ALTAIR_SYMBOL(float) ) || shape->identityEquals( ALTAIR_SYMBOL(double) ) ) {
+        WrongClassError::signalOn( object );
+
+        return ;
+    }
+
+    if ( !object->isKindOf( ALTAIR_TYPEOF(Character) ) ) {
+        if ( shape->identityEquals( ALTAIR_SYMBOL(character) ) || shape->identityEquals( ALTAIR_SYMBOL(utf32) ) ) {
+            WrongClassError::signalOn( object, ALTAIR_TYPEOF(Character) );
+
+            return ;
+        }
+    }
+    if ( shape->identityEquals( ALTAIR_SYMBOL(character) ) ) {
+        ArgumentOutOfRangeError::signalOn( object,
+                                           Character::valueOf( 0 ),
+                                           Character::valueOf( 255 ) );
+
+        return ;
+    }
+    if ( shape->identityEquals( ALTAIR_SYMBOL(utf32) ) ) {
+        ArgumentOutOfRangeError::signalOn( object,
+                                           Character::valueOf( 0 ),
+                                           Character::valueOf( 1114111 ) );
+
+        return ;
+    }
+
+    int size;
+
+    if ( shape->identityEquals( ALTAIR_SYMBOL(byte) ) )
+        size = 8;
+    if ( shape->identityEquals( ALTAIR_SYMBOL(int8) ) )
+        size = 7;
+    if ( shape->identityEquals( ALTAIR_SYMBOL(ushort) ) )
+        size = 16;
+    if ( shape->identityEquals( ALTAIR_SYMBOL(short) ) )
+        size = 15;
+    if ( shape->identityEquals( ALTAIR_SYMBOL(uint) ) )
+        size = 32;
+    if ( shape->identityEquals( ALTAIR_SYMBOL(int) ) )
+        size = 31;
+    if ( shape->identityEquals( ALTAIR_SYMBOL(uint64) ) )
+        size = 64;
+    if ( shape->identityEquals( ALTAIR_SYMBOL(int64) ) )
+        size = 63;
+
+    self_class->release();
+
+    ArgumentOutOfRangeError::signalOn( object,
+                                       ALTAIR_ODD( size ) ? -1 << size : 0,
+                                       (1 << size) - 1);
+    
+    return NULL;
+}
+
+
+Object* const Object::become(const Object* const& other_object)
+{
+    ReadOnlyObjectError::signal();
+
+    return this;
+}
+
+
+Object* const Object::becomeForward(const Object* const& other_object)
+{
+    ReadOnlyObjectError::signal();
+
+    return this;
+}
+
+
+Object* const Object::shallowCopy() const
+{
+    Class* self_class = getClass();
+    Object* a_copy;
+
+    if ( self_class->isVariable() )
+        a_copy = self_class->basicNew( basicSize() );
+    else
+        a_copy = self_class->basicNew();
+
+    self_class->release();
+
+    return a_copy;
+}
+
+
+void Object::makeFixed()
+{
+    InvalidValueError::signalOn( this, "Instances of Integer cannot be tenured!" );
+}
+
+
+Object* const Object::instVarAt(int index) const
+{
+    if ( index < 0 ) {
+        IndexOutOfRangeError::signalOn( self, index );
+
+        return NULL;
+    }
+    if ( index > basicSize() + instSize() ) {
+        IndexOutOfRangeError::signalOn( self, index );
+
+        return NULL;
+    }
+
+    Class* self_class = getClass();
+    Object* ret = basicAt( index - self_class->instSize() );
+
+    self_class->release();
+
+    return ret;
+}
+
+
+void Object::instVarPut(int index, Object* const value)
+{
+    if ( index < 0 ) {
+        IndexOutOfRangeError::signalOn( self, index );
+
+        return NULL;
+    }
+    if ( index > basicSize() + instSize() ) {
+        IndexOutOfRangeError::signalOn( self, index );
+
+        return NULL;
+    }
+
+    Class* self_class = getClass();
+    Object* ret = basicPut( index - self_class->instSize(), value );
+
+    self_class->release();
+
+    return ret;
+}
+
+
+void Object::makeReadOnly(bool a_boolean)
+{
+    WrongClassError::signalOn( Boolean::valueOf( a_boolean ), ALTAIR_GET_CLASS(Boolean) );
+}
+
+
+void Object::makeUntrusted(bool a_boolean)
+{
+    WrongClassError::signalOn( Boolean::valueOf( a_boolean ), ALTAIR_GET_CLASS(Boolean) );
+}
+
+
+void Object::makeEphemeron()
+{
+    InvalidValueError::signalOn( this, "ephemerons should have at least one instance variables" );
+}
+
+
+Object* const Object::asOop() const
+{
+    InvalidValueError::signalOn( this, "Instance of Integer have no associated OOP!" );
+
+    return NULL;
+}
+
+
+int Object::identityHash() const
+{
+    return __STATIC_CAST(int, this);
+}
+
+
+int Object::hash() const
+{
+    return __STATIC_CAST(int, this);
+}
+
+
+Object* const Object::perform(const Object* const& selector_or_message_or_method) const
+{
+    if ( selector_or_message_or_method->isSymbol() ) {
+        if ( respondsTo( __REINTERPRET_CAST(const Symbol * const, selector_or_message_or_method) ) ) {
+            WrongArgumentCountError::signal();
+
+            return NULL;
+        } else
+            return doseNotUnderstand( Message::selector( selector_or_message_or_method, ALTAIR_ARRAY0 ) );
+    }
+
+    if ( selector_or_message_or_method->isKindOf( ALTAIR_GET_CLASS(CompiledMethod) ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    }
+    return selector_or_message_or_method->sendTo( this );
+}
+Object* const Object::perform(const Object* const& selector_or_method, Object* const& arg1) const
+{
+    if ( selector_or_method->isKindOf( ALTAIR_GET_CLASS(CompiledMethod) ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    }
+    if ( !selector_or_method->isSymbol() ) {
+        WrongClassError::signalOn( selector_or_method, ALTAIR_GET_CLASS(Symbol) );
+
+        return NULL;
+    }
+
+    if ( respondsTo( __REINTERPRET_CAST(const Symbol * const, selector_or_method) ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    } else
+        return doseNotUnderstand( Message::selector( selector_or_message_or_method,
+                                                     ALTAIR_ARRAY1( arg1 ) ) );
+}
+Object* const Object::perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2) const
+{
+    if ( selector_or_method->isKindOf( ALTAIR_GET_CLASS(CompiledMethod) ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    }
+    if ( !selector_or_method->isSymbol() ) {
+        WrongClassError::signalOn( selector_or_method, ALTAIR_GET_CLASS(Symbol) );
+
+        return NULL;
+    }
+
+    if ( respondsTo( __REINTERPRET_CAST(const Symbol * const, selector_or_method) ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    } else
+        return doseNotUnderstand( Message::selector( selector_or_message_or_method,
+                                                     ALTAIR_ARRAY2( arg1, arg2 ) ) );
+}
+Object* const Object::perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2, Object* const& arg3) const
+{
+    if ( selector_or_method->isKindOf( ALTAIR_GET_CLASS(CompiledMethod) ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    }
+    if ( !selector_or_method->isSymbol() ) {
+        WrongClassError::signalOn( selector_or_method, ALTAIR_GET_CLASS(Symbol) );
+
+        return NULL;
+    }
+
+    if ( respondsTo( __REINTERPRET_CAST(const Symbol * const, selector_or_method) ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    } else
+        return doseNotUnderstand( Message::selector( selector_or_message_or_method,
+                                                     ALTAIR_ARRAY3( arg1, arg2, arg3 ) ) );
+}
+Object* const Object::perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2, Object* const& arg3, Object* const& arg4) const
+{
+    if ( selector_or_method->isKindOf( ALTAIR_GET_CLASS(CompiledMethod) ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    }
+    if ( !selector_or_method->isSymbol() ) {
+        WrongClassError::signalOn( selector_or_method, ALTAIR_GET_CLASS(Symbol) );
+
+        return NULL;
+    }
+
+    if ( respondsTo( __REINTERPRET_CAST(const Symbol * const, selector_or_method) ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    } else
+        return doseNotUnderstand( Message::selector( selector_or_message_or_method,
+                                                     ALTAIR_ARRAY4( arg1, arg2, arg3, arg4 ) ) );
+}
+
+
+Object* const Object::performWithArguments(const Object* const& selector_or_method, const Array* const& arguments_array) const
+{
+    if ( selector_or_method->isKindOf( ALTAIR_GET_CLASS(CompiledMethod) ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    }
+    if ( !selector_or_method->isSymbol() ) {
+        WrongClassError::signalOn( selector_or_method, ALTAIR_GET_CLASS(Symbol) );
+
+        return NULL;
+    }
+
+    if ( respondsTo( __REINTERPRET_CAST(const Symbol * const, selector_or_method) ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    } else
+        return doseNotUnderstand( Message::selector( selector_or_message_or_method, arguments_array ) );
+}
+
+
+bool Object::equals(const Object* const& arg) const
+{
+    return this == arg;
+}
+
+
+bool Object::identityEquals(const Object* const& arg) const
+{
+    return this == arg;
+}
+
+
 Class* const Object::getClass() const
 {
-    return ALTAIR_GET_CLASS(Object);
+    primitiveFailed();
+
+    return NULL;
 }
+
+
+Object* const Object::error(const String* const& message) const
+{
+}
+
+
+void Object::basicPrint() const
+{
+}
+
+
+Object* const Object::halt()
+{
+    return halt( new String( "halt encountered" ) );
+}
+Object* const Object::halt(const String* const& a_string)
+{
+    return error( a_string );
+}
+
+
+Object* const Object::primitiveFailed() const
+{
+    PrimitiveFailed::signal();
+
+    return this;
+}
+
+
+Object* const Object::shouldNotImplement() const
+{
+    ShouldNotImplementError::signal();
+
+    return this;
+}
+
+
+Object* const subclassResponsibility() const
+{
+    SubclassResponsibilityError::signal();
+
+    return this;
+}
+
+
+Object* const Object::notYetImplemented() const
+{
+    NotYetImplementedError::signal();
+
+    return this;
+}
+
+
+Object* const Object::instVarNamed(const String* const& a_string) const
+{
+    Class* self_class = getClass();
+    Object* ret;
+
+    ret = instVarAt( self_class->indexOfInstVar( a_string ) );
+
+    self_class->release();
+
+    return ret;
+}
+
+
+void Object::instVarNamedPut(const String* const& a_string, Object* const& an_object)
+{
+    Class* self_class = getClass();
+
+    instVarPut( self_class->indexOfInstVar( a_string ),
+                an_object );
+
+    self_class->release();
+}
+
+
+Object* const Object::doseNotUnderstand(const Message* const& message) const
+{
+    return this;
+}
+
+
+Object* const Object::badReturnError() const
+{
+    BadReturnError::signal();
+
+    return this;
+}
+
+
+bool Object::mustBeBoolean() const
+{
+    bool result = MustBeBoolenError::signalOn( this );
+
+    if ( result == false )
+        result = true;
+
+    return result;
+}
+
+
+Object* const Object::noRunnableProcess() const
+{
+    NoRunnableProcessError::signal();
+
+    return this;
+}
+
+
+Object* const Object::userInterrupt() const
+{
+    UserInterruptError::signal();
+
+    return this;
+}
+
 
 // Local Variables:
 //   coding: utf-8

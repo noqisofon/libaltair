@@ -1,9 +1,20 @@
 #include "config.h"
 
 #include "altair/altair_prefix.h"
+#include "altair/CompiledBlock.hxx"
 #include "altair/OrderedCollection.hxx"
 #include "altair/Array.hxx"
+#include "altair/ByteArray.hxx"
+#include "altair/Bag.hxx"
 #include "altair/Iterator.hxx"
+#include "altair/UnicodeString.hxx"
+#include "altair/Set.hxx"
+#include "altair/SortedCollection.hxx"
+#include "altair/Stream.hxx"
+#include "altair/String.hxx"
+
+#include "altair/ElementNotFoundError.hxx"
+#include "altair/EmptyCollectionError.hxx"
 
 #include "altair/Collection.hxx"
 USING_NAMESPACE_ALTAIR;
@@ -127,19 +138,19 @@ Collection* Collection::withJoin(Collection* const& a_collection)
     a_collection->inject( Integer::valueOf( 0 ), binary_block_with_join );
 
     Iterator* it = a_collection->iterator();
-    for ( ; it->finished(); it->next() ) {
+    while ( it->atEnd() ) {
         
     }
 }
 #endif  /* defined(ALTAIR_USING_FUNCTOR) */
 
 
-Collection* const Collection::addAll(const Collection* const& a_collection)
+Collection* const& Collection::addAll(const Collection* const& a_collection)
 {
-    Iterator* it = a_collection->iterator();
+    Stream* it = a_collection->readStream();
 
-    for ( ; it->finished(); it->next() ) {
-        add( it->current() );
+    while ( it->atEnd() ) {
+        add( it->next() );
     }
     it->release();
 
@@ -149,25 +160,50 @@ Collection* const Collection::addAll(const Collection* const& a_collection)
 
 Collection* const Collection::empty()
 {
-    return become( copyEmpty() );
+    //return __REINTERPRET_CAST(Collection* const, become( copyEmpty() ));
+    become( copyEmpty() );
+
+    return this;
+}
+
+
+Object* const remove_exception_block(const Collection* const& self, Object* const& old_object)
+{
+    ElementNotFoundError::signalOn( old_object, new String( "object" ) );
+
+    return NULL;
 }
 
 
 Object* const Collection::remove(Object* const& old_object)
 {
-    if ( !tryRemove( old_object ) )
-        ElementNotFoundException::signalOn( old_object, "object" );
+    return remove( old_object, remove_exception_block );
+}
+Object* const Collection::remove(Object* const& old_object, Object* const (*an_exception_block)(const Collection* const&, Object* const&))
+{
+    subclassResponsibility();
 
-    return old_object;
+    return NULL;
 }
 
 
-Collection* const Collection::removeAll(const Collection* const& a_collection)
+const Collection* const Collection::removeAll(const Collection* const& a_collection)
 {
-    Iterator* it = a_collection->iterator();
+    Stream* it = a_collection->readStream();
 
-    for ( ; it->finished(); it->next() ) {
-        remove( it->current() );
+    while ( it->atEnd() ) {
+        remove( it->next() );
+    }
+    it->release();
+
+    return a_collection;
+}
+const Collection* const Collection::removeAll(const Collection* const& a_collection, Object* const (*a_block)(const Collection* const&, Object* const&))
+{
+    Stream* it = a_collection->readStream();
+
+    while ( it->atEnd() ) {
+        remove( it->next(), a_block );
     }
     it->release();
 
@@ -175,15 +211,12 @@ Collection* const Collection::removeAll(const Collection* const& a_collection)
 }
 
 
-size_t Collection::capacity() const { return basicSize(); }
-
-
-int Collection::size() const
+size_t Collection::size() const
 {
-    int count = 0;
-    Iterator* it = iterator();
+    size_t count = 0;
+    Stream* it = readStream();
 
-    for ( ; it->finished(); it->next() ) {
+    while ( it->atEnd() ) {
         ++ count;
     }
     it->release();
@@ -195,10 +228,10 @@ int Collection::size() const
 bool Collection::includes(const Object* const& an_object) const
 {
     bool ret = false;
-    Iterator* it = iterator();
+    Stream* it = readStream();
 
-    for ( ; it->finished(); it->next() ) {
-        Object* element = it->current();
+    while ( it->atEnd() ) {
+        Object* element = it->next();
 
         if ( an_object->equals( element ) ) {
             ret = true;
@@ -215,12 +248,12 @@ bool Collection::includes(const Object* const& an_object) const
 bool Collection::identityIncludes(const Object* const& an_object) const
 {
     bool ret = false;
-    Iterator* it = iterator();
+    Stream* it = readStream();
 
-    for ( ; it->finished(); it->next() ) {
-        Object* element = it->current();
+    while ( it->atEnd() ) {
+        Object* element = it->next();
 
-        if ( an_object->isIdentity( element ) ) {
+        if ( an_object->identityEquals( element ) ) {
             ret = true;
 
             break;
@@ -237,10 +270,10 @@ bool Collection::includesAllOf(const Collection* const& a_collection) const
     int len = a_collection->size();
     int count = 0;
 
-    Iterator* it = iterator();
+    Stream* it = readStream();
 
-    for ( ; it->finished(); it->next() ) {
-        Object* element = it->current();
+    while ( it->atEnd() ) {
+        Object* element = it->next();
 
         if ( a_collection->includes( element ) )
             ++ count;
@@ -256,10 +289,10 @@ bool Collection::includesAnyOf(const Collection* const& a_collection) const
     int len = a_collection->size();
     int count = 0;
 
-    Iterator* it = iterator();
+    Stream* it = readStream();
 
-    for ( ; it->finished(); it->next() ) {
-        Object* element = it->current();
+    while ( it->atEnd() ) {
+        Object* element = it->next();
 
         if ( a_collection->includes( element ) )
             ++ count;
@@ -286,9 +319,9 @@ bool Collection::occurencesOf(const Object* const& an_object) const
 {
     int count = 0;
 
-    Iterator* it = iterator();
-    for ( ; it->finished(); it->next() ) {
-        Object* element = it->current();
+    Stream* it = readStream();
+    while ( it->atEnd() ) {
+        Object* element = it->next();
 
         if ( an_object->equals( element ) )
             ++ count;
@@ -296,6 +329,297 @@ bool Collection::occurencesOf(const Object* const& an_object) const
     it->release();
 
     return count;
+}
+
+
+Object* const Collection::anyOne() const
+{
+    Object* ret;
+
+    Stream* it = readStream();
+    while ( it->atEnd() ) {
+        ret = it->next();
+
+        break;
+    }
+
+    it->release();
+
+    if ( ret )
+        return ret;
+
+    EmptyCollectionError::signalOn( this );
+
+    return NULL;
+}
+
+
+#if defined(ALTAIR_USING_FUNCTOR)
+Collection* const Collection::join() const
+{
+    if ( isEmpty() )
+        return ALTAIR_ARRAY0;
+    else {
+        Class* anyone_species = anyOne()->species();
+        Collection* ret = Collection::join( this );
+    }
+}
+#endif  /* defined(ALTAIR_USING_FUNCTOR) */
+
+
+Stream* const Collection::readStream() const
+{
+    return Iterator::on( this );
+}
+
+
+Collection* const Collection::select(bool (*a_block)(Object* const&)) const
+{
+    Collection* new_collection = copyEmpty();
+
+    Stream* it = readStream();
+    while ( it->atEnd() ) {
+        Object* element = it->next();
+
+        if ( a_block( element ) )
+            new_collection->add( element );
+    }
+    it->release();
+
+    return new_collection;
+}
+
+
+Collection* const Collection::reject(bool (*a_block)(Object* const&)) const
+{
+    Collection* new_collection = copyEmpty();
+
+    Stream* it = readStream();
+    while ( it->atEnd() ) {
+        Object* element = it->next();
+
+        if ( a_block( element ) )
+            new_collection->add( element );
+    }
+    it->release();
+
+    return new_collection;
+}
+
+
+Collection* const Collection::collect(Object* const (*a_block)(Object* const&)) const
+{
+    Collection* new_collection = copyEmptyForCollect();
+
+    Stream* it = readStream();
+    while ( it->atEnd() ) {
+        Object* element = it->next();
+
+        new_collection->add( a_block( element ) );
+    }
+    it->release();
+
+    return new_collection;
+}
+
+
+#if defined(ALTAIR_USING_FUNCTOR)
+Collection* const Collection::gather(Object* const (*a_block)(Object* const&)) const
+{
+    return collect( a_block )->join();
+}
+#endif  /* defined(ALTAIR_USING_FUNCTOR) */
+
+
+Array* const Collection::asArray() const
+{
+    Array* ret = new Array( size() );
+
+    ret->replaceFrom( 0, size(), this );
+
+    return ret;
+}
+
+
+ByteArray* const Collection::asByteArray() const
+{
+    ByteArray* ret = new ByteArray( size() );
+
+    ret->replaceFrom( 0, size(), this );
+
+    return ret;
+}
+
+
+Bag* const Collection::asBag() const
+{
+    Bag* ret = new Bag( size() );
+
+    ret->addAll( this );
+
+    return ret;
+}
+
+
+Set* const Collection::asSet() const
+{
+    Set* ret = new Set( size() * 2 );
+
+    ret->addAll( this );
+
+    return ret;
+}
+
+
+String* const Collection::asString() const
+{
+    String* ret = new String( __STATIC_CAST(int, size()) );
+
+    ret->replaceFrom( 0, __STATIC_CAST(int, size()), this );
+
+    return ret;
+}
+
+
+UnicodeString* const Collection::asUnicodeString() const
+{
+    UnicodeString* ret = new UnicodeString( size() );
+
+    ret->replaceFrom( 0, size(), this );
+
+    return ret;
+}
+
+
+OrderedCollection* const Collection::asOrderedCollection() const
+{
+    OrderedCollection* ret = new OrderedCollection( size() * 2 );
+
+    ret->addAll( this );
+
+    return ret;
+}
+
+
+Collection* const Collection::asSortedCollection() const
+{
+    SortedCollection* ret = new SortedCollection( size() + 10 );
+
+    ret->addAll( this );
+
+    return ret;
+}
+Collection* const Collection::asSortedCollection(bool (*a_block)(const Object* const&)) const
+{
+    SortedCollection* ret = asSortedCollection();
+
+    ret->sortBlock( a_block );
+
+    return ret;
+}
+
+
+Collection* const Collection::sorted() const
+{
+    Array* ret = new Array( size() );
+
+    ret->replaceFrom( 0, size(), asSortedCollection() );
+
+    return ret;
+}
+Collection* const Collection::sorted(bool (*sort_block)(const Object* const&)) const
+{
+    Array* ret = new Array( size() );
+
+    ret->replaceFrom( 0, size(), asSortedCollection( sort_block ) );
+
+    return ret;
+}
+
+
+// static Object* const copy_replacing_block(Object* const& each)
+// {
+// }
+
+
+Collection* const Collection::copyReplacing(Object* const& target_object, Object* const& new_object) const
+{
+    //return collect(  );
+    Collection* new_collection = copyEmptyForCollect();
+
+    Stream* it = readStream();
+    while ( it->atEnd() ) {
+        Object* element = it->next();
+        if ( element->equals( target_object ) )
+            new_collection->add( element );
+        else
+            new_collection->add( new_object );
+    }
+    it->release();
+
+    return new_collection;
+}
+
+
+Collection* const Collection::copyWith(Object* const& new_element) const
+{
+    Collection* const a_copy = __REINTERPRET_CAST(Collection * const, copy());
+
+    a_copy->add( new_element );
+
+    return a_copy;
+}
+
+
+Collection* const Collection::copyWithout(Object* const& old_element) const
+{
+    //return reject();
+    Collection* new_collection = copyEmpty();
+
+    Stream* it = readStream();
+    while ( it->atEnd() ) {
+        Object* element = it->next();
+
+        if ( element->equals( old_element ) )
+            new_collection->add( element );
+    }
+    it->release();
+
+    return new_collection;
+}
+
+
+Collection* const Collection::copyEmpty() const
+{
+    Collection* ret;
+    Class* const self_species = species();
+
+    ret = self_species->createInstance( basicSize() );
+
+    self_species->release();
+
+    return ret;
+}
+Collection* const Collection::copyEmpty(int new_size) const
+{
+    Collection* ret;
+    Class* const self_species = species();
+
+    ret = self_species->createInstance( new_size );
+
+    self_species->release();
+
+    return ret;
+}
+
+
+Collection* const Collection::copyEmptyForCollect() const
+{
+    return copyEmpty();
+}
+Collection* const Collection::copyEmptyForCollect(int size) const
+{
+    return copyEmpty( size );
 }
 // Local Variables:
 //   coding: utf-8

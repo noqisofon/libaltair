@@ -1,8 +1,8 @@
 #include "config.h"
 
 #include "altair/altair_prefix.h"
-#include "altair/Object.hxx"
 #include "altair/CompiledBlock.hxx"
+#include "altair/Object.hxx"
 #include "altair/List.hxx"
 #include "altair/Error.hxx"
 #include "altair/InvalidValueError.hxx"

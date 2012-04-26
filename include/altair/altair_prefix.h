@@ -9,6 +9,11 @@
 #include "altair/macro.h"
 
 
+typedef   signed char sbyte;
+typedef unsigned char ubyte;
+
+
+
 #define BEGIN_NAMESPACE_ALTAIR    namespace altair {
 #define END_NAMESPACE_ALTAIR      }
 
