@@ -1,7 +1,8 @@
 #include "config.h"
 
-#include "altair/Iterable.hxx"
+#include "altair/altair_prefix.h"
 
+#include "altair/Iteratable.hxx"
 USING_NAMESPACE_ALTAIR;
 
 
@@ -19,3 +20,6 @@ Object* const Iteratable::inject(Object* const& this_value, BinaryBlock& binary_
 
     return result;
 }
+// Local Variables:
+//   coding: utf-8
+// End:

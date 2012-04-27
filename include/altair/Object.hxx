@@ -192,19 +192,19 @@ class Object
     /*!
      * 
      */
-    virtual Object* const copy() const;
+    virtual Object* copy() const;
 
 
     /*!
      * 
      */
-    virtual const Object* const& postCopy() const { return this; }
+    virtual const Object& postCopy() const { return *this; }
 
 
     /*!
      * 
      */
-    virtual Object* const deepCopy() const;
+    virtual Object* deepCopy() const;
     /*! @} */
 
 
@@ -215,7 +215,7 @@ class Object
     /*!
      * 
      */
-    virtual Class* const species() const {
+    virtual Class* species() const {
         return getClass();
     }
 
@@ -223,7 +223,7 @@ class Object
     /*!
      * 
      */
-    virtual const Object* const& yourself() const { return this; }
+    virtual const Object& yourself() const { return *this; }
     /*! @} */
 
 
@@ -241,7 +241,7 @@ class Object
     /*!
      * 
      */
-    virtual Object* const removeDependent(Object* const& an_object);
+    virtual Object* removeDependent(Object* const& an_object);
 
 
     /*!
@@ -259,37 +259,6 @@ class Object
 
 
     /*!
-      \name finalization
-     */
-    /*! @{ */
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
-    /*!
-     * 
-     */
-    virtual void addToBeFinalized();
-
-
-    /*!
-     * 
-     */
-    virtual void removeToBeFinalized();
-
-
-    /*!
-     * 
-     */
-    virtual void mourn() {}
-
-
-    /*!
-     * 
-     */
-    virtual void finalize() {}
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
-    /*! @} */
-
-
-    /*!
       \name change and update
      */
     /*! @{ */
@@ -302,15 +271,16 @@ class Object
     /*!
      * 
      */
-    virtual void changed(Object* const& a_parameter);
+    virtual void changed(Object* const& /* a_parameter */);
 
 
     /*!
      *
      */
-    virtual void update(Object* const& a_parameter) {}
+    virtual void update(Object* const& /* a_parameter */) {}
 
 
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
     /*!
      * 
      */
@@ -329,6 +299,7 @@ class Object
      * 
      */
     virtual void broadcastWithArguments(const Symbol* const& a_symbol, const Array* const& an_array);
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
     /*! @} */
 
 
@@ -339,7 +310,7 @@ class Object
     /*!
      * 
      */
-    Association* const createAssociation(Object* const& an_object) const;
+    Association* createAssociation(Object* const& an_object) const;
     /*! @} */
 
 
@@ -376,7 +347,7 @@ class Object
     /*!
      * 
      */
-    virtual String* const printString() const;
+    virtual String* printString() const;
 
 
     /*!
@@ -418,7 +389,7 @@ class Object
     /*!
      * 
      */
-    virtual String* const storeString() const;
+    virtual String* storeString() const;
 
 
     /*!
@@ -442,7 +413,7 @@ class Object
     /*!
      * 
      */
-    virtual void store() const;
+    virtual void storeNl() const;
     /*! @} */
 
 
@@ -523,7 +494,7 @@ class Object
     /*!
      * 
      */
-    virtual Collection* const allOwners() const { return NULL; }
+    virtual Collection* allOwners() const { return NULL; }
 
 
 #ifdef LT_NEAR_COMPLETE_TRANSPLANT_RATE
@@ -537,23 +508,23 @@ class Object
     /*!
      * 
      */
-    virtual Object* const checkIndexableBounds(int index) const;
+    virtual Object* checkIndexableBounds(int index) const;
     /*!
      * 
      */
-    virtual Object* const checkIndexableBounds(int index, Object* const (*a_block)(const Object* const&)) const;
-
-
-    /*!
-     * 
-     */
-    virtual void putCheckIndexableBounds(int index, Object* const& object);
+    virtual Object* checkIndexableBounds(int index, Object* (*a_block)(const Object* const&)) const;
 
 
     /*!
      * 
      */
-    virtual Object* const at(int index) const {
+    virtual void checkIndexableBoundsPut(int index, Object* const& object);
+
+
+    /*!
+     * 
+     */
+    virtual Object* at(int index) const {
         return checkIndexableBounds( index );
     }
 
@@ -561,7 +532,7 @@ class Object
     /*!
      * 
      */
-    virtual Object* const basicAt(int index) const {
+    virtual Object* basicAt(int index) const {
         return checkIndexableBounds( index );
     }
 
@@ -570,7 +541,7 @@ class Object
      * 
      */
     virtual void put(int index, Object* const& value) {
-        putCheckIndexableBounds( index, value );
+        checkIndexableBoundsPut( index, value );
     }
 
 
@@ -578,7 +549,7 @@ class Object
      * 
      */
     virtual void basicPut(int index, Object* const& value) {
-        putCheckIndexableBounds( index, value );
+        checkIndexableBoundsPut( index, value );
     }
 
 
@@ -597,19 +568,19 @@ class Object
     /*!
      * 
      */
-    virtual Object* const become(const Object* const& other_object);
+    virtual Object* become(const Object* const& other_object);
 
 
     /*!
      * 
      */
-    virtual Object* const becomeForward(const Object* const& other_object);
+    virtual Object* becomeForward(const Object* const& other_object);
 
 
     /*!
      * 
      */
-    virtual Object* const shallowCopy() const;
+    virtual Object* shallowCopy() const;
 
 
     /*!
@@ -627,7 +598,7 @@ class Object
     /*!
      * 
      */
-    virtual Object* const instVarAt(int index) const;
+    virtual Object* instVarAt(int index) const;
 
 
     /*!
@@ -675,7 +646,7 @@ class Object
     /*!
      * 
      */
-    virtual Object* const asOop() const;
+    virtual Object* asOop() const;
 
 
     /*!
@@ -693,35 +664,35 @@ class Object
     /*!
      * 
      */
-    virtual Object* const nextInstance() const { return NULL; }
+    virtual Object* nextInstance() const { return NULL; }
 
 
     /*!
      * 
      */
-    virtual Object* const perform(const Object* const& selector_or_message_or_method) const;
+    virtual Object* perform(const Object* const& selector_or_message_or_method) const;
     /*!
      * 
      */
-    virtual Object* const perform(const Object* const& selector_or_method, Object* const& arg1) const;
+    virtual Object* perform(const Object* const& selector_or_method, Object* const& arg1) const;
     /*!
      * 
      */
-    virtual Object* const perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2) const;
+    virtual Object* perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2) const;
     /*!
      * 
      */
-    virtual Object* const perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2, Object* const& arg3) const;
+    virtual Object* perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2, Object* const& arg3) const;
     /*!
      * 
      */
-    virtual Object* const perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2, Object* const& arg3, Object* const& arg4) const;
+    virtual Object* perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2, Object* const& arg3, Object* const& arg4) const;
 
 
     /*!
      * 
      */
-    virtual Object* const performWithArguments(const Object* const& selector_or_method, const Array* const& arguments_array) const;
+    virtual Object* performWithArguments(const Object* const& selector_or_method, const Array* const& arguments_array) const;
 
 
     /*!
@@ -739,13 +710,13 @@ class Object
     /*!
      * 
      */
-    virtual Class* const getClass() const;
+    virtual Class* getClass() const;
 
 
     /*!
      * 
      */
-    virtual Object* const error(const String* const& message) const;
+    virtual Object* error(const String* const& message) const;
 
 
     /*!
@@ -757,41 +728,41 @@ class Object
     /*!
      * 
      */
-    virtual Object* const halt();
+    virtual Object* halt();
     /*!
      * 
      */
-    virtual Object* const halt(const String* const& a_string);
-
-
-    /*!
-     * 
-     */
-    virtual void mark(const Symbol* const& a_symbol) {}
+    virtual Object* halt(const String* const& a_string);
 
 
     /*!
      * 
      */
-    virtual Object* const primitiveFailed() const;
+    virtual void mark(const Symbol* const&/* a_symbol */) {}
 
 
     /*!
      * 
      */
-    virtual Object* const shouldNotImplement() const;
+    virtual Object* primitiveFailed() const;
 
 
     /*!
      * 
      */
-    virtual Object* const subclassResponsibility() const;
+    virtual Object* shouldNotImplement() const;
 
 
     /*!
      * 
      */
-    virtual Object* const notYetImplemented() const;
+    virtual Object* subclassResponsibility() const;
+
+
+    /*!
+     * 
+     */
+    virtual Object* notYetImplemented() const;
     /*! @} */
 
 
@@ -802,7 +773,7 @@ class Object
     /*!
      * 
      */
-    virtual Object* const instVarNamed(const String* const& a_string) const;
+    virtual Object* instVarNamed(const String* const& a_string) const;
 
 
     /*!
@@ -819,13 +790,13 @@ class Object
     /*!
      * 
      */
-    virtual Object* const doseNotUnderstand(const Message* const& message) const;
+    virtual Object* doseNotUnderstand(const Message* const& message) const;
 
 
     /*!
      * 
      */
-    virtual Object* const badReturnError() const;
+    virtual Object* badReturnError() const;
 
 
     /*!
@@ -837,13 +808,43 @@ class Object
     /*!
      * 
      */
-    virtual Object* const noRunnableProcess() const;
+    virtual Object* noRunnableProcess() const;
 
 
     /*!
      * 
      */
-    virtual Object* const userInterrupt() const;
+    virtual Object* userInterrupt() const;
+    /*! @} */
+
+ protected:
+    /*! \name finalization
+     */
+    /*! @{ */
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+    /*!
+     * 
+     */
+    virtual void addToBeFinalized();
+
+
+    /*!
+     * 
+     */
+    virtual void removeToBeFinalized();
+
+
+    /*!
+     * 
+     */
+    virtual void mourn() {}
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+
+
+    /*!
+     * 
+     */
+    virtual void finalize() {}
     /*! @} */
 };
 

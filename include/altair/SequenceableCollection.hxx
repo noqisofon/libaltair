@@ -17,6 +17,20 @@ class SequenceableCollection : public Collection
      \name basic
      */
     /*! @{ */
+    // /*!
+    //  * 
+    //  */
+    // virtual Object* const checkIndexableBounds(int index) const;
+    // /*!
+    //  * 
+    //  */
+    // virtual Object* const checkIndexableBounds(int index, Object* const (*a_block)(const Object* const&)) const;
+
+
+    // /*!
+    //  * 
+    //  */
+    // virtual void checkIndexableBoundsPut(int index, Object* const& object);
     /*!
      * 
      */
@@ -243,13 +257,23 @@ class SequenceableCollection : public Collection
     /*!
      * 
      */
-    virtual SequenceableCollection const* copyAfter(const Object* const& an_object) const;
+    virtual SequenceableCollection* const copyAfter(const Object* const& an_object) const;
 
 
     /*!
      * 
      */
-    virtual SequenceableCollection const* copyAfterLast(const Object* const& an_object) const;
+    virtual SequenceableCollection* const copyAfterLast(const Object* const& an_object) const;
+
+
+    /*!
+     * 
+     */
+    virtual SequenceableCollection* const copyFrom(int start) const;
+    /*!
+     * 
+     */
+    virtual SequenceableCollection* const copyFrom(int start, int stop) const;
     /*! @} */
 
 
@@ -300,6 +324,22 @@ class SequenceableCollection : public Collection
      * 
      */
     virtual void replaceFrom(int an_index, int stop_index, Object* const& an_object);
+    /*! @} */
+
+
+    /*! \name private methods
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual int countSubCollectionOccurrencesOf(const SequenceableCollection* const& a_subcollection) const;
+
+
+    /*!
+     * 
+     */
+    virtual size_t growSize() const { return ALTAIR_MIN(size(), 8); }
     /*! @} */
 };
 

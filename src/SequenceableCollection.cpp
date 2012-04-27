@@ -9,11 +9,24 @@
 USING_NAMESPACE_ALTAIR;
 
 
+// Object* const SequenceableCollection::checkIndexableBounds(int index) const
+// {
+// }
+// Object* const SequenceableCollection::checkIndexableBounds(int index, Object* const (*a_block)(const Object* const&)) const
+// {
+// }
+
+
+// void SequenceableCollection::checkIndexableBoundsPut(int index, Object* const& object)
+// {
+// }
+
+
 Object* const SequenceableCollection::at(int an_index, Object* const (*a_block)(const Object* const&)) const
 {
     size_t self_size = size();
 
-    if ( 0 <= an_index &&  an_index < (int)self_size )
+    if ( 0 <= an_index &&  an_index < __STATIC_CAST(int, self_size) )
         return a_block( this );
 
     return at( an_index );
@@ -37,7 +50,7 @@ Collection* const SequenceableCollection::atAll(const Collection* const& key_col
         int key = 0;
 
         if ( each->isNumber() )
-            key = ((Number *)each)->asInt32();
+            key = __REINTERPRET_CAST(Number *,each)->asInt32();
 
         result->add( at( key ) );
     }
@@ -107,21 +120,21 @@ Object* const SequenceableCollection::before(const Object* const& old_object) co
 
 SequenceableCollection* const SequenceableCollection::allButFirst() const
 {
-    return (SequenceableCollection *)copyFrom( 1 );
+    return __REINTERPRET_CAST(SequenceableCollection *, copyFrom( 1 ));
 }
 SequenceableCollection* const SequenceableCollection::allButFirst(int n) const
 {
-    return (SequenceableCollection *)copyFrom( n );
+    return __REINTERPRET_CAST(SequenceableCollection *, copyFrom( n ));
 }
 
 
 SequenceableCollection* const SequenceableCollection::allButLast() const
 {
-    return (SequenceableCollection *)copyFrom( 0, size() - 1 );
+    return __REINTERPRET_CAST(SequenceableCollection *, copyFrom( 0, size() - 1 ));
 }
 SequenceableCollection* const SequenceableCollection::allButLast(int n) const
 {
-    return (SequenceableCollection *)copyFrom( 0, size() - (n - 1) );
+    return __REINTERPRET_CAST(SequenceableCollection *, copyFrom( 0, size() - (n - 1) ));
 }
 
 
@@ -131,7 +144,7 @@ Object* const SequenceableCollection::first() const
 }
 SequenceableCollection* const SequenceableCollection::first(int n) const
 {
-    return (SequenceableCollection *)copyFrom( 0, n );
+    return __REINTERPRET_CAST(SequenceableCollection *, copyFrom( 0, n ));
 }
 
 
@@ -159,7 +172,7 @@ Object* const SequenceableCollection::last() const
 }
 SequenceableCollection* const SequenceableCollection::last(int n) const
 {
-    return (SequenceableCollection *)copyFrom( size() - n );
+    return __REINTERPRET_CAST(SequenceableCollection *, copyFrom( size() - n ));
 }
 
 
@@ -230,7 +243,7 @@ int SequenceableCollection::indexOfLast(const Object* const& an_element, int (*e
 {
     size_t self_size = size();
 
-    for ( int i = (int)self_size; i >= 0; -- i ) {
+    for ( int i = __STATIC_CAST(int, self_size); i >= 0; -- i ) {
         if ( at( i )->equals( an_element ) )
             return i;
     }
@@ -275,7 +288,7 @@ int SequenceableCollection::identityIndexOfLast(const Object* const& an_element,
 {
     size_t self_size = size();
 
-    for ( int i = (int)self_size; i >= 0; -- i ) {
+    for ( int i = __STATIC_CAST(int, self_size); i >= 0; -- i ) {
         if ( at( i )->identityEquals( an_element ) )
             return i;
     }
@@ -412,17 +425,49 @@ static int gain_self_size_exception_block(const Object* const& self)
 }
 
 
-SequenceableCollection const* SequenceableCollection::copyAfter(const Object* const& an_object) const
+SequenceableCollection* const SequenceableCollection::copyAfter(const Object* const& an_object) const
 {
     return copyFrom( indexOf( an_object,
                               gain_self_size_exception_block( this ) ) );
 }
 
 
-SequenceableCollection const* SequenceableCollection::copyAfterLast(const Object* const& an_object) const
+SequenceableCollection* const SequenceableCollection::copyAfterLast(const Object* const& an_object) const
 {
     return copyFrom( indexOfLast( an_object,
                                   gain_self_size_exception_block( this ) ) );
+}
+
+
+SequenceableCollection* const SequenceableCollection::copyFrom(int start) const
+{
+    return copyFrom( start, __STATIC_CAST(int, size()) );
+}
+SequenceableCollection* const SequenceableCollection::copyFrom(int start, int stop) const
+{
+    if ( stop < start ) {
+        if ( stop == start - 1 )
+            return copyEmpty( 0 );
+
+        ArgumentOutOfRangeError::signalOn( stop,
+                                           start - 1,
+                                           __STATIC_CAST(int, size()) );
+
+        return NULL;
+    }
+
+    int len = stop - start + 1;
+    SequenceableCollection* sequence = copyEmpty( len + 10 );
+
+    Stream* it = readStream();
+    while ( it->atEnd() ) {
+        Object* each = it->next();
+
+        sequence->add( each );
+    }
+    it->release();
+
+    return sequence;
 }
 
 

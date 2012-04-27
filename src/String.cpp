@@ -1,7 +1,8 @@
 #include "config.h"
 
-#include "altair/String.hxx"
+#include "altair/altair_prefix.h"
 
+#include "altair/String.hxx"
 USING_NAMESPACE_ALTAIR;
 
 

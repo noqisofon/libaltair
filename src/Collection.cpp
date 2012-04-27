@@ -1,6 +1,7 @@
 #include "config.h"
 
 #include "altair/altair_prefix.h"
+#include "altair/Class.hxx"
 #include "altair/CompiledBlock.hxx"
 #include "altair/OrderedCollection.hxx"
 #include "altair/Array.hxx"
@@ -158,7 +159,7 @@ Collection* const& Collection::addAll(const Collection* const& a_collection)
 }
 
 
-Collection* const Collection::empty()
+Collection* Collection::empty()
 {
     //return __REINTERPRET_CAST(Collection* const, become( copyEmpty() ));
     become( copyEmpty() );
@@ -187,7 +188,7 @@ Object* const Collection::remove(Object* const& old_object, Object* const (*an_e
 }
 
 
-const Collection* const Collection::removeAll(const Collection* const& a_collection)
+const Collection* Collection::removeAll(const Collection* const& a_collection)
 {
     Stream* it = a_collection->readStream();
 
@@ -198,7 +199,7 @@ const Collection* const Collection::removeAll(const Collection* const& a_collect
 
     return a_collection;
 }
-const Collection* const Collection::removeAll(const Collection* const& a_collection, Object* const (*a_block)(const Collection* const&, Object* const&))
+const Collection* Collection::removeAll(const Collection* const& a_collection, Object* const (*a_block)(const Collection* const&, Object* const&))
 {
     Stream* it = a_collection->readStream();
 
@@ -315,7 +316,7 @@ bool Collection::notEmpty() const
 }
 
 
-bool Collection::occurencesOf(const Object* const& an_object) const
+int Collection::occurencesOf(const Object* const& an_object) const
 {
     int count = 0;
 
@@ -355,7 +356,7 @@ Object* const Collection::anyOne() const
 
 
 #if defined(ALTAIR_USING_FUNCTOR)
-Collection* const Collection::join() const
+Collection* Collection::join() const
 {
     if ( isEmpty() )
         return ALTAIR_ARRAY0;
@@ -373,7 +374,7 @@ Stream* const Collection::readStream() const
 }
 
 
-Collection* const Collection::select(bool (*a_block)(Object* const&)) const
+Collection* Collection::select(bool (*a_block)(Object* const&)) const
 {
     Collection* new_collection = copyEmpty();
 
@@ -390,7 +391,7 @@ Collection* const Collection::select(bool (*a_block)(Object* const&)) const
 }
 
 
-Collection* const Collection::reject(bool (*a_block)(Object* const&)) const
+Collection* Collection::reject(bool (*a_block)(Object* const&)) const
 {
     Collection* new_collection = copyEmpty();
 
@@ -407,7 +408,7 @@ Collection* const Collection::reject(bool (*a_block)(Object* const&)) const
 }
 
 
-Collection* const Collection::collect(Object* const (*a_block)(Object* const&)) const
+Collection* Collection::collect(Object* const (*a_block)(Object* const&)) const
 {
     Collection* new_collection = copyEmptyForCollect();
 
@@ -424,7 +425,7 @@ Collection* const Collection::collect(Object* const (*a_block)(Object* const&)) 
 
 
 #if defined(ALTAIR_USING_FUNCTOR)
-Collection* const Collection::gather(Object* const (*a_block)(Object* const&)) const
+Collection* Collection::gather(Object* const (*a_block)(Object* const&)) const
 {
     return collect( a_block )->join();
 }
@@ -435,7 +436,7 @@ Array* const Collection::asArray() const
 {
     Array* ret = new Array( size() );
 
-    ret->replaceFrom( 0, size(), this );
+    ret->SequenceableCollection::replaceFrom( 0, size(), this );
 
     return ret;
 }
@@ -445,7 +446,7 @@ ByteArray* const Collection::asByteArray() const
 {
     ByteArray* ret = new ByteArray( size() );
 
-    ret->replaceFrom( 0, size(), this );
+    ret->SequenceableCollection::replaceFrom( 0, size(), this );
 
     return ret;
 }
@@ -491,7 +492,7 @@ UnicodeString* const Collection::asUnicodeString() const
 }
 
 
-OrderedCollection* const Collection::asOrderedCollection() const
+OrderedCollection* Collection::asOrderedCollection() const
 {
     OrderedCollection* ret = new OrderedCollection( size() * 2 );
 
@@ -501,7 +502,7 @@ OrderedCollection* const Collection::asOrderedCollection() const
 }
 
 
-Collection* const Collection::asSortedCollection() const
+SortedCollection* Collection::asSortedCollection() const
 {
     SortedCollection* ret = new SortedCollection( size() + 10 );
 
@@ -509,7 +510,7 @@ Collection* const Collection::asSortedCollection() const
 
     return ret;
 }
-Collection* const Collection::asSortedCollection(bool (*a_block)(const Object* const&)) const
+SortedCollection* Collection::asSortedCollection(bool (*a_block)(const Object* const&, const Object* const&)) const
 {
     SortedCollection* ret = asSortedCollection();
 
@@ -519,7 +520,7 @@ Collection* const Collection::asSortedCollection(bool (*a_block)(const Object* c
 }
 
 
-Collection* const Collection::sorted() const
+Collection* Collection::sorted() const
 {
     Array* ret = new Array( size() );
 
@@ -527,7 +528,7 @@ Collection* const Collection::sorted() const
 
     return ret;
 }
-Collection* const Collection::sorted(bool (*sort_block)(const Object* const&)) const
+Collection* Collection::sorted(bool (*sort_block)(const Object* const&, const Object* const&)) const
 {
     Array* ret = new Array( size() );
 
@@ -542,7 +543,7 @@ Collection* const Collection::sorted(bool (*sort_block)(const Object* const&)) c
 // }
 
 
-Collection* const Collection::copyReplacing(Object* const& target_object, Object* const& new_object) const
+Collection* Collection::copyReplacing(Object* const& target_object, Object* const& new_object) const
 {
     //return collect(  );
     Collection* new_collection = copyEmptyForCollect();
@@ -561,7 +562,7 @@ Collection* const Collection::copyReplacing(Object* const& target_object, Object
 }
 
 
-Collection* const Collection::copyWith(Object* const& new_element) const
+Collection* Collection::copyWith(Object* const& new_element) const
 {
     Collection* const a_copy = __REINTERPRET_CAST(Collection * const, copy());
 
@@ -571,7 +572,7 @@ Collection* const Collection::copyWith(Object* const& new_element) const
 }
 
 
-Collection* const Collection::copyWithout(Object* const& old_element) const
+Collection* Collection::copyWithout(Object* const& old_element) const
 {
     //return reject();
     Collection* new_collection = copyEmpty();
@@ -589,7 +590,7 @@ Collection* const Collection::copyWithout(Object* const& old_element) const
 }
 
 
-Collection* const Collection::copyEmpty() const
+Collection* Collection::copyEmpty() const
 {
     Collection* ret;
     Class* const self_species = species();
@@ -600,7 +601,7 @@ Collection* const Collection::copyEmpty() const
 
     return ret;
 }
-Collection* const Collection::copyEmpty(int new_size) const
+Collection* Collection::copyEmpty(int new_size) const
 {
     Collection* ret;
     Class* const self_species = species();
@@ -613,11 +614,11 @@ Collection* const Collection::copyEmpty(int new_size) const
 }
 
 
-Collection* const Collection::copyEmptyForCollect() const
+Collection* Collection::copyEmptyForCollect() const
 {
     return copyEmpty();
 }
-Collection* const Collection::copyEmptyForCollect(int size) const
+Collection* Collection::copyEmptyForCollect(int size) const
 {
     return copyEmpty( size );
 }

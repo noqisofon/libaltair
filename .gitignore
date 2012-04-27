@@ -45,8 +45,9 @@ OMakeroot.omc
 .omakedb.lock
 
 autom4te.cache/
-
+doc/
 build/m4
+
 
 include/config.h
 include/stamp-h1

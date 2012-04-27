@@ -7,7 +7,7 @@
 BEGIN_NAMESPACE_ALTAIR
 
 
-class EmptyCollectionError : public Object
+class EmptyCollectionError : public Error
 {
  public:
     /*!

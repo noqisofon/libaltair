@@ -13,6 +13,7 @@ class Bag;
 class Set;
 class String;
 class UnicodeString;
+class SortedCollection;
 
 
 /**
@@ -92,7 +93,7 @@ class Collection : public Iteratable
     /**
      * レシーバから全ての要素を取り除きます。
      */
-    virtual Collection* const empty();
+    virtual Collection* empty();
 
 
     /**
@@ -177,7 +178,7 @@ class Collection : public Iteratable
     /**
      * 
      */
-    virtual bool occurencesOf(const Object* const& an_object) const;
+    virtual int occurencesOf(const Object* const& an_object) const;
     /*! @} */
 
 
@@ -189,7 +190,7 @@ class Collection : public Iteratable
     /*!
      * 
      */
-    virtual Collection* const join() const;
+    virtual Collection* join() const;
 #endif  /* defined(ALTAIR_USING_FUNCTOR) */
     /*! @} */
 
@@ -213,26 +214,26 @@ class Collection : public Iteratable
     /*!
      * 
      */
-    virtual Collection* const select(bool (*a_block)(Object* const&)) const;
+    virtual Collection* select(bool (*a_block)(Object* const&)) const;
 
 
     /*!
      * 
      */
-    virtual Collection* const reject(bool (*a_block)(Object* const&)) const;
+    virtual Collection* reject(bool (*a_block)(Object* const&)) const;
 
 
     /*!
      * 
      */
-    virtual Collection* const collect(Object* const (*a_block)(Object* const&)) const;
+    virtual Collection* collect(Object* const (*a_block)(Object* const&)) const;
 
 
 #if defined(ALTAIR_USING_FUNCTOR)
     /*!
      * 
      */
-    virtual Collection* const gather(Object* const (*a_block)(Object* const&)) const;
+    virtual Collection* gather(Object* const (*a_block)(Object* const&)) const;
 #endif  /* defined(ALTAIR_USING_FUNCTOR) */
     /*! @} */
 
@@ -286,11 +287,11 @@ class Collection : public Iteratable
     /*!
      * 
      */
-    virtual Collection* const asSortedCollection() const;
+    virtual SortedCollection* const asSortedCollection() const;
     /*!
      * 
      */
-    virtual Collection* const asSortedCollection(bool (*a_block)(const Object* const&)) const;
+    virtual SortedCollection* const asSortedCollection(bool (*a_block)(const Object* const&, const Object* const&)) const;
     /*! @} */
 
 
@@ -301,11 +302,11 @@ class Collection : public Iteratable
     /*!
      * 
      */
-    virtual Collection* const sorted() const;
+    virtual Collection* sorted() const;
     /*!
      * 
      */
-    virtual Collection* const sorted(bool (*a_block)(const Object* const&)) const;
+    virtual Collection* sorted(bool (*a_block)(const Object* const&, const Object* const&)) const;
     /*! @} */
 
 
@@ -316,22 +317,22 @@ class Collection : public Iteratable
     /*!
      * 
      */
-    virtual Collection* const copyReplacing(Object* const& target_object, Object* const& new_object) const;
+    virtual Collection* copyReplacing(Object* const& target_object, Object* const& new_object) const;
 
 
     /*!
      * 
      */
-    virtual Collection* const copyWith(Object* const& new_element) const;
+    virtual Collection* copyWith(Object* const& new_element) const;
 
 
     /*!
      * 
      */
-    virtual Collection* const copyWithout(Object* const& old_element) const;
+    virtual Collection* copyWithout(Object* const& old_element) const;
     /*! @} */
 
- protected:
+    //protected:
     /*!
       \name copying collections
      */
@@ -339,21 +340,21 @@ class Collection : public Iteratable
     /*!
      * 
      */
-    virtual Collection* const copyEmpty() const;
+    virtual Collection* copyEmpty() const;
     /*!
      * 
      */
-    virtual Collection* const copyEmpty(int new_size) const;
+    virtual Collection* copyEmpty(int new_size) const;
 
 
     /*!
      * 
      */
-    virtual Collection* const copyEmptyForCollect() const;
+    virtual Collection* copyEmptyForCollect() const;
     /*!
      * 
      */
-    virtual Collection* const copyEmptyForCollect(int size) const;
+    virtual Collection* copyEmptyForCollect(int size) const;
 
 
     /*!

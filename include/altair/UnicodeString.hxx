@@ -1,5 +1,5 @@
-#ifndef altair_String_hxx
-#define altair_String_hxx
+#ifndef altair_UnicodeString_hxx
+#define altair_UnicodeString_hxx
 
 #include "altair/CharacterArray.hxx"
 
@@ -16,17 +16,17 @@ class Stream;
 /*!
  * 
  */
-class String : public CharacterArray
+class UnicodeString : public CharacterArray
 {
  public:
     /*!
      * 
      */
-    String(size_t size, char ch = '\0');
+    UnicodeString(size_t size, char ch = '\0');
     /*!
      * 
      */
-    String(const char* const& cstring);
+    UnicodeString(const char* const& cstring);
 
  public:
     /**
@@ -50,13 +50,13 @@ class String : public CharacterArray
     /**
      * 
      */
-    virtual bool isString() const { return true; }
+    virtual bool isUnicodeString() const { return true; }
 
 
     /**
      * 
      */
-    virtual const String* const displayString() const { return this; }
+    virtual const UnicodeString* const displayUnicodeString() const { return this; }
 
 
     /**
@@ -69,7 +69,7 @@ class String : public CharacterArray
 END_NAMESPACE_ALTAIR
 
 
-#endif  /* altair_String_hxx */
+#endif  /* altair_UnicodeString_hxx */
 // Local Variables:
 //   coding: utf-8
 // End:

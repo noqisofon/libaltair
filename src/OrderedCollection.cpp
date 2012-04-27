@@ -1,6 +1,7 @@
 #include "config.h"
 
 #include "altair/altair_prefix.h"
+#include "altair/Iterator.hxx"
 
 #include "altair/OrderedCollection.hxx"
 USING_NAMESPACE_ALTAIR;
@@ -30,12 +31,6 @@ Collection* const& OrderedCollection::add(Object* const& new_object)
 bool OrderedCollection::tryRemove(Object* const& old_object)
 {
     return false;
-}
-
-
-Iterator* const OrderedCollection::iterator() const
-{
-    return NULL;
 }
 // Local Variables:
 //   coding: utf-8

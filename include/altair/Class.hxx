@@ -33,20 +33,20 @@ class Class : public ClassDescription
     /**
      * このクラスの名前を返します。
      */
-    virtual String* const name() const { return name_; }
+    virtual String* name() const { return name_; }
 
 
 #if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     /**
      * 
      */
-    virtual String* const comment() const { return comment_; }
+    virtual String* comment() const { return comment_; }
 
 
     /**
      * 
      */
-    virtual Namespace* const environment() const { return envinronment_; }
+    virtual Namespace* environment() const { return envinronment_; }
     /**
      * 
      */

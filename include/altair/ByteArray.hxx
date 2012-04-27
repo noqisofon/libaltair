@@ -52,6 +52,7 @@ class ByteArray : public ArrayedCollection
     /*! @} */
 
 
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
     /*!
       \name storing
      */
@@ -75,6 +76,7 @@ class ByteArray : public ArrayedCollection
      */
     virtual void storeOn(Stream* const& a_stream);
     /*! @} */
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
     /*!
@@ -90,13 +92,21 @@ class ByteArray : public ArrayedCollection
     /*!
      * 
      */
+    virtual void put(int index, Object* const& value) {
+        checkIndexableBoundsPut( index, value );
+    }
+
+
+    /*!
+     * 
+     */
     ubyte byteAt(int index) const;
 
 
     /*!
      * 
      */
-    ubyte bytePut(int index, ubyte value) const;
+    void bytePut(int index, ubyte value);
 
 
     /*!
@@ -108,7 +118,13 @@ class ByteArray : public ArrayedCollection
     /*!
      * 
      */
-    virtual Collection* const replaceFrom(int start, int stop, const String* const& a_string, int replace_start);
+    virtual void release();
+
+
+    /*!
+     * 
+     */
+    virtual void replaceFrom(int start, int stop, const String* const& a_string, int replace_start);
     /*! @} */
 
 
@@ -132,17 +148,53 @@ class ByteArray : public ArrayedCollection
     virtual int indexOf(Object* const& an_element, int an_index, int (*a_block)(const Object* const&)) const;
     /*! @} */
 
+ protected:
+    /*!
+      \name private
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Object* const checkIndexableBounds(int index) const;
+    /*!
+     * 
+     */
+    virtual Object* const checkIndexableBounds(int index, Object* const (*a_block)(const Object* const&)) const;
+
+
+    /*!
+     * 
+     */
+    virtual void checkIndexableBoundsPut(int index, Object* const& object);
+
+
+    /*!
+     * 
+     */
+    virtual ubyte checkIndexableByteBounds(int index) const;
+    /*!
+     * 
+     */
+    virtual ubyte checkIndexableByteBounds(int index, ubyte (*a_block)(const Object* const&)) const;
+
+
+    /*!
+     * 
+     */
+    virtual void checkIndexableByteBoundsPut(int index, ubyte value);
+    /*! @} */
+
  private:
     /*!
       \name private
      */
     /*! @{ */
-    size_t growSize() const { return size(); }
+    virtual size_t growSize() const { return size(); }
     /*! @} */
 
  private:
     ubyte* bytes_;
-    size_t tally_;
 };
 
 
@@ -150,3 +202,6 @@ END_NAMESPACE_ALTAIR
 
 
 #endif  /* altair_ByteArray_hxx */
+// Local Variables:
+//   coding: utf-8
+// End:

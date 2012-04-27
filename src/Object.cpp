@@ -141,13 +141,13 @@ bool Object::respondsTo(const Symbol* const& a_symbol) const
 }
 
 
-Object* const Object::copy() const
+Object* Object::copy() const
 {
     return shallowCopy( postCopy() );
 }
 
 
-Object* const Object::deepCopy() const
+Object* Object::deepCopy() const
 {
     int num = 0;
     Class* self_class = getClass();
@@ -181,7 +181,7 @@ void Object::addDependent(Object* const& an_object)
 }
 
 
-Object* const Object::removeDependent(Object* const& an_object)
+Object* Object::removeDependent(Object* const& an_object)
 {
     Dictionary* const all_dependencies = getClass()->dependencies();
 
@@ -229,31 +229,6 @@ void Object::release()
 
 
 #if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
-void Object::addToBeFinalized()
-{
-    Collection* finalizable_objects = getClass()->finalizableObjects();
-
-    finalizable_objects->add( new HomedAssociation( this,                  // key:
-                                                    nil,                   // value:
-                                                    finalizable_objects,   // environment:
-                                                    yourself()             // makeEphemeron:
-                              ) );
-}
-
-
-void Object::removeToBeFinalized()
-{
-    Collection* finalizable_objects = getClass()->finalizableObjects();
-
-    HomedAssociation* assoc = new HomedAssociation( this,                   // key:
-                                                    nil,                    // value:
-                                                    finalizable_objects );  // environment:
-
-    if ( finalizable_objects->isHasElement( assoc ) )
-        finalizable_objects->remove( assoc );
-}
-
-
 void Object::changed(Object* const& a_parameter)
 {
     Dictionary* const all_dependencies = getClass()->dependencies();
@@ -345,14 +320,14 @@ void Object::broadcastWithArguments(const Symbol* const& a_symbol, const Array* 
 #endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
-Association* const Object::createAssociation(Object* const& an_object) const
+Association* Object::createAssociation(Object* const& an_object) const
 {
     return new Association( this, an_object );
 }
 
 
 #if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
-String* const Object::displayString() const
+String* Object::displayString() const
 {
     Stream* stream = WriteStream::on( new String() );
     displayOn( stream );
@@ -391,7 +366,7 @@ void Object::displayNl() const
 #endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
-String* const Object::printString() const
+String* Object::printString() const
 {
     Stream* const& write_stream = WriteStream::on( new String() );
 
@@ -452,7 +427,7 @@ void Object::basicPrintNl() const
 
 
 #if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
-String* const Object::storeString() const
+String* Object::storeString() const
 {
     Stream* const& write_stream = WriteStream::on( new String() );
 
@@ -646,7 +621,7 @@ void Object::examineOn(Stream* const& a_stream) const
 
 
 
-Object* const Object::checkIndexableBounds(int index) const
+Object* Object::checkIndexableBounds(int index) const
 {
     Class* self_class = getClass();
 
@@ -671,7 +646,7 @@ Object* const Object::checkIndexableBounds(int index) const
     }
     return NULL;
 }
-Object* const Object::checkIndexableBounds(int index, Object* const (*a_block)(const Object* const&)) const
+Object* Object::checkIndexableBounds(int index, Object* (*a_block)(const Object* const&)) const
 {
     Class* self_class = getClass();
 
@@ -687,7 +662,7 @@ Object* const Object::checkIndexableBounds(int index, Object* const (*a_block)(c
 }
 
 
-void Object::putCheckIndexableBounds(int index, Object* const& object)
+void Object::checkIndexableBoundsPut(int index, Object* const& object)
 {
     Class* self_class = getClass();
 
@@ -774,7 +749,7 @@ void Object::putCheckIndexableBounds(int index, Object* const& object)
 }
 
 
-Object* const Object::become(const Object* const& other_object)
+Object* Object::become(const Object* const& other_object)
 {
     ReadOnlyObjectError::signal();
 
@@ -782,7 +757,7 @@ Object* const Object::become(const Object* const& other_object)
 }
 
 
-Object* const Object::becomeForward(const Object* const& other_object)
+Object* Object::becomeForward(const Object* const& other_object)
 {
     ReadOnlyObjectError::signal();
 
@@ -790,7 +765,7 @@ Object* const Object::becomeForward(const Object* const& other_object)
 }
 
 
-Object* const Object::shallowCopy() const
+Object* Object::shallowCopy() const
 {
     Class* self_class = getClass();
     Object* a_copy;
@@ -812,7 +787,7 @@ void Object::makeFixed()
 }
 
 
-Object* const Object::instVarAt(int index) const
+Object* Object::instVarAt(int index) const
 {
     if ( index < 0 ) {
         IndexOutOfRangeError::signalOn( self, index );
@@ -874,7 +849,7 @@ void Object::makeEphemeron()
 }
 
 
-Object* const Object::asOop() const
+Object* Object::asOop() const
 {
     InvalidValueError::signalOn( this, "Instance of Integer have no associated OOP!" );
 
@@ -894,7 +869,7 @@ int Object::hash() const
 }
 
 
-Object* const Object::perform(const Object* const& selector_or_message_or_method) const
+Object* Object::perform(const Object* const& selector_or_message_or_method) const
 {
     if ( selector_or_message_or_method->isSymbol() ) {
         if ( respondsTo( __REINTERPRET_CAST(const Symbol * const, selector_or_message_or_method) ) ) {
@@ -912,7 +887,7 @@ Object* const Object::perform(const Object* const& selector_or_message_or_method
     }
     return selector_or_message_or_method->sendTo( this );
 }
-Object* const Object::perform(const Object* const& selector_or_method, Object* const& arg1) const
+Object* Object::perform(const Object* const& selector_or_method, Object* const& arg1) const
 {
     if ( selector_or_method->isKindOf( ALTAIR_GET_CLASS(CompiledMethod) ) ) {
         WrongArgumentCountError::signal();
@@ -933,7 +908,7 @@ Object* const Object::perform(const Object* const& selector_or_method, Object* c
         return doseNotUnderstand( Message::selector( selector_or_message_or_method,
                                                      ALTAIR_ARRAY1( arg1 ) ) );
 }
-Object* const Object::perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2) const
+Object* Object::perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2) const
 {
     if ( selector_or_method->isKindOf( ALTAIR_GET_CLASS(CompiledMethod) ) ) {
         WrongArgumentCountError::signal();
@@ -954,7 +929,7 @@ Object* const Object::perform(const Object* const& selector_or_method, Object* c
         return doseNotUnderstand( Message::selector( selector_or_message_or_method,
                                                      ALTAIR_ARRAY2( arg1, arg2 ) ) );
 }
-Object* const Object::perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2, Object* const& arg3) const
+Object* Object::perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2, Object* const& arg3) const
 {
     if ( selector_or_method->isKindOf( ALTAIR_GET_CLASS(CompiledMethod) ) ) {
         WrongArgumentCountError::signal();
@@ -975,7 +950,7 @@ Object* const Object::perform(const Object* const& selector_or_method, Object* c
         return doseNotUnderstand( Message::selector( selector_or_message_or_method,
                                                      ALTAIR_ARRAY3( arg1, arg2, arg3 ) ) );
 }
-Object* const Object::perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2, Object* const& arg3, Object* const& arg4) const
+Object* Object::perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2, Object* const& arg3, Object* const& arg4) const
 {
     if ( selector_or_method->isKindOf( ALTAIR_GET_CLASS(CompiledMethod) ) ) {
         WrongArgumentCountError::signal();
@@ -998,7 +973,7 @@ Object* const Object::perform(const Object* const& selector_or_method, Object* c
 }
 
 
-Object* const Object::performWithArguments(const Object* const& selector_or_method, const Array* const& arguments_array) const
+Object* Object::performWithArguments(const Object* const& selector_or_method, const Array* const& arguments_array) const
 {
     if ( selector_or_method->isKindOf( ALTAIR_GET_CLASS(CompiledMethod) ) ) {
         WrongArgumentCountError::signal();
@@ -1032,7 +1007,7 @@ bool Object::identityEquals(const Object* const& arg) const
 }
 
 
-Class* const Object::getClass() const
+Class* Object::getClass() const
 {
     primitiveFailed();
 
@@ -1040,7 +1015,7 @@ Class* const Object::getClass() const
 }
 
 
-Object* const Object::error(const String* const& message) const
+Object* Object::error(const String* const& message) const
 {
 }
 
@@ -1050,17 +1025,17 @@ void Object::basicPrint() const
 }
 
 
-Object* const Object::halt()
+Object* Object::halt()
 {
     return halt( new String( "halt encountered" ) );
 }
-Object* const Object::halt(const String* const& a_string)
+Object* Object::halt(const String* const& a_string)
 {
     return error( a_string );
 }
 
 
-Object* const Object::primitiveFailed() const
+Object* Object::primitiveFailed() const
 {
     PrimitiveFailed::signal();
 
@@ -1068,7 +1043,7 @@ Object* const Object::primitiveFailed() const
 }
 
 
-Object* const Object::shouldNotImplement() const
+Object* Object::shouldNotImplement() const
 {
     ShouldNotImplementError::signal();
 
@@ -1084,7 +1059,7 @@ Object* const subclassResponsibility() const
 }
 
 
-Object* const Object::notYetImplemented() const
+Object* Object::notYetImplemented() const
 {
     NotYetImplementedError::signal();
 
@@ -1092,7 +1067,7 @@ Object* const Object::notYetImplemented() const
 }
 
 
-Object* const Object::instVarNamed(const String* const& a_string) const
+Object* Object::instVarNamed(const String* const& a_string) const
 {
     Class* self_class = getClass();
     Object* ret;
@@ -1116,13 +1091,13 @@ void Object::instVarNamedPut(const String* const& a_string, Object* const& an_ob
 }
 
 
-Object* const Object::doseNotUnderstand(const Message* const& message) const
+Object* Object::doseNotUnderstand(const Message* const& message) const
 {
     return this;
 }
 
 
-Object* const Object::badReturnError() const
+Object* Object::badReturnError() const
 {
     BadReturnError::signal();
 
@@ -1141,7 +1116,7 @@ bool Object::mustBeBoolean() const
 }
 
 
-Object* const Object::noRunnableProcess() const
+Object* Object::noRunnableProcess() const
 {
     NoRunnableProcessError::signal();
 
@@ -1149,12 +1124,39 @@ Object* const Object::noRunnableProcess() const
 }
 
 
-Object* const Object::userInterrupt() const
+Object* Object::userInterrupt() const
 {
     UserInterruptError::signal();
 
     return this;
 }
+
+
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+void Object::addToBeFinalized()
+{
+    Collection* finalizable_objects = getClass()->finalizableObjects();
+
+    finalizable_objects->add( new HomedAssociation( this,                  // key:
+                                                    nil,                   // value:
+                                                    finalizable_objects,   // environment:
+                                                    yourself()             // makeEphemeron:
+                              ) );
+}
+
+
+void Object::removeToBeFinalized()
+{
+    Collection* finalizable_objects = getClass()->finalizableObjects();
+
+    HomedAssociation* assoc = new HomedAssociation( this,                   // key:
+                                                    nil,                    // value:
+                                                    finalizable_objects );  // environment:
+
+    if ( finalizable_objects->isHasElement( assoc ) )
+        finalizable_objects->remove( assoc );
+}
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
 // Local Variables:

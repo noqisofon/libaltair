@@ -12,6 +12,21 @@ BEGIN_NAMESPACE_ALTAIR
  */
 class Behavior : public Object
 {
+ public:
+    /*! \name testing the form of the instances
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual bool isFixed() const { return !isVariable(); }
+
+
+     /*!
+     * 
+     */
+    virtual bool isVariable() const;
+    /*! @} */
 };
 
 

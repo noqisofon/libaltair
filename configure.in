@@ -53,5 +53,6 @@ AC_TYPE_UINT32_T
 AC_CONFIG_FILES([
     Makefile
     include/Makefile
+    include/altair/Makefile
     src/Makefile])
 AC_OUTPUT
