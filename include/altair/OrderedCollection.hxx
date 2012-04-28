@@ -32,19 +32,13 @@ class OrderedCollection : public SequenceableCollection
     /*!
      * 
      */
-    virtual Object* const first() const;
+    virtual Object* first() const;
 
 
     /**
      * 
      */
     virtual Collection* const& add(Object* const& new_object);
-
-
-    /*!
-     *
-     */
-    virtual bool tryRemove(Object* const& old_object);
 };
 
 

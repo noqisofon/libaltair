@@ -4,6 +4,7 @@ lib_LTLIBRARIES = libaltair.la
 libaltair_la_SOURCES =   \
 	Array.cpp  \
 	ArrayedCollection.cpp  \
+	Bag.cpp  \
 	ByteArray.cpp  \
 	Class.cpp  \
 	Collection.cpp  \

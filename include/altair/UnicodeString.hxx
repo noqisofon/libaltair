@@ -32,19 +32,19 @@ class UnicodeString : public CharacterArray
     /**
      * 
      */
-    Encoding* const encoding() const;
+    Encoding* encoding() const;
 
 
     /**
      * 
      */
-    virtual ByteArray* const asByteArray() const;
+    virtual ByteArray* asByteArray() const;
 
 
     /**
      * 
      */
-    virtual Symbol* const asSymbol() const;
+    virtual Symbol* asSymbol() const;
 
 
     /**
@@ -56,7 +56,7 @@ class UnicodeString : public CharacterArray
     /**
      * 
      */
-    virtual const UnicodeString* const displayUnicodeString() const { return this; }
+    virtual const String* displayString() const;
 
 
     /**

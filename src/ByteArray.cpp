@@ -45,7 +45,7 @@ ByteArray::~ByteArray()
 }
 
 
-String* const ByteArray::asString() const
+String* ByteArray::asString() const
 {
     size_t self_size = size();
     String*  ret_string = new String( self_size );
@@ -56,7 +56,7 @@ String* const ByteArray::asString() const
 }
 
 
-UnicodeString* const ByteArray::asUnicodeString() const
+UnicodeString* ByteArray::asUnicodeString() const
 {
     shouldNotImplement();
 
@@ -112,7 +112,7 @@ void ByteArray::storeOn(Stream* const& a_stream)
 
 
 
-Object* const ByteArray::at(int an_index, Object* const (*a_block)(const Object* const&)) const
+Object* ByteArray::at(int an_index, Object* (*a_block)(const Object* const&)) const
 {
     return checkIndexableBounds( an_index, a_block );
 }
@@ -141,7 +141,7 @@ void ByteArray::replaceFrom(int start, int stop, const String* const& a_string, 
 }
 
 
-bool ByteArray::equals(const Collection* const& a_collection) const
+bool ByteArray::equals(const Collection* const&/* a_collection */) const
 {
     return false;
 }
@@ -155,7 +155,7 @@ void ByteArray::release()
 }
 
 
-static int null_exception_block(const Object* const& self)
+static int null_exception_block(const Object* const&/* self */)
 {
     return -1;
 }
@@ -175,7 +175,7 @@ int ByteArray::indexOf(Object* const& an_element, int an_index, int (*a_exceptio
     // return an_index < 0 || an_index > ( __STATIC_CAST(int, size()) + 1)
     //     ? checkIndexableBounds( an_index )
     //     : a_exception_block();
-    size_t self_size = size();
+    int self_size = __STATIC_CAST(int, size());
 
     if ( an_index < 0 || self_size < an_index ) {
         if ( an_index == self_size + 1 )
@@ -184,7 +184,7 @@ int ByteArray::indexOf(Object* const& an_element, int an_index, int (*a_exceptio
         //     checkIndexableBounds( an_index );
     }
 
-    int arrived = (int)size();
+    int arrived = __STATIC_CAST(int, size());
     for ( int i = an_index; i < arrived; ++ i ) {
         if ( Object::at( i )->equals( an_element ) )
             return i;
@@ -193,7 +193,7 @@ int ByteArray::indexOf(Object* const& an_element, int an_index, int (*a_exceptio
 }
 
 
-Object* const ByteArray::checkIndexableBounds(int index) const
+Object* ByteArray::checkIndexableBounds(int index) const
 {
     Class* self_class = getClass();
 
@@ -211,14 +211,14 @@ Object* const ByteArray::checkIndexableBounds(int index) const
 
         return NULL;
     }
-    if ( index > basicSize() ) {
+    if ( index > __STATIC_CAST(int, basicSize()) ) {
         IndexOutOfRangeError::signalOn( this, index );
 
         return NULL;
     }
-    return Integer::valueOf( bytes_[index] );;
+    return Integer::valueOf( bytes_[index] );
 }
-Object* const ByteArray::checkIndexableBounds(int index, Object* const (*a_block)(const Object* const&)) const
+Object* ByteArray::checkIndexableBounds(int index, Object* (*a_block)(const Object* const&)) const
 {
     Class* self_class = getClass();
 
@@ -232,7 +232,7 @@ Object* const ByteArray::checkIndexableBounds(int index, Object* const (*a_block
 
     if ( index < 0 )
         return a_block( this );
-    if ( index < basicSize() )
+    if ( index > __STATIC_CAST(int, basicSize()) )
         return a_block( this );
 
     return Integer::valueOf( bytes_[index] );
@@ -246,7 +246,7 @@ ubyte ByteArray::checkIndexableByteBounds(int index)  const
 
         return 0;
     }
-    if ( index < basicSize() ) {
+    if ( index > __STATIC_CAST(int, basicSize()) ) {
         IndexOutOfRangeError::signalOn( this, index );
 
         return 0;
@@ -258,7 +258,7 @@ ubyte ByteArray::checkIndexableByteBounds(int index, ubyte (*a_block)(const Obje
 {
     if ( index < 0 )
         return a_block( this );
-    if ( index < basicSize() )
+    if ( index > __STATIC_CAST(int, basicSize()) )
         return a_block( this );
 
     return bytes_[index];
@@ -272,7 +272,7 @@ void ByteArray::checkIndexableByteBoundsPut(int index, ubyte value)
 
         return ;
     }
-    if ( index < basicSize() ) {
+    if ( index > __STATIC_CAST(int, basicSize()) ) {
         IndexOutOfRangeError::signalOn( this, index );
 
         return ;

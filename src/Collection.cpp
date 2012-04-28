@@ -149,7 +149,6 @@ Collection* Collection::withJoin(Collection* const& a_collection)
 Collection* const& Collection::addAll(const Collection* const& a_collection)
 {
     Stream* it = a_collection->readStream();
-
     while ( it->atEnd() ) {
         add( it->next() );
     }
@@ -168,7 +167,7 @@ Collection* Collection::empty()
 }
 
 
-Object* const remove_exception_block(const Collection* const& self, Object* const& old_object)
+Object* remove_exception_block(const Collection* const& self, Object* const& old_object)
 {
     ElementNotFoundError::signalOn( old_object, new String( "object" ) );
 
@@ -176,11 +175,11 @@ Object* const remove_exception_block(const Collection* const& self, Object* cons
 }
 
 
-Object* const Collection::remove(Object* const& old_object)
+Object* Collection::remove(Object* const& old_object)
 {
     return remove( old_object, remove_exception_block );
 }
-Object* const Collection::remove(Object* const& old_object, Object* const (*an_exception_block)(const Collection* const&, Object* const&))
+Object* Collection::remove(Object* const& old_object, Object* (*an_exception_block)(const Collection* const&, Object* const&))
 {
     subclassResponsibility();
 
@@ -199,7 +198,7 @@ const Collection* Collection::removeAll(const Collection* const& a_collection)
 
     return a_collection;
 }
-const Collection* Collection::removeAll(const Collection* const& a_collection, Object* const (*a_block)(const Collection* const&, Object* const&))
+const Collection* Collection::removeAll(const Collection* const& a_collection, Object* (*a_block)(const Collection* const&, Object* const&))
 {
     Stream* it = a_collection->readStream();
 
@@ -287,11 +286,10 @@ bool Collection::includesAllOf(const Collection* const& a_collection) const
 
 bool Collection::includesAnyOf(const Collection* const& a_collection) const
 {
-    int len = a_collection->size();
+    //int len = a_collection->size();
     int count = 0;
 
     Stream* it = readStream();
-
     while ( it->atEnd() ) {
         Object* element = it->next();
 
@@ -333,7 +331,7 @@ int Collection::occurencesOf(const Object* const& an_object) const
 }
 
 
-Object* const Collection::anyOne() const
+Object* Collection::anyOne() const
 {
     Object* ret;
 
@@ -368,7 +366,7 @@ Collection* Collection::join() const
 #endif  /* defined(ALTAIR_USING_FUNCTOR) */
 
 
-Stream* const Collection::readStream() const
+Stream* Collection::readStream() const
 {
     return Iterator::on( this );
 }
@@ -408,7 +406,7 @@ Collection* Collection::reject(bool (*a_block)(Object* const&)) const
 }
 
 
-Collection* Collection::collect(Object* const (*a_block)(Object* const&)) const
+Collection* Collection::collect(Object* (*a_block)(Object* const&)) const
 {
     Collection* new_collection = copyEmptyForCollect();
 
@@ -425,14 +423,14 @@ Collection* Collection::collect(Object* const (*a_block)(Object* const&)) const
 
 
 #if defined(ALTAIR_USING_FUNCTOR)
-Collection* Collection::gather(Object* const (*a_block)(Object* const&)) const
+Collection* Collection::gather(Object* (*a_block)(Object* const&)) const
 {
     return collect( a_block )->join();
 }
 #endif  /* defined(ALTAIR_USING_FUNCTOR) */
 
 
-Array* const Collection::asArray() const
+Array* Collection::asArray() const
 {
     Array* ret = new Array( size() );
 
@@ -442,7 +440,7 @@ Array* const Collection::asArray() const
 }
 
 
-ByteArray* const Collection::asByteArray() const
+ByteArray* Collection::asByteArray() const
 {
     ByteArray* ret = new ByteArray( size() );
 
@@ -452,7 +450,7 @@ ByteArray* const Collection::asByteArray() const
 }
 
 
-Bag* const Collection::asBag() const
+Bag* Collection::asBag() const
 {
     Bag* ret = new Bag( size() );
 
@@ -462,7 +460,7 @@ Bag* const Collection::asBag() const
 }
 
 
-Set* const Collection::asSet() const
+Set* Collection::asSet() const
 {
     Set* ret = new Set( size() * 2 );
 
@@ -472,7 +470,7 @@ Set* const Collection::asSet() const
 }
 
 
-String* const Collection::asString() const
+String* Collection::asString() const
 {
     String* ret = new String( __STATIC_CAST(int, size()) );
 
@@ -482,7 +480,7 @@ String* const Collection::asString() const
 }
 
 
-UnicodeString* const Collection::asUnicodeString() const
+UnicodeString* Collection::asUnicodeString() const
 {
     UnicodeString* ret = new UnicodeString( size() );
 
@@ -551,6 +549,7 @@ Collection* Collection::copyReplacing(Object* const& target_object, Object* cons
     Stream* it = readStream();
     while ( it->atEnd() ) {
         Object* element = it->next();
+
         if ( element->equals( target_object ) )
             new_collection->add( element );
         else

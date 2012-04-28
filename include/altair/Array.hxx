@@ -25,7 +25,7 @@ class Array : public ArrayedCollection
     /*!
      * 
      */
-    static Array* const from(Array* const& an_array) {
+    static Array* from(Array* const& an_array) {
         return an_array;
     }
 
@@ -98,11 +98,11 @@ class Array : public ArrayedCollection
     /*!
      * 
      */
-    virtual Object* const at(int an_index) const;
+    virtual Object* at(int an_index) const;
     /*!
      * 
      */
-    virtual Object* const at(int an_index, Object* const (*a_block)(const Object* const&)) const;
+    virtual Object* at(int an_index, Object* (*a_block)(const Object* const&)) const;
 
 
     /*!
@@ -150,7 +150,7 @@ class Array : public ArrayedCollection
     /*!
      * 
      */
-    virtual Object* const multiBecome(Array* const& an_array);
+    virtual Object* multiBecome(Array* const& an_array);
     /*! @} */
 
 

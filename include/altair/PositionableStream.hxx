@@ -32,7 +32,7 @@ class PositionableStream : public Stream
     /*!
      * 
      */
-    virtual Object* const next();
+    virtual Object* next();
 
 
     /*!
@@ -56,7 +56,7 @@ class PositionableStream : public Stream
     /*!
      * 
      */
-    virtual Object* const peek() const;
+    virtual Object* peek() const;
 
 
     /*!
@@ -68,37 +68,37 @@ class PositionableStream : public Stream
     /*!
      * 
      */
-    virtual SequenceableCollection* const copyFrom(int start, int end) const;
+    virtual SequenceableCollection* copyFrom(int start, int end) const;
 
 
     /*!
      * 
      */
-    virtual SequenceableCollection* const contents() const;
+    virtual SequenceableCollection* contents() const;
 
 
     /*!
      * 
      */
-    virtual Stream* const readStream() const;
+    virtual Stream* readStream() const;
 
 
     /*!
      * 
      */
-    virtual SequenceableCollection* const reverseContents() const;
+    virtual SequenceableCollection* reverseContents() const;
 
 
     /*!
      * 
      */
-    virtual SequenceableCollection* const upToEnd();
+    virtual SequenceableCollection* upToEnd();
 
 
     /*!
      * 
      */
-    virtual SequenceableCollection* const upTo(const Object* const& an_object);
+    virtual SequenceableCollection* upTo(const Object* const& an_object);
     /*! @} */
 
 
@@ -213,7 +213,7 @@ class PositionableStream : public Stream
     /*!
      * 
      */
-    virtual const SequenceableCollection* const collection() const { return collection_; }
+    virtual const SequenceableCollection* collection() const { return collection_; }
 
 
     /*!
@@ -235,7 +235,7 @@ class PositionableStream : public Stream
     /*!
      *
      */
-    virtual Class* const species() const;
+    virtual Class* species() const;
     /*! @} */
 
  protected:

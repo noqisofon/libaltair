@@ -42,7 +42,7 @@ Collection* const& ArrayedCollection::add(Object* const& value)
 }
 
 
-Collection* const ArrayedCollection::addAll(Collection* const& key_collection)
+Collection* ArrayedCollection::addAll(Collection* const& key_collection)
 {
     int i = 0;
     Collection* result = copyEmptyForCollect( __STATIC_CAST(int, key_collection->size()) );
@@ -60,11 +60,11 @@ Collection* const ArrayedCollection::addAll(Collection* const& key_collection)
 }
 
 
-SequenceableCollection* const ArrayedCollection::copyFrom(int start, int stop) const
+SequenceableCollection* ArrayedCollection::copyFrom(int start, int stop) const
 {
     if ( stop < start ) {
         if ( stop == start - 1 )
-            return _Super::copyEmpty( 0 );
+            return __REINTERPRET_CAST(SequenceableCollection *, _Super::copyEmpty( 0 ));
 
         ArgumentOutOfRangeError::signalOn( stop,
                                            start - 1,
@@ -82,7 +82,7 @@ SequenceableCollection* const ArrayedCollection::copyFrom(int start, int stop) c
 }
 
 
-Collection* const ArrayedCollection::copyWithout(const Object* const old_element) const
+Collection* ArrayedCollection::copyWithout(const Object* const old_element) const
 {
     SequenceableCollection* new_collection;
     int num_occurrences = 0;
@@ -110,13 +110,13 @@ Collection* const ArrayedCollection::copyWithout(const Object* const old_element
 }
 
 
-Collection* const ArrayedCollection::copyWith(Object* const& an_element) const
+Collection* ArrayedCollection::copyWith(Object* const& an_element) const
 {
     SequenceableCollection* new_collection = __REINTERPRET_CAST(SequenceableCollection *, _Super::copyEmpty( size() + 1 ));
 }
 
 
-Collection* const ArrayedCollection::select(bool (*a_block)(const Object* const&)) const
+Collection* ArrayedCollection::select(bool (*a_block)(const Object* const&)) const
 {
     Stream* write_stream = WriteStream::on( _Super::copyEmpty() );
     Collection* new_collection;
@@ -137,7 +137,7 @@ Collection* const ArrayedCollection::select(bool (*a_block)(const Object* const&
 }
 
 
-Collection* const ArrayedCollection::reject(bool (*a_block)(const Object* const&)) const
+Collection* ArrayedCollection::reject(bool (*a_block)(const Object* const&)) const
 {
     Stream* write_stream = WriteStream::on( copyEmpty() );
     Collection* new_collection;
@@ -158,7 +158,7 @@ Collection* const ArrayedCollection::reject(bool (*a_block)(const Object* const&
 }
 
 
-Collection* const ArrayedCollection::collect(Object* const (*a_block)(const Object* const&)) const
+Collection* ArrayedCollection::collect(Object* (*a_block)(const Object* const&)) const
 {
     SequenceableCollection* new_collection = __REINTERPRET_CAST(SequenceableCollection *, copyEmptyForCollect());
 
@@ -167,12 +167,12 @@ Collection* const ArrayedCollection::collect(Object* const (*a_block)(const Obje
         new_collection->put( i, a_block( Object::at( i ) ) );
     }
 
-    return new_collection;
+    return __REINTERPRET_CAST(Collection *, new_collection);
 }
 
 
-Collection* const ArrayedCollection::withCollect( const SequenceableCollection* const& a_sequence,
-                                                  Object* const (*a_block)(const Object* const&, const Object* const&)) const
+Collection* ArrayedCollection::withCollect( const SequenceableCollection* const& a_sequence,
+                                            Object* (*a_block)(const Object* const&, const Object* const&)) const
 {
     if ( size() != a_sequence->size() ) {
         InvalidSizeError::signalOn( a_sequence );
@@ -193,7 +193,7 @@ Collection* const ArrayedCollection::withCollect( const SequenceableCollection* 
 }
 
 
-Collection* const ArrayedCollection::copyReplaceFrom(int start, int stop, Object* const& an_object) const
+Collection* ArrayedCollection::copyReplaceFrom(int start, int stop, Object* const& an_object) const
 {
     if ( ( stop - start ) < 0 ) {
         ArgumentOutOfRangeError::signalOn( stop,
@@ -206,7 +206,7 @@ Collection* const ArrayedCollection::copyReplaceFrom(int start, int stop, Object
     int end = stop >= start ? stop : start;
     int new_size = end + __STATIC_CAST(int, size()) - stop;
 
-    SequenceableCollection* new_collection = __REINTERPRET_CAST(SequenceableCollection *,_Super::copyEmpty( new_size ));
+    SequenceableCollection* new_collection = __REINTERPRET_CAST(SequenceableCollection *, _Super::copyEmpty( new_size ));
 
     new_collection->replaceFrom( 0, start - 1, this, 0 );
     new_collection->replaceFrom( start, end, an_object );
@@ -214,7 +214,7 @@ Collection* const ArrayedCollection::copyReplaceFrom(int start, int stop, Object
 
     return new_collection;
 }
-Collection* const ArrayedCollection::copyReplaceFrom(int start, int stop, Collection* const& replacement_collection) const
+Collection* ArrayedCollection::copyReplaceFrom(int start, int stop, Collection* const& replacement_collection) const
 {
     if ( ( stop - start ) < 0 ) {
         ArgumentOutOfRangeError::signalOn( stop,
@@ -245,7 +245,7 @@ Collection* const ArrayedCollection::copyReplaceFrom(int start, int stop, Collec
 }
 
 
-Collection* const ArrayedCollection::copyReplaceAll(const SequenceableCollection* const& old_subcollection, const SequenceableCollection* const& new_subcollection) const
+Collection* ArrayedCollection::copyReplaceAll(const SequenceableCollection* const& old_subcollection, const SequenceableCollection* const& new_subcollection) const
 {
     int num_old = _Super::countSubCollectionOccurrencesOf( old_subcollection );
 
@@ -289,7 +289,7 @@ Collection* const ArrayedCollection::copyReplaceAll(const SequenceableCollection
 }
 
 
-Collection* const ArrayedCollection::reverse() const
+Collection* ArrayedCollection::reverse() const
 {
     SequenceableCollection* result = __REINTERPRET_CAST(SequenceableCollection *, copyEmpty());
     int complement = __STATIC_CAST(int, size()) + 1;
@@ -302,27 +302,27 @@ Collection* const ArrayedCollection::reverse() const
 }
 
 
-Collection* const ArrayedCollection::sorted() const
+Collection* ArrayedCollection::sorted() const
 {
     SequenceableCollection* new_collection = __REINTERPRET_CAST(SequenceableCollection *, copyEmpty());
 
     new_collection->replaceFrom( 0,
                                  __STATIC_CAST(int, size()),
-                                 asSortedCollection(),
+                                 __REINTERPRET_CAST(Collection *, asSortedCollection()),
                                  0 );
 
-    return new_collection;
+    return __REINTERPRET_CAST(Collection *, new_collection);
 }
-Collection* const ArrayedCollection::sorted(bool (*a_block)(const Object* const&, const Object* const&)) const
+Collection* ArrayedCollection::sorted(bool (*a_block)(const Object* const&, const Object* const&)) const
 {
     SequenceableCollection* new_collection = __REINTERPRET_CAST(SequenceableCollection *, copyEmpty());
 
     new_collection->replaceFrom( 0,
                                  __STATIC_CAST(int, size()),
-                                 asSortedCollection( a_block ),
+                                 __REINTERPRET_CAST(Collection *, asSortedCollection( a_block )),
                                  0 );
 
-    return new_collection;
+    return __REINTERPRET_CAST(Collection *, new_collection);
 }
 
 
@@ -360,13 +360,13 @@ void ArrayedCollection::storeOn(Stream* const& a_stream) const
 #endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
-Stream* const ArrayedCollection::writeStream()
+Stream* ArrayedCollection::writeStream()
 {
     return WriteStream::on( this );
 }
 
 
-Collection* const ArrayedCollection::copyEmpty() const
+Collection* ArrayedCollection::copyEmpty() const
 {
     return _Super::copyEmpty( size() );
 }
@@ -392,13 +392,13 @@ void ArrayedCollection::grow()
 }
 
 
-ArrayedCollection* const ArrayedCollection::growBy(int delta)
+ArrayedCollection* ArrayedCollection::growBy(int delta)
 {
     return __REINTERPRET_CAST(ArrayedCollection* const, become( copyGrowTo( __STATIC_CAST(int, basicSize()) + delta ) ));
 }
 
 
-ArrayedCollection* const ArrayedCollection::growTo(int new_size)
+ArrayedCollection* ArrayedCollection::growTo(int new_size)
 {
     return __REINTERPRET_CAST(ArrayedCollection* const, become( copyGrowTo( new_size ) ));
 }

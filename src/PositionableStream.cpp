@@ -24,7 +24,7 @@ void PositionableStream::close()
 }
 
 
-Object* const PositionableStream::next()
+Object* PositionableStream::next()
 {
     if ( ( access_ & 1 ) == 0 ) {
         shouldNotImplement();
@@ -96,7 +96,7 @@ int PositionableStream::nextAvailableInto(int an_integer, SequenceableCollection
 }
 
 
-Object* const PositionableStream::peek() const
+Object* PositionableStream::peek() const
 {
     if ( ( access_ & 1 ) == 0 ) {
         shouldNotImplement();
@@ -121,43 +121,43 @@ bool PositionableStream::peekFor(const Object* const& an_object) const
 }
 
 
-SequenceableCollection* const PositionableStream::copyFrom(int start, int end) const
+SequenceableCollection* PositionableStream::copyFrom(int start, int end) const
 {
     return collection_->copyFrom( start, end );
 }
 
 
-SequenceableCollection* const PositionableStream::contents() const
+SequenceableCollection* PositionableStream::contents() const
 {
     return collection_->copyFrom( 0, end_ptr_ );
 }
 
 
-Stream* const PositionableStream::readStream() const
+Stream* PositionableStream::readStream() const
 {
     return ReadStream::on( collection_, 0, end_ptr_ );
 }
 
 
-SequenceableCollection* const PositionableStream::reverseContents() const
+SequenceableCollection* PositionableStream::reverseContents() const
 {
     SequenceableCollection* new_collection = __REINTERPRET_CAST(SequenceableCollection *, collection_->copyEmpty( end_ptr_ ));
 
     int arrived = end_ptr_;
-    for ( int i = 0; i < end_ptr_; ++ i ) {
+    for ( int i = 0; i < arrived; ++ i ) {
         new_collection->put( i, collection_->Object::at( end_ptr_ - i ) );
     }
     return new_collection;
 }
 
 
-SequenceableCollection* const PositionableStream::upToEnd()
+SequenceableCollection* PositionableStream::upToEnd()
 {
     return _Super::next( end_ptr_ - ptr_ );
 }
 
 
-SequenceableCollection* const PositionableStream::upTo(const Object* const& an_object)
+SequenceableCollection* PositionableStream::upTo(const Object* const& an_object)
 {
     int r = collection_->indexOf( an_object, ptr_ );
 
@@ -212,7 +212,7 @@ void PositionableStream::status(String* const a_string) const
 }
 
 
-Class* const PositionableStream::species() const
+Class* PositionableStream::species() const
 {
     return collection_->species();
 }

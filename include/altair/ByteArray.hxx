@@ -42,13 +42,13 @@ class ByteArray : public ArrayedCollection
     /*!
      * 
      */
-    virtual String* const asString() const;
+    virtual String* asString() const;
 
 
     /*!
      * 
      */
-    virtual UnicodeString* const asUnicodeString() const;
+    virtual UnicodeString* asUnicodeString() const;
     /*! @} */
 
 
@@ -86,7 +86,7 @@ class ByteArray : public ArrayedCollection
     /*!
      * 
      */
-    virtual Object* const at(int an_index, Object* const (*a_block)(const Object* const&)) const;
+    virtual Object* at(int an_index, Object* (*a_block)(const Object* const&)) const;
 
 
     /*!
@@ -156,11 +156,11 @@ class ByteArray : public ArrayedCollection
     /*!
      * 
      */
-    virtual Object* const checkIndexableBounds(int index) const;
+    virtual Object* checkIndexableBounds(int index) const;
     /*!
      * 
      */
-    virtual Object* const checkIndexableBounds(int index, Object* const (*a_block)(const Object* const&)) const;
+    virtual Object* checkIndexableBounds(int index, Object* (*a_block)(const Object* const&)) const;
 
 
     /*!

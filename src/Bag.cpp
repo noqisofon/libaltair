@@ -1,9 +1,13 @@
 #include "config.h"
 
 #include "altair/altair_prefix.h"
+#include "altair/Association.hxx"
+#include "altair/Number.hxx"
 #include "altair/Character.hxx"
 #include "altair/Stream.hxx"
 #include "altair/String.hxx"
+#include "altair/HashedCollection.hxx"
+#include "altair/InvalidArgumentError.hxx"
 
 #include "altair/Bag.hxx"
 USING_NAMESPACE_ALTAIR;
@@ -19,15 +23,15 @@ Bag::Bag(size_t size)
 }
 
 
-Object* const Bag::add(Object* const new_object)
+Collection* const& Bag::add(Object* const& new_object)
 {
     addWithOccurrences( new_object, 1 );
 
-    return new_object;
+    return this;
 }
 
 
-Object* const Bag::addWithOccurrences(Object* const new_object, int an_integer)
+Object* Bag::addWithOccurrences(Object* const new_object, int an_integer)
 {
     if ( ALTAIR_ISNIL( new_object ) ) {
         InvalidArgumentError::signalOn( new_object );
@@ -35,7 +39,7 @@ Object* const Bag::addWithOccurrences(Object* const new_object, int an_integer)
         return NULL;
     }
 
-    int new_occurrences = content_->put( new_object, occurrencesOf( new_object ) + an_integer );
+    int new_occurrences = contents_->put( new_object, occurrencesOf( new_object ) + an_integer );
 
     if ( new_occurrences <= 0 )
         contents_->removeKey( new_object );
@@ -44,16 +48,16 @@ Object* const Bag::addWithOccurrences(Object* const new_object, int an_integer)
 }
 
 
-Object* const Bag::remove(Object* const& old_object, Object* const (*an_exception_block)(const Collection* const&, Object* const&))
+Object* Bag::remove(Object* const& old_object, Object* (*an_exception_block)(const Collection* const&, Object* const&))
 {
     int count = occurencesOf( old_object );
 
     if ( count == 0 )
         return an_exception_block( this, NULL );
     if ( count == 1 )
-        content_->removeKey( old_object );
+        contents_->removeKey( old_object );
     else
-        content_->put( old_object, count - 1 );
+        contents_->put( old_object, count - 1 );
 
     return old_object;
 }
@@ -62,13 +66,13 @@ Object* const Bag::remove(Object* const& old_object, Object* const (*an_exceptio
 static int counts_sort_block(const Object* const& left, const Object* const& right)
 {
     if ( left->isNumber() && right->isNumber() )
-        return __REINTERPRET_CAST(Number *, left)->asInt32() >= __REINTERPRET_CAST(Number *, right)->asInt32();
+        return __REINTERPRET_CAST(const Number * const, left)->asInt32() >= __REINTERPRET_CAST(const Number * const, right)->asInt32();
     else
         return 1;
 }
 
 
-SequenceableCollection* const Bag::sortedByCount() const
+SequenceableCollection* Bag::sortedByCount() const
 {
     Array* result;
     SortedCollection* counts = SortedCollection::sortBlock( counts_sort_block );
@@ -77,7 +81,7 @@ SequenceableCollection* const Bag::sortedByCount() const
     while ( it->atEnd() ) {
         Object* each = it->next();
 
-        if ( pair->isAssociation() ) {
+        if ( each->isAssociation() ) {
             Association* pair = __REINTERPRET_CAST(Association *, each);
 
             counts->add( new Association( pair->value(), pair->key() ) );
@@ -92,7 +96,7 @@ SequenceableCollection* const Bag::sortedByCount() const
 }
 
 
-static int occurrences_of_absent(const Object* const& an_object)
+static int null_if_absent(const Object* const&/* an_object*/)
 {
     return 0;
 }
@@ -100,13 +104,13 @@ static int occurrences_of_absent(const Object* const& an_object)
 
 int Bag::occurrencesOf(const Object* const& an_object) const
 {
-    return content_->at( an_object, occurrences_of_absent );
+    return contents_->at( an_object, null_if_absent );
 }
 
 
 bool Bag::includes(const Object* const& an_object) const
 {
-    return content_->includesKey( an_object );
+    return contents_->includesKey( an_object );
 }
 
 
@@ -129,7 +133,7 @@ size_t Bag::size() const
 
 int Bag::hash() const
 {
-    return content_->hash();
+    return contents_->hash();
 }
 
 
@@ -148,7 +152,7 @@ bool Bag::equals(const Object* const& a_bag) const
 }
 
 
-Set* const Bag::asSet() const
+Set* Bag::asSet() const
 {
     return contents_->keys();
 }
@@ -178,6 +182,30 @@ void Bag::printOn(Stream* const& a_stream) const
     it->release();
 
     a_stream->nextPut( ')' );
+}
+
+
+Class* Bag::dictionaryClass() const
+{
+    return LookupTable::getClass();
+}
+
+
+HashedCollection* Bag::valuesAndCounts() const
+{
+    return contents_->copy();
+}
+
+
+HashedCollection* Bag::contents() const
+{
+    return contents_;
+}
+
+
+void Bag::initContents(size_t size)
+{
+    contents_ = dictionaryClass()->createInstance( size );
 }
 // Local Variables:
 //   coding: utf-8

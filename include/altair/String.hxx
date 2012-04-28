@@ -32,19 +32,19 @@ class String : public CharacterArray
     /**
      * 
      */
-    Encoding* const encoding() const;
+    Encoding* encoding() const;
 
 
     /**
      * 
      */
-    virtual ByteArray* const asByteArray() const;
+    virtual ByteArray* asByteArray() const;
 
 
     /**
      * 
      */
-    virtual Symbol* const asSymbol() const;
+    virtual Symbol* asSymbol() const;
 
 
     /**
@@ -56,7 +56,7 @@ class String : public CharacterArray
     /**
      * 
      */
-    virtual const String* const displayString() const { return this; }
+    virtual const String* displayString() const { return this; }
 
 
     /**

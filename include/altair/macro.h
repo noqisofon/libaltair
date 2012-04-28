@@ -34,5 +34,8 @@
 
 #define    ALTAIR_BETWEEN_AND(_a_, _n_, _m_)   ALTAIR_TYPED_BETWEEN_AND(_a_, _n_, _m_, int)
 
+#define    ALTAIR_ISNIL(_self_)    ((_self_) == NULL)
+#define    ALTAIR_NOTNIL(_self_)   ((_self_) != NULL)
+
 
 #endif  /* altair_macro_h */

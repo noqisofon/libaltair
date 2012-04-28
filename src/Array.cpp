@@ -150,11 +150,11 @@ Array::~Array()
 }
 
 
-Object* const Array::at(int an_index) const
+Object* Array::at(int an_index) const
 {
     return checkIndexableBounds( an_index );
 }
-Object* const Array::at(int an_index, Object* const (*a_block)(const Object* const&)) const
+Object* Array::at(int an_index, Object* (*a_block)(const Object* const&)) const
 {
     return checkIndexableBounds( an_index, a_block );
 }
@@ -162,10 +162,10 @@ Object* const Array::at(int an_index, Object* const (*a_block)(const Object* con
 
 void Array::replaceFrom(int start, int stop, ByteArray* const& byte_array, int replace_start)
 {
-    _Super::replaceFrom( start,
-                         stop,
-                         __REINTERPRET_CAST(Collection* const, byte_array),
-                         replace_start );
+    SequenceableCollection::replaceFrom( start,
+                                         stop,
+                                         __REINTERPRET_CAST(SequenceableCollection *, byte_array),
+                                         replace_start );
 }
 
 
@@ -221,7 +221,7 @@ void Array::storeOn(Stream* const& a_stream) const
 #endif  /*  defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
-Object* const Array::multiBecome(Array* const& an_array)
+Object* Array::multiBecome(Array* const& an_array)
 {
     int index = 0;
 

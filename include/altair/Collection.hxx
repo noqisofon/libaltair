@@ -99,21 +99,21 @@ class Collection : public Iteratable
     /**
      * レシーバから old_object を取り除きます。ない場合は ElementNotFoundException を返します。
      */
-    virtual Object* const remove(Object* const& old_object);
+    virtual Object* remove(Object* const& old_object);
     /*!
      * 
      */
-    virtual Object* const remove(Object* const& old_object, Object* const (*an_exception_block)(const Collection* const&, Object* const&));
+    virtual Object* remove(Object* const& old_object, Object* (*an_exception_block)(const Collection* const&, Object* const&));
 
 
     /**
      * レシーバから a_collection を取り除きます。
      */
-    virtual const Collection* const removeAll(const Collection* const& a_collection);
+    virtual const Collection* removeAll(const Collection* const& a_collection);
     /**
      * レシーバから a_collection を取り除きます。
      */
-    virtual const Collection* const removeAll(const Collection* const& a_collection, Object* const (*a_block)(const Collection* const&, Object* const&));
+    virtual const Collection* removeAll(const Collection* const& a_collection, Object* (*a_block)(const Collection* const&, Object* const&));
     /*! @} */
 
 
@@ -130,7 +130,7 @@ class Collection : public Iteratable
     /**
      * レシーバがどれだけの要素を保持できるかを返します。
      */
-    virtual size_t capacity() const { basicSize(); }
+    virtual size_t capacity() const { return basicSize(); }
 
 
     /**
@@ -202,13 +202,13 @@ class Collection : public Iteratable
     /*!
      * 
      */
-    virtual Object* const anyOne() const;
+    virtual Object*  anyOne() const;
 
 
     /*!
      * 
      */
-    virtual Stream* const readStream() const;
+    virtual Stream* readStream() const;
 
 
     /*!
@@ -226,14 +226,14 @@ class Collection : public Iteratable
     /*!
      * 
      */
-    virtual Collection* collect(Object* const (*a_block)(Object* const&)) const;
+    virtual Collection* collect(Object* (*a_block)(Object* const&)) const;
 
 
 #if defined(ALTAIR_USING_FUNCTOR)
     /*!
      * 
      */
-    virtual Collection* gather(Object* const (*a_block)(Object* const&)) const;
+    virtual Collection* gather(Object* (*a_block)(Object* const&)) const;
 #endif  /* defined(ALTAIR_USING_FUNCTOR) */
     /*! @} */
 
@@ -245,53 +245,53 @@ class Collection : public Iteratable
     /*!
      * 
      */
-    virtual Array* const asArray() const;
+    virtual Array* asArray() const;
 
 
     /*!
      * 
      */
-    virtual ByteArray* const asByteArray() const;
+    virtual ByteArray* asByteArray() const;
 
 
     /*!
      * 
      */
-    virtual Bag* const asBag() const;
+    virtual Bag* asBag() const;
 
 
     /*!
      * 
      */
-    virtual Set* const asSet() const;
+    virtual Set* asSet() const;
 
 
     /*!
      * 
      */
-    virtual String* const asString() const;
+    virtual String* asString() const;
 
 
     /*!
      * 
      */
-    virtual UnicodeString* const asUnicodeString() const;
+    virtual UnicodeString* asUnicodeString() const;
 
 
     /*!
      * 
      */
-    virtual OrderedCollection* const asOrderedCollection() const;
+    virtual OrderedCollection* asOrderedCollection() const;
 
 
     /*!
      * 
      */
-    virtual SortedCollection* const asSortedCollection() const;
+    virtual SortedCollection* asSortedCollection() const;
     /*!
      * 
      */
-    virtual SortedCollection* const asSortedCollection(bool (*a_block)(const Object* const&, const Object* const&)) const;
+    virtual SortedCollection* asSortedCollection(bool (*a_block)(const Object* const&, const Object* const&)) const;
     /*! @} */
 
 

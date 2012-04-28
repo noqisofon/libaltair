@@ -25,29 +25,29 @@ class Stream : public Iteratable
     /*!
      * 
      */
-    virtual const String* const file() const { return NULL; }
+    virtual const String* file() const { return NULL; }
 
 
     /*!
      * 
      */
-    virtual const String* const name() const { return NULL; }
+    virtual const String* name() const { return NULL; }
 
 
     /*!
      * 
      */
-    virtual Object* const next();
+    virtual Object* next();
     /*!
      * 
      */
-    virtual SequenceableCollection* const next(int an_integer);
+    virtual SequenceableCollection* next(int an_integer);
 
 
     /*!
      * 
      */
-    virtual Object* const nextInto(int an_integer, Object* const& answer, int starting_pos);
+    virtual Object* nextInto(int an_integer, Object* const& answer, int starting_pos);
 
 
     /*!
@@ -81,31 +81,31 @@ class Stream : public Iteratable
     /*!
      * 
      */
-    virtual OrderedCollection* const splitAt(const Object* const& an_object);
+    virtual OrderedCollection* splitAt(const Object* const& an_object);
 
 
     /*!
      * 
      */
-    virtual SequenceableCollection* const contents();
+    virtual SequenceableCollection* contents();
 
 
     /*!
      * 
      */
-    virtual SequenceableCollection* const nextLine();
+    virtual SequenceableCollection* nextLine();
 
 
     /*!
      * 
      */
-    virtual SequenceableCollection* const upTo(const Object* const& an_object);
+    virtual SequenceableCollection* upTo(const Object* const& an_object);
 
 
     /*!
      * 
      */
-    virtual SequenceableCollection* const upToAll(const SequenceableCollection* const& a_collection);
+    virtual SequenceableCollection* upToAll(const SequenceableCollection* const& a_collection);
     /*! @} */
 
 
@@ -124,25 +124,25 @@ class Stream : public Iteratable
     /*!
      * 
      */
-    virtual Object* const nextPut(int n, Object* const& an_object);
+    virtual Object* nextPut(int n, Object* const& an_object);
     /*!
      * 
      */
-    virtual Object* const  nextPut(int n, char ch);
+    virtual Object*  nextPut(int n, char ch);
 
 
     /*!
      * 
      */
-    virtual SequenceableCollection* const nextPutAll(SequenceableCollection* const& a_collection);
+    virtual SequenceableCollection* nextPutAll(SequenceableCollection* const& a_collection);
     /*!
      * 
      */
-    virtual SequenceableCollection* const nextPutAll(const char* const& cstring);
+    virtual SequenceableCollection* nextPutAll(const char* const& cstring);
     /*!
      * 
      */
-    virtual SequenceableCollection* const nextPutAll(int n, SequenceableCollection* const& a_collection, int start);
+    virtual SequenceableCollection* nextPutAll(int n, SequenceableCollection* const& a_collection, int start);
 
 
     /*!
@@ -191,7 +191,7 @@ class Stream : public Iteratable
     /*!
      * 
      */
-    virtual Object* const pastEnd();
+    virtual Object* pastEnd();
 
 
     /*!

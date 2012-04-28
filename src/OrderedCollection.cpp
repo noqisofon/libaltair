@@ -15,7 +15,7 @@ OrderedCollection::OrderedCollection(int an_integer)
 }
 
 
-Object* const OrderedCollection::first() const
+Object* OrderedCollection::first() const
 {
     return NULL;
 }
@@ -25,12 +25,6 @@ Collection* const& OrderedCollection::add(Object* const& new_object)
 {
 
     return this;
-}
-
-
-bool OrderedCollection::tryRemove(Object* const& old_object)
-{
-    return false;
 }
 // Local Variables:
 //   coding: utf-8

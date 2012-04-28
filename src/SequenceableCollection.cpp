@@ -9,10 +9,10 @@
 USING_NAMESPACE_ALTAIR;
 
 
-// Object* const SequenceableCollection::checkIndexableBounds(int index) const
+// Object* SequenceableCollection::checkIndexableBounds(int index) const
 // {
 // }
-// Object* const SequenceableCollection::checkIndexableBounds(int index, Object* const (*a_block)(const Object* const&)) const
+// Object* SequenceableCollection::checkIndexableBounds(int index, Object* const (*a_block)(const Object* const&)) const
 // {
 // }
 
@@ -22,7 +22,7 @@ USING_NAMESPACE_ALTAIR;
 // }
 
 
-Object* const SequenceableCollection::at(int an_index, Object* const (*a_block)(const Object* const&)) const
+Object* SequenceableCollection::at(int an_index, Object* const (*a_block)(const Object* const&)) const
 {
     size_t self_size = size();
 
@@ -33,13 +33,13 @@ Object* const SequenceableCollection::at(int an_index, Object* const (*a_block)(
 }
 
 
-Object* const SequenceableCollection::atRandom() const
+Object* SequenceableCollection::atRandom() const
 {
     return at( Random::betweenAnd( 0, size() ) );
 }
 
 
-Collection* const SequenceableCollection::atAll(const Collection* const& key_collection) const
+Collection* SequenceableCollection::atAll(const Collection* const& key_collection) const
 {
     Collection* result = copyEmptyForCollect( key_collection->size() );
 
@@ -96,7 +96,7 @@ const SequenceableCollection* const& SequenceableCollection::atAllPut(Object* co
 }
 
 
-Object* const SequenceableCollection::after(const Object* const& old_object) const
+Object* SequenceableCollection::after(const Object* const& old_object) const
 {
     int i = indexOf( old_object );
 
@@ -107,7 +107,7 @@ Object* const SequenceableCollection::after(const Object* const& old_object) con
 }
 
 
-Object* const SequenceableCollection::before(const Object* const& old_object) const
+Object* SequenceableCollection::before(const Object* const& old_object) const
 {
     int i = indexOf( old_object );
 
@@ -118,59 +118,59 @@ Object* const SequenceableCollection::before(const Object* const& old_object) co
 }
 
 
-SequenceableCollection* const SequenceableCollection::allButFirst() const
+SequenceableCollection* SequenceableCollection::allButFirst() const
 {
     return __REINTERPRET_CAST(SequenceableCollection *, copyFrom( 1 ));
 }
-SequenceableCollection* const SequenceableCollection::allButFirst(int n) const
+SequenceableCollection* SequenceableCollection::allButFirst(int n) const
 {
     return __REINTERPRET_CAST(SequenceableCollection *, copyFrom( n ));
 }
 
 
-SequenceableCollection* const SequenceableCollection::allButLast() const
+SequenceableCollection* SequenceableCollection::allButLast() const
 {
     return __REINTERPRET_CAST(SequenceableCollection *, copyFrom( 0, size() - 1 ));
 }
-SequenceableCollection* const SequenceableCollection::allButLast(int n) const
+SequenceableCollection* SequenceableCollection::allButLast(int n) const
 {
     return __REINTERPRET_CAST(SequenceableCollection *, copyFrom( 0, size() - (n - 1) ));
 }
 
 
-Object* const SequenceableCollection::first() const
+Object* SequenceableCollection::first() const
 {
     return at( 0 );
 }
-SequenceableCollection* const SequenceableCollection::first(int n) const
+SequenceableCollection* SequenceableCollection::first(int n) const
 {
     return __REINTERPRET_CAST(SequenceableCollection *, copyFrom( 0, n ));
 }
 
 
-Object* const SequenceableCollection::second() const
+Object* SequenceableCollection::second() const
 {
     return at( 1 );
 }
 
 
-Object* const SequenceableCollection::third() const
+Object* SequenceableCollection::third() const
 {
     return at( 2 );
 }
 
 
-Object* const SequenceableCollection::fourth() const
+Object* SequenceableCollection::fourth() const
 {
     return at( 3 );
 }
 
 
-Object* const SequenceableCollection::last() const
+Object* SequenceableCollection::last() const
 {
     return at( size() - 1 );
 }
-SequenceableCollection* const SequenceableCollection::last(int n) const
+SequenceableCollection* SequenceableCollection::last(int n) const
 {
     return __REINTERPRET_CAST(SequenceableCollection *, copyFrom( size() - n ));
 }
@@ -425,25 +425,25 @@ static int gain_self_size_exception_block(const Object* const& self)
 }
 
 
-SequenceableCollection* const SequenceableCollection::copyAfter(const Object* const& an_object) const
+SequenceableCollection* SequenceableCollection::copyAfter(const Object* const& an_object) const
 {
     return copyFrom( indexOf( an_object,
                               gain_self_size_exception_block( this ) ) );
 }
 
 
-SequenceableCollection* const SequenceableCollection::copyAfterLast(const Object* const& an_object) const
+SequenceableCollection* SequenceableCollection::copyAfterLast(const Object* const& an_object) const
 {
     return copyFrom( indexOfLast( an_object,
                                   gain_self_size_exception_block( this ) ) );
 }
 
 
-SequenceableCollection* const SequenceableCollection::copyFrom(int start) const
+SequenceableCollection* SequenceableCollection::copyFrom(int start) const
 {
     return copyFrom( start, __STATIC_CAST(int, size()) );
 }
-SequenceableCollection* const SequenceableCollection::copyFrom(int start, int stop) const
+SequenceableCollection* SequenceableCollection::copyFrom(int start, int stop) const
 {
     if ( stop < start ) {
         if ( stop == start - 1 )

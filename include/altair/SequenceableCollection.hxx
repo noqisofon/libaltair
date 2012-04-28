@@ -34,25 +34,25 @@ class SequenceableCollection : public Collection
     /*!
      * 
      */
-    virtual Object* const at(int an_index, Object* const (*a_block)(const Object* const&)) const;
+    virtual Object* at(int an_index, Object* (*a_block)(const Object* const&)) const;
 
 
     /*!
      * 
      */
-    virtual Object* const atRandom() const;
+    virtual Object* atRandom() const;
 
 
     /*!
      * 
      */
-    virtual Collection* const atAll(const Collection& key_collection) const {
+    virtual Collection* atAll(const Collection& key_collection) const {
         return atAll( &key_collection );
     }
     /*!
      * 
      */
-    virtual Collection* const atAll(const Collection* const& key_collection) const;
+    virtual Collection* atAll(const Collection* const& key_collection) const;
 
 
     /*!
@@ -70,72 +70,72 @@ class SequenceableCollection : public Collection
     /*!
      * 
      */
-    virtual Object* const after(const Object* const& old_object) const;
+    virtual Object* after(const Object* const& old_object) const;
 
 
     /*!
      * 
      */
-    virtual Object* const before(const Object* const& old_object) const;
+    virtual Object* before(const Object* const& old_object) const;
 
 
     /*!
      * 
      */
-    virtual SequenceableCollection* const allButFirst() const;
+    virtual SequenceableCollection* allButFirst() const;
     /*!
      * 
      */
-    virtual SequenceableCollection* const allButFirst(int n) const;
-
-
-    /*!
-     * 
-     */
-    virtual SequenceableCollection* const allButLast() const;
-    /*!
-     * 
-     */
-    virtual SequenceableCollection* const allButLast(int n) const;
+    virtual SequenceableCollection* allButFirst(int n) const;
 
 
     /*!
      * 
      */
-    virtual Object* const first() const;
+    virtual SequenceableCollection* allButLast() const;
     /*!
      * 
      */
-    virtual SequenceableCollection* const first(int n) const;
-
-
-    /*!
-     * 
-     */
-    virtual Object* const second() const;
+    virtual SequenceableCollection* allButLast(int n) const;
 
 
     /*!
      * 
      */
-    virtual Object* const third() const;
+    virtual Object* first() const;
+    /*!
+     * 
+     */
+    virtual SequenceableCollection* first(int n) const;
 
 
     /*!
      * 
      */
-    virtual Object* const fourth() const;
+    virtual Object* second() const;
+
+
+    /*!
+     * 
+     */
+    virtual Object* third() const;
+
+
+    /*!
+     * 
+     */
+    virtual Object* fourth() const;
 
 
 
     /*!
      * 
      */
-    virtual Object* const last() const;
+    virtual Object* last() const;
     /*!
      * 
      */
-    virtual SequenceableCollection* const last(int n) const;
+    virtual SequenceableCollection* last(int n) const;
 
 
     /*!
@@ -257,23 +257,23 @@ class SequenceableCollection : public Collection
     /*!
      * 
      */
-    virtual SequenceableCollection* const copyAfter(const Object* const& an_object) const;
+    virtual SequenceableCollection* copyAfter(const Object* const& an_object) const;
 
 
     /*!
      * 
      */
-    virtual SequenceableCollection* const copyAfterLast(const Object* const& an_object) const;
+    virtual SequenceableCollection* copyAfterLast(const Object* const& an_object) const;
 
 
     /*!
      * 
      */
-    virtual SequenceableCollection* const copyFrom(int start) const;
+    virtual SequenceableCollection* copyFrom(int start) const;
     /*!
      * 
      */
-    virtual SequenceableCollection* const copyFrom(int start, int stop) const;
+    virtual SequenceableCollection* copyFrom(int start, int stop) const;
     /*! @} */
 
 

@@ -9,13 +9,13 @@
 USING_NAMESPACE_ALTAIR;
 
 
-Object* const Stream::next()
+Object* Stream::next()
 {
     subclassResponsibility();
 
     return NULL;
 }
-SequenceableCollection* const Stream::next(int an_integer)
+SequenceableCollection* Stream::next(int an_integer)
 {
     SequenceableCollection* answer = new Array( an_integer );
 
@@ -25,7 +25,7 @@ SequenceableCollection* const Stream::next(int an_integer)
 }
 
 
-Object* const Stream::nextInto(int an_integer, Object* const& answer, int starting_pos)
+Object* Stream::nextInto(int an_integer, Object* const& answer, int starting_pos)
 {
     int readen = 0;
 
@@ -113,7 +113,7 @@ bool Stream::nextMatchFor(const Object* const& an_object)
 }
 
 
-OrderedCollection* const Stream::splitAt(const Object* const& an_object)
+OrderedCollection* Stream::splitAt(const Object* const& an_object)
 {
     OrderedCollection* result = new OrderedCollection( 10 );
 
@@ -124,7 +124,7 @@ OrderedCollection* const Stream::splitAt(const Object* const& an_object)
 }
 
 
-SequenceableCollection* const Stream::contents()
+SequenceableCollection* Stream::contents()
 {
     Class* self_species = species();
     WriteStream* write_stream = WriteStream::on( self_species->createInstance( 8 ) );
@@ -142,7 +142,7 @@ SequenceableCollection* const Stream::contents()
 }
 
 
-SequenceableCollection* const Stream::nextLine()
+SequenceableCollection* Stream::nextLine()
 {
     Class* self_species = species();
     WriteStream* write_stream = WriteStream::on( self_species->createInstance( 40 ) );
@@ -172,7 +172,7 @@ SequenceableCollection* const Stream::nextLine()
 }
 
 
-SequenceableCollection* const Stream::upTo(const Object* const& an_object)
+SequenceableCollection* Stream::upTo(const Object* const& an_object)
 {
     Class* self_species = species();
     WriteStream* write_stream = WriteStream::on( self_species->createInstance( 8 ) );
@@ -198,7 +198,7 @@ SequenceableCollection* const Stream::upTo(const Object* const& an_object)
 }
 
 
-SequenceableCollection* const Stream::upToAll(const SequenceableCollection* const& a_collection)
+SequenceableCollection* Stream::upToAll(const SequenceableCollection* const& a_collection)
 {
     SequenceableCollection* ret;
     Class* self_species = species();
@@ -258,28 +258,28 @@ void Stream::nextPut(Object* const& an_object)
 void Stream::nextPut(char ch) {
     nextPut( Character::valueOf( ch ) );
 }
-Object* const Stream::nextPut(int an_integer, Object* const& an_object)
+Object* Stream::nextPut(int an_integer, Object* const& an_object)
 {
     for ( int i = 0; i < an_integer; ++ i ) {
         nextPut( an_object );
     }
     return an_object;
 }
-Object* const Stream::nextPut(int n, char ch) {
+Object* Stream::nextPut(int n, char ch) {
     return nextPut( n, Character::valueOf( ch ) );
 }
 
 
-SequenceableCollection* const Stream::nextPutAll(SequenceableCollection* const& a_collection)
+SequenceableCollection* Stream::nextPutAll(SequenceableCollection* const& a_collection)
 {
     a_collection->nextPutAllOn( self );
 
     return a_collection;
 }
-SequenceableCollection* const Stream::nextPutAll(const char* const& cstring) {
+SequenceableCollection* Stream::nextPutAll(const char* const& cstring) {
     return nextPutAll( new String( cstring ) );
 }
-SequenceableCollection* const Stream::nextPutAll(int n, SequenceableCollection* const& a_collection, int start)
+SequenceableCollection* Stream::nextPutAll(int n, SequenceableCollection* const& a_collection, int start)
 {
     Stream* it = a_collection->readSream();
 

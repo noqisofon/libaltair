@@ -57,25 +57,25 @@ class ArrayedCollection : public SequenceableCollection
     /*!
      * 
      */
-    virtual Collection* const addAll(Collection* const& key_collection);
+    virtual Collection* addAll(Collection* const& key_collection);
 
 
     /*!
      * 
      */
-    virtual SequenceableCollection* const copyFrom(int start, int stop) const;
+    virtual SequenceableCollection* copyFrom(int start, int stop) const;
 
 
     /*!
      * 
      */
-    virtual Collection* const copyWithout(const Object* const old_element) const;
+    virtual Collection* copyWithout(const Object* const old_element) const;
 
 
     /*!
      * 
      */
-    virtual Collection* const copyWith(Object* const& an_element) const;
+    virtual Collection* copyWith(Object* const& an_element) const;
     /*! @} */
 
 
@@ -86,25 +86,25 @@ class ArrayedCollection : public SequenceableCollection
     /*!
      * 
      */
-    virtual Collection* const select(bool (*a_block)(const Object* const&)) const;
+    virtual Collection* select(bool (*a_block)(const Object* const&)) const;
 
 
     /*!
      * 
      */
-    virtual Collection* const reject(bool (*a_block)(const Object* const&)) const;
+    virtual Collection* reject(bool (*a_block)(const Object* const&)) const;
 
 
     /*!
      * 
      */
-    virtual Collection* const collect(Object* const (*a_block)(const Object* const&)) const;
+    virtual Collection* collect(Object* (*a_block)(const Object* const&)) const;
 
 
     /*!
      * 
      */
-    virtual Collection* const withCollect(const SequenceableCollection* const& a_sequence, Object* const (*a_block)(const Object* const&, const Object* const&)) const;
+    virtual Collection* withCollect(const SequenceableCollection* const& a_sequence, Object* (*a_block)(const Object* const&, const Object* const&)) const;
     /*! @} */
 
 
@@ -115,23 +115,23 @@ class ArrayedCollection : public SequenceableCollection
     /*!
      * 
      */
-    virtual Collection* const copyReplaceFrom(int start, int stop, Object* const& an_object) const;
+    virtual Collection* copyReplaceFrom(int start, int stop, Object* const& an_object) const;
     /*!
      * 
      */
-    virtual Collection* const copyReplaceFrom(int start, int stop, Collection* const& replacement_collection) const;
-
-
-    /*!
-     * 
-     */
-    virtual Collection* const copyReplaceAll(const SequenceableCollection* const& old_subcollection, const SequenceableCollection* const& new_subcollection) const;
+    virtual Collection* copyReplaceFrom(int start, int stop, Collection* const& replacement_collection) const;
 
 
     /*!
      * 
      */
-    virtual Collection* const reverse() const;
+    virtual Collection* copyReplaceAll(const SequenceableCollection* const& old_subcollection, const SequenceableCollection* const& new_subcollection) const;
+
+
+    /*!
+     * 
+     */
+    virtual Collection* reverse() const;
     /*! @} */
 
 
@@ -142,11 +142,11 @@ class ArrayedCollection : public SequenceableCollection
     /*!
      * 
      */
-    virtual Collection* const sorted() const;
+    virtual Collection* sorted() const;
     /*!
      * 
      */
-    virtual Collection* const sorted(bool (*a_block)(const Object* const&, const Object* const&)) const;
+    virtual Collection* sorted(bool (*a_block)(const Object* const&, const Object* const&)) const;
     /*! @} */
 
 
@@ -170,7 +170,7 @@ class ArrayedCollection : public SequenceableCollection
     /*!
      * 
      */
-    virtual Stream* const writeStream();
+    virtual Stream* writeStream();
     /*! @} */
 
 
@@ -181,7 +181,7 @@ class ArrayedCollection : public SequenceableCollection
     /*!
      * 
      */
-    virtual Collection* const copyEmpty() const;
+    virtual Collection* copyEmpty() const;
 
 
     /*!
@@ -204,13 +204,13 @@ class ArrayedCollection : public SequenceableCollection
     /*!
      * 
      */
-    virtual ArrayedCollection* const growBy(int delta);
+    virtual ArrayedCollection* growBy(int delta);
 
 
     /*!
      * 
      */
-    virtual ArrayedCollection* const growTo(int new_size);
+    virtual ArrayedCollection* growTo(int new_size);
     /*! @} */
 
  protected:

@@ -1,3 +1,95 @@
+commit 96772218ccd7c1fd59f143103a9633d12a134cb5
+Author: ned rihine <ned.rihine@gmail.com>
+Date:   Sat Apr 28 00:34:59 2012 +0900
+
+    ビルドするために依存エラーを解決しまくる感じ。
+
+ .gitignore                                 |    3 +-
+ configure.in                               |    1 +
+ doxygen.conf                               | 1800 ++++++++++++++++++++++++++++
+ include/altair/ArgumentError.hxx           |   27 +
+ include/altair/ArgumentOutOfRangeError.hxx |   32 +
+ include/altair/Array.hxx                   |  154 +++
+ include/altair/ArrayedCollection.hxx       |  203 ++++
+ include/altair/Bag.hxx                     |  135 +++
+ include/altair/Behavior.hxx                |   15 +
+ include/altair/ByteArray.hxx               |   63 +-
+ include/altair/Character.hxx               |   35 +
+ include/altair/Class.hxx                   |    6 +-
+ include/altair/Collection.hxx              |   39 +-
+ include/altair/EmptyCollectionError.hxx    |    2 +-
+ include/altair/HashedCollection.hxx        |   21 +
+ include/altair/IndexOutOfRangeError.hxx    |   23 +
+ include/altair/Integer.hxx                 |   26 +
+ include/altair/InvalidSizeError.hxx        |   32 +
+ include/altair/Magunitude.hxx              |   24 +
+ include/altair/Makefile.am                 |   13 +-
+ include/altair/NotIndexableError.hxx       |   23 +
+ include/altair/Number.hxx                  |   39 +
+ include/altair/Object.hxx                  |  155 +--
+ include/altair/PositionableStream.hxx      |  255 ++++
+ include/altair/ReadStream.hxx              |   39 +
+ include/altair/SequenceableCollection.hxx  |   44 +-
+ include/altair/Set.hxx                     |   21 +
+ include/altair/SortedCollection.hxx        |   21 +
+ include/altair/Stream.hxx                  |   71 +-
+ include/altair/String.hxx                  |    2 +-
+ include/altair/Transcript.hxx              |   28 +
+ include/altair/UnicodeString.hxx           |   75 ++
+ include/altair/WriteStream.hxx             |   33 +
+ include/altair/cast.h                      |   50 +
+ include/altair/macro.h                     |   20 +
+ src/Array.cpp                              |  239 ++++
+ src/ArrayedCollection.cpp                  |  407 +++++++
+ src/Bag.cpp                                |  185 +++
+ src/ByteArray.cpp                          |  171 ++-
+ src/Collection.cpp                         |   47 +-
+ src/Iteratable.cpp                         |    6 +-
+ src/Makefile.am                            |    2 +
+ src/Object.cpp                             |  118 +-
+ src/OrderedCollection.cpp                  |    7 +-
+ src/PositionableStream.cpp                 |  222 ++++
+ src/SequenceableCollection.cpp             |   69 +-
+ src/Stream.cpp                             |   48 +-
+ src/String.cpp                             |    3 +-
+ 48 files changed, 4791 insertions(+), 263 deletions(-)
+
+commit d9f0f3b5256250d4925e50e189fab2aafcc250e4
+Author: ned rihine <ned.rihine@gmail.com>
+Date:   Thu Apr 26 18:45:52 2012 +0900
+
+    ビルドするために色々追加したり Object を完璧にコピーしたりしました。
+
+ ChangeLog                                 |  240 +++++++++++
+ include/altair/Behavior.hxx               |   21 +
+ include/altair/ByteArray.hxx              |  152 +++++++
+ include/altair/CharacterArray.hxx         |    4 +-
+ include/altair/ClassDescription.hxx       |    4 +-
+ include/altair/Collection.hxx             |  242 ++++++++++-
+ include/altair/CompiledBlock.hxx          |   11 +-
+ include/altair/ElementNotFoundError.hxx   |   32 ++
+ include/altair/EmptyCollectionError.hxx   |   23 +
+ include/altair/Error.hxx                  |    6 +-
+ include/altair/Iterator.hxx               |   34 ++
+ include/altair/Makefile.am                |   22 +-
+ include/altair/NotFoundError.hxx          |   24 ++
+ include/altair/Object.hxx                 |  655 ++++++++++++++++++++++-------
+ include/altair/OrderedCollection.hxx      |   36 ++
+ include/altair/SequenceableCollection.hxx |   26 +-
+ include/altair/Stream.hxx                 |  164 ++++++++
+ include/altair/String.hxx                 |    2 +-
+ include/altair/altair_prefix.h            |    5 +
+ include/altair/macro.h                    |   10 +-
+ src/ByteArray.cpp                         |  158 +++++++
+ src/Class.cpp                             |    2 +-
+ src/Collection.cpp                        |  392 +++++++++++++++--
+ src/Makefile.am                           |   20 +-
+ src/Object.cpp                            |  547 +++++++++++++++++++++++-
+ src/OrderedCollection.cpp                 |   42 ++
+ src/SequenceableCollection.cpp            |   46 +-
+ src/Stream.cpp                            |  310 ++++++++++++++
+ 28 files changed, 2956 insertions(+), 274 deletions(-)
+
 commit dfa3ba7cb27434c0f9c186bf9c34ad9e8d1138d7
 Author: ned rihine <ned.rihine@gmail.com>
 Date:   Sat Apr 21 17:05:00 2012 +0900

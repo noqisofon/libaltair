@@ -7,6 +7,11 @@
 BEGIN_NAMESPACE_ALTAIR
 
 
+class HashedCollection;
+class SequenceableCollection;
+class Stream;
+
+
 /*!
  *
  */
@@ -29,13 +34,13 @@ class Bag : public Collection
     /*!
      * 
      */
-    virtual Object* const add(Object* const new_object);
+    virtual Collection* const& add(Object* const& new_object);
 
 
     /*!
      * 
      */
-    virtual Object* const addWithOccurrences(Object* const new_object, int an_integer);
+    virtual Object* addWithOccurrences(Object* const new_object, int an_integer);
     /*! @} */
 
 
@@ -45,7 +50,7 @@ class Bag : public Collection
     /*!
      * 
      */
-    virtual Object* const remove(Object* const& old_object, Object* const (*an_exception_block)(const Collection* const&, Object* const&));
+    virtual Object* remove(Object* const& old_object, Object* (*an_exception_block)(const Collection* const&, Object* const&));
     /*! @} */
 
 
@@ -55,7 +60,7 @@ class Bag : public Collection
     /*!
      * 
      */
-    virtual SequenceableCollection* const sortedByCount() const;
+    virtual SequenceableCollection* sortedByCount() const;
     /*! @} */
 
 
@@ -99,7 +104,7 @@ class Bag : public Collection
     /*!
      * 
      */
-    virtual Set* const asSet() const;
+    virtual Set* asSet() const;
     /*! @} */
 
 
@@ -123,6 +128,41 @@ class Bag : public Collection
      */
     virtual void printOn(Stream* const& a_stream) const;
     /*! @} */
+
+
+    /*! \name private
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Class* dictionaryClass() const;
+
+
+    /*!
+     * 
+     */
+    virtual HashedCollection* valuesAndCounts() const;
+
+
+    /*!
+     * 
+     */
+    virtual HashedCollection* contents() const;
+    /*! @} */
+
+ protected:
+    /*! \name private
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual void initContents(size_t size);
+    /*! @} */
+
+ private:
+    HashedCollection* contents_;
 };
 
 
