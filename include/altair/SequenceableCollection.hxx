@@ -34,7 +34,7 @@ class SequenceableCollection : public Collection
     /*!
      * 
      */
-    virtual Object* at(int an_index, Object* (*a_block)(const Object* const&)) const;
+    virtual Object* at(int an_index, Object* (*a_block)(const Object* const&, const Object* const&)) const;
 
 
     /*!
@@ -161,19 +161,19 @@ class SequenceableCollection : public Collection
     /*!
      * 
      */
-    virtual int indexOf(const Object* const& an_element, int (*exception_block)(const Object* const) ) const {
+    virtual int indexOf(const Object* const& an_element, int (*exception_block)(const Object* const&, const Object* const&) ) const {
         return indexOf( an_element, 0, exception_block );
     }
     /*!
      * 
      */
-    virtual int indexOf(const Object* const& an_element, int an_index, int (*exception_block)(const Object* const) ) const;
+    virtual int indexOf(const Object* const& an_element, int an_index, int (*exception_block)(const Object* const&, const Object* const&)) const;
 
 
     /*!
      * 
      */
-    virtual int indexOfLast(const Object* const& an_element, int (*exception_block)(const Object* const) ) const;
+    virtual int indexOfLast(const Object* const& an_element, int (*exception_block)(const Object* const&, const Object* const&)) const;
 
 
     /*!
@@ -187,13 +187,13 @@ class SequenceableCollection : public Collection
     /*!
      * 
      */
-    virtual int identityIndexOf(const Object* const& an_element, int an_index, int (*exception_block)(const Object* const) ) const;
+    virtual int identityIndexOf(const Object* const& an_element, int an_index, int (*exception_block)(const Object* const&, const Object* const&) ) const;
 
 
     /*!
      * 
      */
-    virtual int identityIndexOfLast(const Object* const& an_element, int (*exception_block)(const Object* const) ) const;
+    virtual int identityIndexOfLast(const Object* const& an_element, int (*exception_block)(const Object* const&, const Object* const&) ) const;
 
 
     /*!
@@ -203,7 +203,7 @@ class SequenceableCollection : public Collection
     /*!
      * 
      */
-    virtual int indexOfSubCollection( const SequenceableCollection* const& a_sub_collection, int (*exception_block)(const Object* const) ) const {
+    virtual int indexOfSubCollection( const SequenceableCollection* const& a_sub_collection, int (*exception_block)(const Object* const&, const Object* const&) ) const {
         return indexOfSubCollection( a_sub_collection,
                                      0,
                                      exception_block );
@@ -217,7 +217,7 @@ class SequenceableCollection : public Collection
      */
     virtual int indexOfSubCollection( const SequenceableCollection* const& a_sub_collection,
                                       int an_index,
-                                      int (*exception_block)(const Object* const) ) const;
+                                      int (*exception_block)(const Object* const&, const Object* const&) ) const;
     /*! @} */
 
 
@@ -277,8 +277,19 @@ class SequenceableCollection : public Collection
     /*! @} */
 
 
+    /*! \name concatenating
+     */
+    /*! @{ */
+    /*! @} */
+
+
     /*!
-     \name testing
+     * 
+     */
+    virtual void nextPutAllOn(Stream* const& a_stream);
+
+
+    /*! \name testing
      */
     /*! @{ */
     /*!
@@ -327,9 +338,25 @@ class SequenceableCollection : public Collection
     /*! @} */
 
 
+    /*! \name testing collections
+     */
+    /*! @{ */
+    /*!
+     *
+     */
+    virtual size_t size() const { return 0; }
+    /*! @} */
+
+
     /*! \name private methods
      */
     /*! @{ */
+    /*!
+     *
+     */
+    virtual bool matchSubCollection(const SequenceableCollection* const& a_sub_collection, int an_index) const;
+
+
     /*!
      * 
      */

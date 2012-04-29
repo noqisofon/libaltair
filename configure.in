@@ -26,9 +26,9 @@ AC_ARG_ENABLE(debug,
     , enable_debug=no)
 
 if test x$enable_debug = xyes; then
-  CFLAGS="$CFLAGS -g -W -Wall"
+  CFLAGS="$CFLAGS -g -W -Wall -D__STDC_CONSTANT_MACROS"
 else
-  CFLAGS="$CFLAGS -O2 -W -Wall"
+  CFLAGS="$CFLAGS -O2 -W -Wall -D__STDC_CONSTANT_MACROS"
 fi
 
 AC_DEFINE([ALTAIR_BUILD], [1], [build the libaltair])

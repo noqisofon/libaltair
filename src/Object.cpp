@@ -3,15 +3,38 @@
 #include "altair/altair_prefix.h"
 #include "altair/Collection.hxx"
 #include "altair/Class.hxx"
+#include "altair/Integer.hxx"
+#include "altair/Character.hxx"
+#include "altair/Boolean.hxx"
 #include "altair/Symbol.hxx"
 #include "altair/String.hxx"
-#include "altair/ObjectMemory.hxx"
-#include "altair/WeakKeyIdentityDictionary.hxx"
+#include "altair/IOChannel.hxx"
+#include "altair/Association.hxx"
+#include "altair/Transcript.hxx"
+#include "altair/WriteStream.hxx"
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#   include "altair/ObjectMemory.hxx"
+#   include "altair/WeakKeyIdentityDictionary.hxx"
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#include "altair/ArgumentOutOfRangeError.hxx"
+#include "altair/NotIndexableError.hxx"
+#include "altair/IndexOutOfRangeError.hxx"
+#include "altair/ReadOnlyObjectError.hxx"
+#include "altair/WrongClassError.hxx"
+#include "altair/InvalidValueError.hxx"
+#include "altair/BadReturnError.hxx"
+#include "altair/UserInterruptError.hxx"
+#include "altair/SubclassResponsibilityError.hxx"
+#include "altair/NotYetImplementedError.hxx"
+#include "altair/ShouldNotImplementError.hxx"
+#include "altair/NoRunnableProcessError.hxx"
+#include "altair/PrimitiveFailed.hxx"
 
 #include "altair/Object.hxx"
 USING_NAMESPACE_ALTAIR;
 
 
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
 class Object_class : public Class
 {
  public:
@@ -24,7 +47,7 @@ class Object_class : public Class
     /**
      * 
      */
-    Object* const initialize(Object* const& self) {
+    virtual Object* const initialize(Object* const& self) {
         if ( !self->( Object_class::getInstance() ) )
             return self;
 
@@ -82,6 +105,7 @@ class Object_class : public Class
 
 
 const Object_class Object_class::OBJECT_CLASS
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
 Object::Object()
@@ -101,10 +125,10 @@ Object::~Object()
 
 bool Object::isKindOf(const Class* const& a_class) const
 {
-    bool ret
+    bool ret;
     Class* const self_class = getClass();
 
-    ret = self_class->identityEquals( a_class ) || self_class->inheritFrom( a_class );
+    ret = self_class->identityEquals( a_class ) || self_class->inheritsFrom( a_class );
 
     // self_class がどーなっているのかわからないが、解放する必要がある。
     self_class->release();
@@ -115,7 +139,7 @@ bool Object::isKindOf(const Class* const& a_class) const
 
 bool Object::isInstanceOf(const Class* const& a_class) const
 {
-    bool ret
+    bool ret;
     Class* const self_class = getClass();
 
     ret = self_class->identityEquals( a_class );
@@ -143,7 +167,7 @@ bool Object::respondsTo(const Symbol* const& a_symbol) const
 
 Object* Object::copy() const
 {
-    return shallowCopy( postCopy() );
+    return shallowCopy( /* postCopy() */ );
 }
 
 
@@ -349,7 +373,7 @@ void Object::display() const
 {
     String* display_string = displayString();
 
-    Transcipt::show( display_string );
+    Transcript::show( display_string );
 
     display_string->release();
 }
@@ -359,7 +383,7 @@ void Object::displayNl() const
 {
     String* display_string = displayString();
 
-    Transcipt::showCr( display_string );
+    Transcript::showCr( display_string );
 
     display_string->release();
 }
@@ -368,12 +392,13 @@ void Object::displayNl() const
 
 String* Object::printString() const
 {
-    Stream* const& write_stream = WriteStream::on( new String() );
+    Stream* write_stream = WriteStream::on( new String() );
 
     printOn( write_stream );
 
-    String* const ret = stream->contents();
-    stream->release();
+    String* ret = __REINTERPRET_CAST(String *, write_stream->contents());
+
+    write_stream->release();
 
     return ret;
 }
@@ -399,7 +424,7 @@ void Object::print() const
 {
     String* print_string = printString();
 
-    Transcipt::show( print_string );
+    Transcript::show( print_string );
 
     print_string->release();
 }
@@ -409,7 +434,7 @@ void Object::printNl() const
 {
     String* print_string = printString();
 
-    Transcipt::showCr( print_string );
+    Transcript::showCr( print_string );
 
     print_string->release();
 }
@@ -417,12 +442,14 @@ void Object::printNl() const
 
 void Object::basicPrintNl() const
 {
-    IOChannel* standard_output = StdOut::getInstance();
+    Stream* standard_output = IOChannel::getStandardOutput();
 
     standard_output->flush();
     basicPrint();
-    standard_output->nextPut( Character::nl );
+    standard_output->nextPut( Character::nl() );
     standard_output->flush();
+
+    standard_output->release();
 }
 
 
@@ -524,18 +551,18 @@ void Object::reconstructOriginalObject()
 void Object::examine() const
 {
     /*
-     * st なコードではクラスをそのまま渡しているが、C++ ではそんなことは無理なので、CLASS_INSTANCE_OF を使う。
-     * CLASS_INSTANCE_OF マクロは、指定されたクラスの静的メンバ関数、getInsance() を呼び出す。
+     * st なコードではクラスをそのまま渡しているが、C++ ではそんなことは無理なので、instanceOf を使う。
+     * 
      */
-    examineOn( ALTAIR_CLASS_INSTANCE_OF(Transcript) );
+    examineOn( Transcript::instanceOf() );
 }
 #endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
 void Object::inspect() const
 {
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
-    examineOn( ALTAIR_CLASS_INSTANCE_OF(Transcript) );
+#if !defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+    printOn( Transcript::instanceOf() );
 #else
     Class* const self_class = getClass();
 
@@ -553,7 +580,7 @@ void Object::inspect() const
         Object* object = instVarAt( i );
 
         try {
-            output_text = object->printingString();
+            output_text = object->printString();
         } catch ( Error& ex ) {
             output_text =  String::format( "%1 %2",
                                            object->getClass()->article(),
@@ -573,7 +600,7 @@ void Object::inspect() const
         Transcript::nextPutAll( output_text );
         Transcript::nl();
     }
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* !defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 }
 
 
@@ -639,7 +666,7 @@ Object* Object::checkIndexableBounds(int index) const
 
         return NULL;
     }
-    if ( index > basicSize() ) {
+    if ( index > __STATIC_CAST(int, basicSize()) ) {
         IndexOutOfRangeError::signalOn( this, index );
 
         return NULL;
@@ -684,7 +711,7 @@ void Object::checkIndexableBoundsPut(int index, Object* const& object)
 
         return;
     }
-    if ( index > basicSize() ) {
+    if ( index > __STATIC_CAST(int, basicSize()) ) {
         IndexOutOfRangeError::signalOn( this, index );
 
         return;
@@ -698,9 +725,9 @@ void Object::checkIndexableBoundsPut(int index, Object* const& object)
         return ;
     }
 
-    if ( !object->isKindOf( ALTAIR_TYPEOF(Character) ) ) {
+    if ( !object->isKindOf( Character::getCurrentClass() ) ) {
         if ( shape->identityEquals( ALTAIR_SYMBOL(character) ) || shape->identityEquals( ALTAIR_SYMBOL(utf32) ) ) {
-            WrongClassError::signalOn( object, ALTAIR_TYPEOF(Character) );
+            WrongClassError::signalOn( object, Character::getCurrentClass() );
 
             return ;
         }
@@ -742,14 +769,14 @@ void Object::checkIndexableBoundsPut(int index, Object* const& object)
     self_class->release();
 
     ArgumentOutOfRangeError::signalOn( object,
-                                       ALTAIR_ODD( size ) ? -1 << size : 0,
-                                       (1 << size) - 1);
+                                       Integer::valueOf( ALTAIR_ODD(size) ? -1 << size : 0 ),
+                                       Integer::valueOf( ( 1 << size ) - 1 ) );
     
-    return NULL;
+    return ;
 }
 
 
-Object* Object::become(const Object* const& other_object)
+Object* Object::become(const Object* const&/* other_object */)
 {
     ReadOnlyObjectError::signal();
 
@@ -757,7 +784,7 @@ Object* Object::become(const Object* const& other_object)
 }
 
 
-Object* Object::becomeForward(const Object* const& other_object)
+Object* Object::becomeForward(const Object* const&/* other_object */)
 {
     ReadOnlyObjectError::signal();
 
@@ -790,18 +817,19 @@ void Object::makeFixed()
 Object* Object::instVarAt(int index) const
 {
     if ( index < 0 ) {
-        IndexOutOfRangeError::signalOn( self, index );
+        IndexOutOfRangeError::signalOn( this, index );
 
         return NULL;
     }
-    if ( index > basicSize() + instSize() ) {
-        IndexOutOfRangeError::signalOn( self, index );
-
-        return NULL;
-    }
-
+    
     Class* self_class = getClass();
-    Object* ret = basicAt( index - self_class->instSize() );
+    if ( index > __STATIC_CAST(int, basicSize()) + __STATIC_CAST(int, self_class->instanceSize()) ) {
+        IndexOutOfRangeError::signalOn( this, index );
+
+        return NULL;
+    }
+
+    Object* ret = basicAt( index - self_class->instanceSize() );
 
     self_class->release();
 
@@ -812,34 +840,38 @@ Object* Object::instVarAt(int index) const
 void Object::instVarPut(int index, Object* const value)
 {
     if ( index < 0 ) {
-        IndexOutOfRangeError::signalOn( self, index );
+        IndexOutOfRangeError::signalOn( this, index );
 
-        return NULL;
-    }
-    if ( index > basicSize() + instSize() ) {
-        IndexOutOfRangeError::signalOn( self, index );
-
-        return NULL;
+        return ;
     }
 
     Class* self_class = getClass();
-    Object* ret = basicPut( index - self_class->instSize(), value );
+
+    if ( index > __STATIC_CAST(int, basicSize()) + __STATIC_CAST(int, self_class->instanceSize()) ) {
+        IndexOutOfRangeError::signalOn( this, index );
+
+        return ;
+    }
+
+    /* Object* ret = */basicPut( index - __STATIC_CAST(int, self_class->instanceSize()), value );
 
     self_class->release();
 
-    return ret;
+    //return ret;
 }
 
 
 void Object::makeReadOnly(bool a_boolean)
 {
-    WrongClassError::signalOn( Boolean::valueOf( a_boolean ), ALTAIR_GET_CLASS(Boolean) );
+    WrongClassError::signalOn( Boolean::valueOf( a_boolean ),
+                               Boolean::getCurrentClass() );
 }
 
 
 void Object::makeUntrusted(bool a_boolean)
 {
-    WrongClassError::signalOn( Boolean::valueOf( a_boolean ), ALTAIR_GET_CLASS(Boolean) );
+    WrongClassError::signalOn( Boolean::valueOf( a_boolean ),
+                               Boolean::getCurrentClass() );
 }
 
 
@@ -859,16 +891,17 @@ Object* Object::asOop() const
 
 int Object::identityHash() const
 {
-    return __STATIC_CAST(int, this);
+    return *__REINTERPRET_CAST(const int *, this);
 }
 
 
 int Object::hash() const
 {
-    return __STATIC_CAST(int, this);
+    return *__REINTERPRET_CAST(const int *, this);
 }
 
 
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
 Object* Object::perform(const Object* const& selector_or_message_or_method) const
 {
     if ( selector_or_message_or_method->isSymbol() ) {
@@ -880,7 +913,7 @@ Object* Object::perform(const Object* const& selector_or_message_or_method) cons
             return doseNotUnderstand( Message::selector( selector_or_message_or_method, ALTAIR_ARRAY0 ) );
     }
 
-    if ( selector_or_message_or_method->isKindOf( ALTAIR_GET_CLASS(CompiledMethod) ) ) {
+    if ( selector_or_message_or_method->isKindOf( CompiledMethod::getCurrentClass() ) ) {
         WrongArgumentCountError::signal();
 
         return NULL;
@@ -889,13 +922,13 @@ Object* Object::perform(const Object* const& selector_or_message_or_method) cons
 }
 Object* Object::perform(const Object* const& selector_or_method, Object* const& arg1) const
 {
-    if ( selector_or_method->isKindOf( ALTAIR_GET_CLASS(CompiledMethod) ) ) {
+    if ( selector_or_method->isKindOf( CompiledMethod::getCurrentClass() ) ) {
         WrongArgumentCountError::signal();
 
         return NULL;
     }
     if ( !selector_or_method->isSymbol() ) {
-        WrongClassError::signalOn( selector_or_method, ALTAIR_GET_CLASS(Symbol) );
+        WrongClassError::signalOn( selector_or_method, Symbol::getCurrentClass() );
 
         return NULL;
     }
@@ -910,13 +943,13 @@ Object* Object::perform(const Object* const& selector_or_method, Object* const& 
 }
 Object* Object::perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2) const
 {
-    if ( selector_or_method->isKindOf( ALTAIR_GET_CLASS(CompiledMethod) ) ) {
+    if ( selector_or_method->isKindOf( CompiledMethod::getCurrentClass() ) ) {
         WrongArgumentCountError::signal();
 
         return NULL;
     }
     if ( !selector_or_method->isSymbol() ) {
-        WrongClassError::signalOn( selector_or_method, ALTAIR_GET_CLASS(Symbol) );
+        WrongClassError::signalOn( selector_or_method, Symbol::getCurrentClass() );
 
         return NULL;
     }
@@ -931,13 +964,13 @@ Object* Object::perform(const Object* const& selector_or_method, Object* const& 
 }
 Object* Object::perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2, Object* const& arg3) const
 {
-    if ( selector_or_method->isKindOf( ALTAIR_GET_CLASS(CompiledMethod) ) ) {
+    if ( selector_or_method->isKindOf( CompiledMethod::getCurrentClass() ) ) {
         WrongArgumentCountError::signal();
 
         return NULL;
     }
     if ( !selector_or_method->isSymbol() ) {
-        WrongClassError::signalOn( selector_or_method, ALTAIR_GET_CLASS(Symbol) );
+        WrongClassError::signalOn( selector_or_method, Symbol::getCurrentClass() );
 
         return NULL;
     }
@@ -952,13 +985,13 @@ Object* Object::perform(const Object* const& selector_or_method, Object* const& 
 }
 Object* Object::perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2, Object* const& arg3, Object* const& arg4) const
 {
-    if ( selector_or_method->isKindOf( ALTAIR_GET_CLASS(CompiledMethod) ) ) {
+    if ( selector_or_method->isKindOf( CompiledMethod::getCurrentClass() ) ) {
         WrongArgumentCountError::signal();
 
         return NULL;
     }
     if ( !selector_or_method->isSymbol() ) {
-        WrongClassError::signalOn( selector_or_method, ALTAIR_GET_CLASS(Symbol) );
+        WrongClassError::signalOn( selector_or_method, Symbol::getCurrentClass() );
 
         return NULL;
     }
@@ -975,13 +1008,13 @@ Object* Object::perform(const Object* const& selector_or_method, Object* const& 
 
 Object* Object::performWithArguments(const Object* const& selector_or_method, const Array* const& arguments_array) const
 {
-    if ( selector_or_method->isKindOf( ALTAIR_GET_CLASS(CompiledMethod) ) ) {
+    if ( selector_or_method->isKindOf( CompiledMethod::getCurrentClass() ) ) {
         WrongArgumentCountError::signal();
 
         return NULL;
     }
     if ( !selector_or_method->isSymbol() ) {
-        WrongClassError::signalOn( selector_or_method, ALTAIR_GET_CLASS(Symbol) );
+        WrongClassError::signalOn( selector_or_method, Symbol::getCurrentClass() );
 
         return NULL;
     }
@@ -993,6 +1026,7 @@ Object* Object::performWithArguments(const Object* const& selector_or_method, co
     } else
         return doseNotUnderstand( Message::selector( selector_or_message_or_method, arguments_array ) );
 }
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
 bool Object::equals(const Object* const& arg) const
@@ -1017,6 +1051,7 @@ Class* Object::getClass() const
 
 Object* Object::error(const String* const& message) const
 {
+    return NULL;
 }
 
 
@@ -1035,7 +1070,7 @@ Object* Object::halt(const String* const& a_string)
 }
 
 
-Object* Object::primitiveFailed() const
+const Object* Object::primitiveFailed() const
 {
     PrimitiveFailed::signal();
 
@@ -1043,7 +1078,7 @@ Object* Object::primitiveFailed() const
 }
 
 
-Object* Object::shouldNotImplement() const
+const Object* Object::shouldNotImplement() const
 {
     ShouldNotImplementError::signal();
 
@@ -1051,7 +1086,7 @@ Object* Object::shouldNotImplement() const
 }
 
 
-Object* const subclassResponsibility() const
+const Object* Object::subclassResponsibility() const
 {
     SubclassResponsibilityError::signal();
 
@@ -1059,7 +1094,7 @@ Object* const subclassResponsibility() const
 }
 
 
-Object* Object::notYetImplemented() const
+const Object* Object::notYetImplemented() const
 {
     NotYetImplementedError::signal();
 
@@ -1069,8 +1104,8 @@ Object* Object::notYetImplemented() const
 
 Object* Object::instVarNamed(const String* const& a_string) const
 {
-    Class* self_class = getClass();
     Object* ret;
+    Class* self_class = getClass();
 
     ret = instVarAt( self_class->indexOfInstVar( a_string ) );
 
@@ -1091,13 +1126,15 @@ void Object::instVarNamedPut(const String* const& a_string, Object* const& an_ob
 }
 
 
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
 Object* Object::doseNotUnderstand(const Message* const& message) const
 {
     return this;
 }
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
-Object* Object::badReturnError() const
+const Object* Object::badReturnError() const
 {
     BadReturnError::signal();
 
@@ -1107,16 +1144,17 @@ Object* Object::badReturnError() const
 
 bool Object::mustBeBoolean() const
 {
-    bool result = MustBeBoolenError::signalOn( this );
+    // bool result = MustBeBoolenError::signalOn( this );
 
-    if ( result == false )
-        result = true;
+    // if ( result == false )
+    //     result = true;
 
-    return result;
+    // return result;
+    return false;
 }
 
 
-Object* Object::noRunnableProcess() const
+const Object* Object::noRunnableProcess() const
 {
     NoRunnableProcessError::signal();
 
@@ -1124,7 +1162,7 @@ Object* Object::noRunnableProcess() const
 }
 
 
-Object* Object::userInterrupt() const
+const Object* Object::userInterrupt() const
 {
     UserInterruptError::signal();
 

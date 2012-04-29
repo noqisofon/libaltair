@@ -20,6 +20,10 @@ class InvalidArgumentError : public ArgumentError
      * 
      */
     static void signalOn(const Object* const&);
+    /*!
+     * 
+     */
+    static void signalOn(int, const char* const&);
 };
 
 

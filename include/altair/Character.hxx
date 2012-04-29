@@ -16,13 +16,37 @@ class Character : public Magunitude
     /*!
      * 
      */
+    static Class* getCurrentClass();
+
+
+    /*!
+     * 
+     */
     static Character* valueOf(int value);
 
 
     /*!
      * 
      */
+    static Character* cr();
+
+
+    /*!
+     * 
+     */
+    static Character* tab();
+
+
+    /*!
+     * 
+     */
     static Character* space();
+
+
+    /*!
+     * 
+     */
+    static Character* nl();
 };
 
 

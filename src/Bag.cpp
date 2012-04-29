@@ -1,11 +1,16 @@
 #include "config.h"
 
 #include "altair/altair_prefix.h"
+#include "altair/Class.hxx"
 #include "altair/Association.hxx"
 #include "altair/Number.hxx"
+#include "altair/Integer.hxx"
 #include "altair/Character.hxx"
 #include "altair/Stream.hxx"
 #include "altair/String.hxx"
+#include "altair/Dictionary.hxx"
+#include "altair/LookupTable.hxx"
+#include "altair/SortedCollection.hxx"
 #include "altair/HashedCollection.hxx"
 #include "altair/InvalidArgumentError.hxx"
 
@@ -39,7 +44,8 @@ Object* Bag::addWithOccurrences(Object* const new_object, int an_integer)
         return NULL;
     }
 
-    int new_occurrences = contents_->put( new_object, occurrencesOf( new_object ) + an_integer );
+    Number* temp = __REINTERPRET_CAST(Number *, contents_->put( new_object, Integer::valueOf( occurrencesOf( new_object ) + an_integer ) ));
+    int new_occurrences = temp->asInt32();
 
     if ( new_occurrences <= 0 )
         contents_->removeKey( new_object );
@@ -53,11 +59,11 @@ Object* Bag::remove(Object* const& old_object, Object* (*an_exception_block)(con
     int count = occurencesOf( old_object );
 
     if ( count == 0 )
-        return an_exception_block( this, NULL );
+        return an_exception_block( this, old_object );
     if ( count == 1 )
         contents_->removeKey( old_object );
     else
-        contents_->put( old_object, count - 1 );
+        contents_->put( old_object, Integer::valueOf( count - 1 ) );
 
     return old_object;
 }
@@ -68,14 +74,14 @@ static int counts_sort_block(const Object* const& left, const Object* const& rig
     if ( left->isNumber() && right->isNumber() )
         return __REINTERPRET_CAST(const Number * const, left)->asInt32() >= __REINTERPRET_CAST(const Number * const, right)->asInt32();
     else
-        return 1;
+        return 0;
 }
 
 
 SequenceableCollection* Bag::sortedByCount() const
 {
     Array* result;
-    SortedCollection* counts = SortedCollection::sortBlock( counts_sort_block );
+    SortedCollection* counts = SortedCollection::withSortBlock( counts_sort_block );
 
     Stream* it = readStream();
     while ( it->atEnd() ) {
@@ -92,19 +98,21 @@ SequenceableCollection* Bag::sortedByCount() const
     result = counts->asArray();
     counts->release();
 
-    return result;
+    return __REINTERPRET_CAST(SequenceableCollection *, result);
 }
 
 
-static int null_if_absent(const Object* const&/* an_object*/)
+static Object* null_if_absent(const Object* const&/* self */, const Object* const&/* key */)
 {
-    return 0;
+    return NULL;
 }
 
 
 int Bag::occurrencesOf(const Object* const& an_object) const
 {
-    return contents_->at( an_object, null_if_absent );
+    Number* temp = __REINTERPRET_CAST(Number *, contents_->at( an_object, null_if_absent ));
+
+    return temp->asInt32();
 }
 
 
@@ -137,17 +145,21 @@ int Bag::hash() const
 }
 
 
-bool Bag::equals(const Object* const& a_bag) const
+bool Bag::equals(const Object* const& an_object) const
 {
     Class* self_class = getClass();
-    Class* bag_class = a_bag->getClass();
+    Class* other_class = an_object->getClass();
 
-    if ( !self_class->identityEquals( bag_class ) ) {
+    if ( !self_class->identityEquals( other_class ) ) {
         self_class->release();
-        bag_class->release();
+        other_class->release();
 
         return false;
     }
+    return equals( __REINTERPRET_CAST(const Bag* const, an_object) );
+}
+bool Bag::equals(const Bag* const& a_bag) const
+{
     return contents_->equals( a_bag->contents_ );
 }
 
@@ -187,17 +199,17 @@ void Bag::printOn(Stream* const& a_stream) const
 
 Class* Bag::dictionaryClass() const
 {
-    return LookupTable::getClass();
+    return LookupTable::getCurrentClass();
 }
 
 
-HashedCollection* Bag::valuesAndCounts() const
+Dictionary* Bag::valuesAndCounts() const
 {
-    return contents_->copy();
+    return __REINTERPRET_CAST(Dictionary *, contents_->copy());
 }
 
 
-HashedCollection* Bag::contents() const
+Dictionary* Bag::contents() const
 {
     return contents_;
 }
@@ -205,7 +217,7 @@ HashedCollection* Bag::contents() const
 
 void Bag::initContents(size_t size)
 {
-    contents_ = dictionaryClass()->createInstance( size );
+    contents_ = __REINTERPRET_CAST(Dictionary *, dictionaryClass()->createInstance( size ));
 }
 // Local Variables:
 //   coding: utf-8

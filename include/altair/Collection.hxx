@@ -82,7 +82,7 @@ class Collection : public Iteratable
     /**
      * 
      */
-    virtual Collection* const& addAll(const Collection* const& a_collection);
+    virtual const Collection* addAll(const Collection* const& a_collection);
     /*! @} */
 
 
@@ -291,7 +291,7 @@ class Collection : public Iteratable
     /*!
      * 
      */
-    virtual SortedCollection* asSortedCollection(bool (*a_block)(const Object* const&, const Object* const&)) const;
+    virtual SortedCollection* asSortedCollection(int (*a_block)(const Object* const&, const Object* const&)) const;
     /*! @} */
 
 
@@ -306,7 +306,7 @@ class Collection : public Iteratable
     /*!
      * 
      */
-    virtual Collection* sorted(bool (*a_block)(const Object* const&, const Object* const&)) const;
+    virtual Collection* sorted(int (*a_block)(const Object* const&, const Object* const&)) const;
     /*! @} */
 
 

@@ -19,3 +19,6 @@ END_NAMESPACE_ALTAIR
 
 
 #endif  /* altair_ClassDescription_hxx */
+// Local Variables:
+//   coding: utf-8
+// End:

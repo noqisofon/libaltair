@@ -14,17 +14,17 @@ Encoding* String::encoding() const
 {
     notYetImplemented();
 
-    return nil;
+    return NULL;
 }
 
 
-ByteArray* String::asByteArray()
+ByteArray* String::asByteArray() const
 {
-    int self_bytesize = byteSize();
-    ByteArray* byte_array = new ByteArray( self_bytesize );
+    int self_size = size();
+    ByteArray* byte_array = new ByteArray( self_size );
 
     byte_array->replaceFrom( 0,                  // from:
-                             self_bytesize - 1,  // to:
+                             self_size - 1,      // to:
                              this,               // withString:
                              0 );                // startingAt:
 
@@ -38,10 +38,18 @@ Symbol* String::asSymbol() const
 }
 
 
+String* String::asString() const
+{
+    return __CONST_CAST(String *, this);
+}
+
+
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
 void String::displayOn(Stream* const& a_stream) const
 {
     a_stream->nextPutAll( this );
 }
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 // Local Variables:
 //   coding: utf-8
 // End:

@@ -1,12 +1,34 @@
 #include "config.h"
 
 #include "altair/altair_prefix.h"
+#include "altair/Class.hxx"
 #include "altair/Character.hxx"
 #include "altair/Stream.hxx"
 #include "altair/String.hxx"
 
 #include "altair/Array.hxx"
 USING_NAMESPACE_ALTAIR;
+
+
+class Array_class : public Class
+{
+    typedef Class _Super;
+
+ public:
+    static Class* getInstance() {
+        return __REINTERPRET_CAST(Class *, &ARRAY_CLASS);
+    }
+
+ private:
+    Array_class() : _Super("Array") {}
+
+ private:
+    static Array_class ARRAY_CLASS;
+
+};
+
+
+Array_class Array_class::ARRAY_CLASS;
 
 
 Array* Array::with(Object* const& an_object)
@@ -83,6 +105,12 @@ Array* Array::withAll(Collection* const& a_collection)
     it->release();
 
     return ret;
+}
+
+
+Class* Array::getClassInstance()
+{
+    return Array_class::getInstance();
 }
 
 

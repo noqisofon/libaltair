@@ -10,6 +10,7 @@ BEGIN_NAMESPACE_ALTAIR
 class SequenceableCollection;
 class OrderedCollection;
 class String;
+class Encoding;
 
 
 /*!
@@ -42,12 +43,10 @@ class Stream : public Iteratable
      * 
      */
     virtual SequenceableCollection* next(int an_integer);
-
-
     /*!
      * 
      */
-    virtual Object* nextInto(int an_integer, Object* const& answer, int starting_pos);
+    virtual Object* next(int an_integer, SequenceableCollection* const& answer, int starting_pos);
 
 
     /*!
@@ -59,7 +58,7 @@ class Stream : public Iteratable
     /*!
      * 
      */
-    virtual int nextAvailable(int an_integer);
+    virtual SequenceableCollection* nextAvailable(int an_integer);
     /*!
      * 
      */
@@ -166,6 +165,35 @@ class Stream : public Iteratable
      * 
      */
     virtual bool atEnd() const;
+
+
+    /*!
+     * 
+     */
+    virtual Stream* readStream() const;
+
+
+    /*!
+     * 
+     */
+    virtual bool isSequenceable() const { return false; }
+
+
+    /*!
+     * 
+     */
+    virtual bool isExternalStream() const { return false; }
+    /*! @} */
+
+
+    /*! \name basic
+      
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Class* species() const;
     /*! @} */
 
 
@@ -175,7 +203,63 @@ class Stream : public Iteratable
     /*!
      * 
      */
+    virtual bool isUnicode() const;
+
+
+    /*!
+     *
+     */
+    virtual Encoding* encoding() const;
+
+
+    /*!
+     * 
+     */
+    virtual void cr();
+
+
+    /*!
+     * 
+     */
+    virtual void nl();
+
+
+    /*!
+     * 
+     */
+    virtual void crTab() {
+        cr();
+        tab();
+    }
+
+
+    /*!
+     * 
+     */
+    virtual void nlTab() {
+        nl();
+        tab();
+    }
+
+
+    /*!
+     * 
+     */
     virtual void space();
+    /*!
+     * 
+     */
+    virtual void space(int n);
+
+
+    /*!
+     * 
+     */
+    virtual void tab();
+    /*!
+     * 
+     */
+    virtual void tab(int n);
     /*! @} */
 
 
@@ -198,6 +282,127 @@ class Stream : public Iteratable
      * 
      */
     virtual void flush() {}
+    /*! @} */
+
+
+    /*! \name printing
+      
+     */
+    /*! @{ */
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+    /*!
+     * 
+     */
+    virtual void display(const Object* const& an_object);
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+
+
+    /*!
+     * 
+     */
+    virtual void print(const Object* const& an_object);
+    /*! @} */
+
+
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+    /*! \name storing
+      
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual void store(const Object* const& an_object);
+    /*! @} */
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+
+
+#if 0
+    /*! \name filing out
+      
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual void fileOut(const Class* const& a_class);
+    /*! @} */
+#endif
+
+
+    /*! \name positioning
+      
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual bool isPositionable() const { return false; }
+
+
+    /*!
+     * 
+     */
+    virtual bool skip(int an_integer);
+
+
+    /*!
+     * 
+     */
+    virtual bool skipTo(const Object* const& an_object);
+
+
+    /*!
+     * 
+     */
+    virtual bool skipToAll(const Collection* const& a_collection);
+
+
+    /*!
+     * 
+     */
+    virtual bool peekFor(const Object* const& an_object);
+    /*! @} */
+
+
+    /*! \name streaming protocol
+      
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual void nextAvailablePutAllOn(Stream* const& a_stream);
+    /*! @} */
+
+
+    /*! \name private
+      
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual SequenceableCollection* prefixTableFor(const Collection* const& a_collection);
+    /*! @} */
+
+
+    /*! \name built ins
+      
+     */
+    /*! @{ */
+#if 0
+    /*!
+     * 
+     */
+    virtual Object* fileIn();
+
+
+    /*!
+     * 
+     */
+    virtual Object* fileInLine(int line_num, File* const& a_file, int char_pos_int);
+#endif
     /*! @} */
 };
 

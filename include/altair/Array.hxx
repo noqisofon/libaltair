@@ -7,6 +7,7 @@
 BEGIN_NAMESPACE_ALTAIR
 
 
+class Class;
 class Stream;
 
 
@@ -65,6 +66,12 @@ class Array : public ArrayedCollection
     static Array* withJoin(Collection* const& an_collection);
 #endif  /* defined(ALTAIR_USING_FUNCTOR) */
     /*! @} */
+
+
+    /*!
+     * 
+     */
+    static Class* getClassInstance();
 
  public:
     /*!

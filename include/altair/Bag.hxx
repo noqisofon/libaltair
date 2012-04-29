@@ -7,7 +7,7 @@
 BEGIN_NAMESPACE_ALTAIR
 
 
-class HashedCollection;
+class Dictionary;
 class SequenceableCollection;
 class Stream;
 
@@ -94,7 +94,11 @@ class Bag : public Collection
     /*!
      * 
      */
-    virtual bool equals(const Object* const& a_bag) const;
+    virtual bool equals(const Object* const& a_object) const;
+    /*!
+     * 
+     */
+    virtual bool equals(const Bag* const& a_bag) const;
     /*! @} */
 
 
@@ -142,13 +146,13 @@ class Bag : public Collection
     /*!
      * 
      */
-    virtual HashedCollection* valuesAndCounts() const;
+    virtual Dictionary* valuesAndCounts() const;
 
 
     /*!
      * 
      */
-    virtual HashedCollection* contents() const;
+    virtual Dictionary* contents() const;
     /*! @} */
 
  protected:
@@ -162,7 +166,7 @@ class Bag : public Collection
     /*! @} */
 
  private:
-    HashedCollection* contents_;
+    Dictionary* contents_;
 };
 
 

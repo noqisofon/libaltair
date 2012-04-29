@@ -15,6 +15,8 @@ class String;
  */
 class Association : public LookupKey
 {
+ public:
+    Association(const altair::Object* const, altair::Object* const&);
 };
 
 

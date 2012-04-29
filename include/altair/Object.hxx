@@ -175,6 +175,12 @@ class Object
     /*!
      * 
      */
+    virtual bool isAssociation() const { return false; }
+
+
+    /*!
+     * 
+     */
     virtual bool isMeta() const { return isMetaClass(); }
 
 
@@ -667,6 +673,7 @@ class Object
     virtual Object* nextInstance() const { return NULL; }
 
 
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
     /*!
      * 
      */
@@ -693,6 +700,7 @@ class Object
      * 
      */
     virtual Object* performWithArguments(const Object* const& selector_or_method, const Array* const& arguments_array) const;
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
     /*!
@@ -744,25 +752,25 @@ class Object
     /*!
      * 
      */
-    virtual Object* primitiveFailed() const;
+    virtual const Object* primitiveFailed() const;
 
 
     /*!
      * 
      */
-    virtual Object* shouldNotImplement() const;
+    virtual const Object* shouldNotImplement() const;
 
 
     /*!
      * 
      */
-    virtual Object* subclassResponsibility() const;
+    virtual const Object* subclassResponsibility() const;
 
 
     /*!
      * 
      */
-    virtual Object* notYetImplemented() const;
+    virtual const Object* notYetImplemented() const;
     /*! @} */
 
 
@@ -787,16 +795,18 @@ class Object
       \name VM callbacks
      */
     /*! @{ */
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
     /*!
      * 
      */
     virtual Object* doseNotUnderstand(const Message* const& message) const;
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 
 
     /*!
      * 
      */
-    virtual Object* badReturnError() const;
+    virtual const Object* badReturnError() const;
 
 
     /*!
@@ -808,13 +818,13 @@ class Object
     /*!
      * 
      */
-    virtual Object* noRunnableProcess() const;
+    virtual const Object* noRunnableProcess() const;
 
 
     /*!
      * 
      */
-    virtual Object* userInterrupt() const;
+    virtual const Object* userInterrupt() const;
     /*! @} */
 
  protected:

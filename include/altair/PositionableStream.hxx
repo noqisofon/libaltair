@@ -183,8 +183,10 @@ class PositionableStream : public Stream
     /*!
      * 
      */
-    virtual void skip(int an_integer) {
+    virtual bool skip(int an_integer) {
         position( ALTAIR_MIN(ALTAIR_MAX(position() + an_integer, 0), end_ptr_) );
+
+        return true;
     }
     /*! @} */
 

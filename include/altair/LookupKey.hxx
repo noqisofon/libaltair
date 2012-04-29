@@ -23,12 +23,20 @@ class LookupKey : public Magunitude
      *
      */
     virtual Object* key() const;
+    /*!
+     *
+     */
+    virtual void key(Object* const& new_key);
 
 
     /*!
      *
      */
     virtual Object* value() const;
+    /*!
+     *
+     */
+    virtual void value(Object* const& new_value);
     /*! @} */
 };
 

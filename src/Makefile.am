@@ -8,10 +8,15 @@ libaltair_la_SOURCES =   \
 	ByteArray.cpp  \
 	Class.cpp  \
 	Collection.cpp  \
+	Dictionary.cpp  \
+	HashedCollection.cpp  \
 	Iteratable.cpp  \
 	Object.cpp  \
 	ObjectMemory.cpp  \
+	OrderedCollection.cpp  \
+	PositionableStream.cpp  \
 	Random.cpp  \
 	SequenceableCollection.cpp  \
+	Set.cpp  \
 	Stream.cpp  \
 	String.cpp

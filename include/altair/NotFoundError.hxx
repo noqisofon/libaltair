@@ -12,6 +12,8 @@ BEGIN_NAMESPACE_ALTAIR
  */
 class NotFoundError : public Error
 {
+ public:
+    static Error* signalOn(const Object* const&, const char* const&);
 };
 
 

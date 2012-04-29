@@ -97,3 +97,12 @@ void Class::environment(Namespace* const& a_namespace)
 }
 #   endif  /* ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 #endif  /* defined(ALTAIR_TRANSPLANTLY) */
+
+
+bool Class::equals(const Class* const& a_class) const
+{
+    return identityEquals( a_class );
+}
+// Local Variables:
+//   coding: utf-8
+// End:

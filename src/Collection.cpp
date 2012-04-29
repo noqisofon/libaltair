@@ -146,7 +146,7 @@ Collection* Collection::withJoin(Collection* const& a_collection)
 #endif  /* defined(ALTAIR_USING_FUNCTOR) */
 
 
-Collection* const& Collection::addAll(const Collection* const& a_collection)
+const Collection* Collection::addAll(const Collection* const& a_collection)
 {
     Stream* it = a_collection->readStream();
     while ( it->atEnd() ) {
@@ -154,7 +154,7 @@ Collection* const& Collection::addAll(const Collection* const& a_collection)
     }
     it->release();
 
-    return this;
+    return a_collection;
 }
 
 
@@ -508,7 +508,7 @@ SortedCollection* Collection::asSortedCollection() const
 
     return ret;
 }
-SortedCollection* Collection::asSortedCollection(bool (*a_block)(const Object* const&, const Object* const&)) const
+SortedCollection* Collection::asSortedCollection(int (*a_block)(const Object* const&, const Object* const&)) const
 {
     SortedCollection* ret = asSortedCollection();
 
@@ -522,15 +522,21 @@ Collection* Collection::sorted() const
 {
     Array* ret = new Array( size() );
 
-    ret->replaceFrom( 0, size(), asSortedCollection() );
+    ret->SequenceableCollection::replaceFrom( 0,
+                                              size(),
+                                              __REINTERPRET_CAST(SequenceableCollection *, asSortedCollection()),
+                                              0 );
 
     return ret;
 }
-Collection* Collection::sorted(bool (*sort_block)(const Object* const&, const Object* const&)) const
+Collection* Collection::sorted(int (*sort_block)(const Object* const&, const Object* const&)) const
 {
     Array* ret = new Array( size() );
 
-    ret->replaceFrom( 0, size(), asSortedCollection( sort_block ) );
+    ret->SequenceableCollection::replaceFrom( 0,
+                                              size(),
+                                              __REINTERPRET_CAST(SequenceableCollection *, asSortedCollection( sort_block )),
+                                              0 );
 
     return ret;
 }
@@ -594,7 +600,7 @@ Collection* Collection::copyEmpty() const
     Collection* ret;
     Class* const self_species = species();
 
-    ret = self_species->createInstance( basicSize() );
+    ret = __REINTERPRET_CAST(Collection *, self_species->createInstance( basicSize() ));
 
     self_species->release();
 
@@ -605,7 +611,7 @@ Collection* Collection::copyEmpty(int new_size) const
     Collection* ret;
     Class* const self_species = species();
 
-    ret = self_species->createInstance( new_size );
+    ret = __REINTERPRET_CAST(Collection *, self_species->createInstance( new_size ));
 
     self_species->release();
 

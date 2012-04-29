@@ -313,7 +313,7 @@ Collection* ArrayedCollection::sorted() const
 
     return __REINTERPRET_CAST(Collection *, new_collection);
 }
-Collection* ArrayedCollection::sorted(bool (*a_block)(const Object* const&, const Object* const&)) const
+Collection* ArrayedCollection::sorted(int (*a_block)(const Object* const&, const Object* const&)) const
 {
     SequenceableCollection* new_collection = __REINTERPRET_CAST(SequenceableCollection *, copyEmpty());
 

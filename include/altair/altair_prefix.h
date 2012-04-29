@@ -1,6 +1,8 @@
 #ifndef altair_altair_prefix_hxx
 #define altair_altair_prefix_hxx
 
+#define __STDC_CONSTANT_MACROS
+
 #include <stdint.h>
 #include <stddef.h>
 
@@ -11,6 +13,9 @@
 
 typedef   signed char sbyte;
 typedef unsigned char ubyte;
+
+typedef   signed int  sint;
+typedef unsigned int  uint;
 
 
 

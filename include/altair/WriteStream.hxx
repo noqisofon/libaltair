@@ -20,7 +20,7 @@ class WriteStream : public PositionableStream
     /*!
      * 
      */
-    static Stream* on(Collection* const& a_collection);
+    static WriteStream* on(Collection* const& a_collection);
 };
 
 

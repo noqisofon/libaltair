@@ -146,7 +146,7 @@ class ArrayedCollection : public SequenceableCollection
     /*!
      * 
      */
-    virtual Collection* sorted(bool (*a_block)(const Object* const&, const Object* const&)) const;
+    virtual Collection* sorted(int (*a_block)(const Object* const&, const Object* const&)) const;
     /*! @} */
 
 

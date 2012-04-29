@@ -8,6 +8,7 @@ BEGIN_NAMESPACE_ALTAIR
 
 
 class String;
+class Magunitude;
 
 
 /*!
@@ -20,6 +21,10 @@ class ArgumentOutOfRangeError : public ArgumentError
      * 
      */
     static void signalOn(int n, int m, int k);
+    /*!
+     * 
+     */
+    static void signalOn(const Object* const& n, const Magunitude* const& m, const Magunitude* const& k);
 };
 
 

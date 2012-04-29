@@ -8,6 +8,7 @@ BEGIN_NAMESPACE_ALTAIR
 
 
 class CompiledBlock;
+class Encoding;
 class List;
 class Error;
 
@@ -17,6 +18,16 @@ class Error;
  */
 class Class : public ClassDescription
 {
+ public:
+    /*! \name initialize
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    static void initialize();
+    /*! @{ */
+
  protected:
     /**
      * 
@@ -53,6 +64,82 @@ class Class : public ClassDescription
     virtual void environment(Namespace* const& a_namespace);
 #endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
+
+    /*! \name instance creation
+     */
+    /*! @{ */
+    /*!
+     *
+     */
+    virtual Object* createInstance() const;
+
+
+    /*!
+     *
+     */
+    virtual Object* createInstance(size_t size) const;
+
+
+    /*!
+     *
+     */
+    virtual Object* basicNew() const;
+
+
+    /*!
+     *
+     */
+    virtual Object* basicNew(size_t size) const;
+    /*! @} */
+
+
+    /*! \name printing
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual String* article() const;
+    /*! @} */
+
+
+    /*! \name testing
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual bool equals(const Class* const& a_class) const;
+    /*! @} */
+
+
+    /*! \name testing functionality
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual const Class* asClass() const { return this; }
+
+
+    /*!
+     * 
+     */
+    virtual bool isClass() const { return true; }
+    /*! @} */
+
+
+    /*!
+     *
+     */
+    virtual bool isUnicode() const { return true; }
+
+
+    /*!
+     * 
+     */
+    virtual Encoding* defaultEncoding();
+
  private:
     /**
      * \ingroup private
@@ -76,3 +163,6 @@ END_NAMESPACE_ALTAIR
 
 
 #endif  /* altair_Class_hxx */
+// Local Variables:
+//   coding: utf-8
+// End:

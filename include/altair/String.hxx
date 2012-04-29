@@ -22,6 +22,10 @@ class String : public CharacterArray
     /*!
      * 
      */
+    String();
+    /*!
+     * 
+     */
     String(size_t size, char ch = '\0');
     /*!
      * 
@@ -29,6 +33,9 @@ class String : public CharacterArray
     String(const char* const& cstring);
 
  public:
+    /*! \name converting
+     */
+    /*! @{ */
     /**
      * 
      */
@@ -47,12 +54,20 @@ class String : public CharacterArray
     virtual Symbol* asSymbol() const;
 
 
+    /*!
+     * 
+     */
+    virtual String* asString() const;
+    /*! @} */
+
+
     /**
      * 
      */
     virtual bool isString() const { return true; }
 
 
+#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
     /**
      * 
      */
@@ -63,6 +78,7 @@ class String : public CharacterArray
      * 
      */
     virtual void displayOn(Stream* const a_stream) const;
+#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
 };
 
 
