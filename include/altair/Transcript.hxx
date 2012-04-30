@@ -23,15 +23,21 @@
 #ifndef altair_Transcript_hxx
 #define altair_Transcript_hxx
 
+#include "altair/Object.hxx"
+
 
 BEGIN_NAMESPACE_ALTAIR
 
 
+class String;
 class SequenceableCollection;
 
 
-class Transcript
+class Transcript : public Object
 {
+ public:
+    virtual ~Transcript() {}
+
  public:
     static void print(const Object* const& an_object);
     static void nextPut(char ch);
@@ -42,10 +48,16 @@ class Transcript
     static void put(const Object* const& arg1, const Object* const& arg2);
 
 
+    static void show(const char* const& cstring);
     static void show(const String* const& a_string);
+
+    static void showCr(const char* const& cstring);
     static void showCr(const String* const& a_string);
 
     static Stream* instanceOf();
+
+ private:
+    Transcript();
 };
 
 

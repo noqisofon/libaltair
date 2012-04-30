@@ -1,3 +1,206 @@
+commit f78c537b343c7bc63b2f54282e947f6052b40a78
+Author: ned rihine <ned.rihine@gmail.com>
+Date:   Mon Apr 30 11:24:02 2012 +0900
+
+    fix #3
+
+ include/altair/ArgumentError.hxx               |   22 ++++++++++++++++++++++
+ include/altair/ArgumentOutOfRangeError.hxx     |   22 ++++++++++++++++++++++
+ include/altair/Array.hxx                       |   22 ++++++++++++++++++++++
+ include/altair/ArrayedCollection.hxx           |   22 ++++++++++++++++++++++
+ include/altair/Association.hxx                 |   22 ++++++++++++++++++++++
+ include/altair/BadReturnError.hxx              |   22 ++++++++++++++++++++++
+ include/altair/Bag.hxx                         |   22 ++++++++++++++++++++++
+ include/altair/Behavior.hxx                    |   22 ++++++++++++++++++++++
+ include/altair/Boolean.hxx                     |   22 ++++++++++++++++++++++
+ include/altair/ByteArray.hxx                   |   22 ++++++++++++++++++++++
+ include/altair/Character.hxx                   |   22 ++++++++++++++++++++++
+ include/altair/CharacterArray.hxx              |   22 ++++++++++++++++++++++
+ include/altair/Class.hxx                       |   22 ++++++++++++++++++++++
+ include/altair/ClassDescription.hxx            |   22 ++++++++++++++++++++++
+ include/altair/Collection.hxx                  |   22 ++++++++++++++++++++++
+ include/altair/CompiledBlock.hxx               |   22 ++++++++++++++++++++++
+ include/altair/Dictionary.hxx                  |   22 ++++++++++++++++++++++
+ include/altair/ElementNotFoundError.hxx        |   22 ++++++++++++++++++++++
+ include/altair/EmptyCollectionError.hxx        |   22 ++++++++++++++++++++++
+ include/altair/Encoding.hxx                    |   22 ++++++++++++++++++++++
+ include/altair/Error.hxx                       |   22 ++++++++++++++++++++++
+ include/altair/HashedCollection.hxx            |   22 ++++++++++++++++++++++
+ include/altair/IOChannel.hxx                   |   22 ++++++++++++++++++++++
+ include/altair/IdentitySet.hxx                 |   22 ++++++++++++++++++++++
+ include/altair/IndexOutOfRangeError.hxx        |   22 ++++++++++++++++++++++
+ include/altair/Integer.hxx                     |   22 ++++++++++++++++++++++
+ include/altair/InvalidArgumentError.hxx        |   22 ++++++++++++++++++++++
+ include/altair/InvalidSizeError.hxx            |   22 ++++++++++++++++++++++
+ include/altair/InvalidValueError.hxx           |   22 ++++++++++++++++++++++
+ include/altair/Iteratable.hxx                  |   22 ++++++++++++++++++++++
+ include/altair/Iterator.hxx                    |   22 ++++++++++++++++++++++
+ include/altair/List.hxx                        |   22 ++++++++++++++++++++++
+ include/altair/LookupKey.hxx                   |   22 ++++++++++++++++++++++
+ include/altair/LookupTable.hxx                 |   22 ++++++++++++++++++++++
+ include/altair/Magunitude.hxx                  |   22 ++++++++++++++++++++++
+ include/altair/NoRunnableProcessError.hxx      |   22 ++++++++++++++++++++++
+ include/altair/NotEnoughElementsError.hxx      |   22 ++++++++++++++++++++++
+ include/altair/NotFoundError.hxx               |   22 ++++++++++++++++++++++
+ include/altair/NotIndexableError.hxx           |   22 ++++++++++++++++++++++
+ include/altair/NotYetImplementedError.hxx      |   22 ++++++++++++++++++++++
+ include/altair/Number.hxx                      |   22 ++++++++++++++++++++++
+ include/altair/Object.hxx                      |   22 ++++++++++++++++++++++
+ include/altair/ObjectMemory.hxx                |   22 ++++++++++++++++++++++
+ include/altair/OrderedCollection.hxx           |   22 ++++++++++++++++++++++
+ include/altair/PositionableStream.hxx          |   22 ++++++++++++++++++++++
+ include/altair/PrimitiveFailed.hxx             |   22 ++++++++++++++++++++++
+ include/altair/Random.hxx                      |   22 ++++++++++++++++++++++
+ include/altair/ReadOnlyObjectError.hxx         |   22 ++++++++++++++++++++++
+ include/altair/ReadStream.hxx                  |   22 ++++++++++++++++++++++
+ include/altair/SequenceableCollection.hxx      |   22 ++++++++++++++++++++++
+ include/altair/Set.hxx                         |   22 ++++++++++++++++++++++
+ include/altair/ShouldNotImplementError.hxx     |   22 ++++++++++++++++++++++
+ include/altair/SortedCollection.hxx            |   22 ++++++++++++++++++++++
+ include/altair/Stream.hxx                      |   22 ++++++++++++++++++++++
+ include/altair/String.hxx                      |   22 ++++++++++++++++++++++
+ include/altair/SubclassResponsibilityError.hxx |   22 ++++++++++++++++++++++
+ include/altair/Symbol.hxx                      |   22 ++++++++++++++++++++++
+ include/altair/Transcript.hxx                  |   22 ++++++++++++++++++++++
+ include/altair/UnicodeString.hxx               |   22 ++++++++++++++++++++++
+ include/altair/UserInterruptError.hxx          |   22 ++++++++++++++++++++++
+ include/altair/WeakKeyIdentityDictionary.hxx   |   22 ++++++++++++++++++++++
+ include/altair/WriteStream.hxx                 |   22 ++++++++++++++++++++++
+ include/altair/WrongClassError.hxx             |   22 ++++++++++++++++++++++
+ include/altair/altair_prefix.h                 |   22 ++++++++++++++++++++++
+ include/altair/cast.h                          |   22 ++++++++++++++++++++++
+ include/altair/macro.h                         |   22 ++++++++++++++++++++++
+ include/altair/platform.h                      |   22 ++++++++++++++++++++++
+ include/altair/transplant.h                    |   22 ++++++++++++++++++++++
+ src/Array.cpp                                  |   22 ++++++++++++++++++++++
+ src/ArrayedCollection.cpp                      |   22 ++++++++++++++++++++++
+ src/Bag.cpp                                    |   22 ++++++++++++++++++++++
+ src/ByteArray.cpp                              |   22 ++++++++++++++++++++++
+ src/Class.cpp                                  |   22 ++++++++++++++++++++++
+ src/Collection.cpp                             |   22 ++++++++++++++++++++++
+ src/Dictionary.cpp                             |   22 ++++++++++++++++++++++
+ src/HashedCollection.cpp                       |   22 ++++++++++++++++++++++
+ src/Iteratable.cpp                             |   22 ++++++++++++++++++++++
+ src/Object.cpp                                 |   22 ++++++++++++++++++++++
+ src/ObjectMemory.cpp                           |   22 ++++++++++++++++++++++
+ src/OrderedCollection.cpp                      |   22 ++++++++++++++++++++++
+ src/PositionableStream.cpp                     |   22 ++++++++++++++++++++++
+ src/Random.cpp                                 |   22 ++++++++++++++++++++++
+ src/SequenceableCollection.cpp                 |   22 ++++++++++++++++++++++
+ src/Set.cpp                                    |   22 ++++++++++++++++++++++
+ src/Stream.cpp                                 |   22 ++++++++++++++++++++++
+ src/String.cpp                                 |   22 ++++++++++++++++++++++
+ 86 files changed, 1892 insertions(+)
+
+commit b7d0564015921662a2cad91dfebb0098b08e47c7
+Author: ned rihine <ned.rihine@gmail.com>
+Date:   Mon Apr 30 01:10:29 2012 +0900
+
+    とりあえずビルドできるようにしました。  #1
+
+ configure.in                                   |    4 +-
+ include/altair/ArgumentOutOfRangeError.hxx     |    5 +
+ include/altair/Array.hxx                       |    7 +
+ include/altair/ArrayedCollection.hxx           |    2 +-
+ include/altair/Association.hxx                 |    2 +
+ include/altair/BadReturnError.hxx              |   32 ++
+ include/altair/Bag.hxx                         |   14 +-
+ include/altair/Behavior.hxx                    |   57 +++
+ include/altair/Boolean.hxx                     |   24 ++
+ include/altair/Character.hxx                   |   24 ++
+ include/altair/Class.hxx                       |   90 +++++
+ include/altair/ClassDescription.hxx            |    3 +
+ include/altair/Collection.hxx                  |    6 +-
+ include/altair/Dictionary.hxx                  |  140 +++++++
+ include/altair/Encoding.hxx                    |   25 ++
+ include/altair/HashedCollection.hxx            |  288 ++++++++++++++-
+ include/altair/IOChannel.hxx                   |   24 ++
+ include/altair/InvalidArgumentError.hxx        |    4 +
+ include/altair/InvalidValueError.hxx           |    8 +-
+ include/altair/Iteratable.hxx                  |   22 ++
+ include/altair/LookupKey.hxx                   |    8 +
+ include/altair/LookupTable.hxx                 |   23 ++
+ include/altair/NoRunnableProcessError.hxx      |   32 ++
+ include/altair/NotEnoughElementsError.hxx      |   29 ++
+ include/altair/NotFoundError.hxx               |    2 +
+ include/altair/NotYetImplementedError.hxx      |   32 ++
+ include/altair/Object.hxx                      |   24 +-
+ include/altair/OrderedCollection.hxx           |  242 ++++++++++++
+ include/altair/PositionableStream.hxx          |    4 +-
+ include/altair/PrimitiveFailed.hxx             |   32 ++
+ include/altair/Random.hxx                      |  141 ++++---
+ include/altair/ReadOnlyObjectError.hxx         |   24 ++
+ include/altair/SequenceableCollection.hxx      |   45 ++-
+ include/altair/Set.hxx                         |   72 ++++
+ include/altair/ShouldNotImplementError.hxx     |   32 ++
+ include/altair/SortedCollection.hxx            |   11 +
+ include/altair/Stream.hxx                      |  213 ++++++++++-
+ include/altair/String.hxx                      |   16 +
+ include/altair/SubclassResponsibilityError.hxx |   32 ++
+ include/altair/Symbol.hxx                      |   27 ++
+ include/altair/Transcript.hxx                  |   11 +-
+ include/altair/UserInterruptError.hxx          |   32 ++
+ include/altair/WeakKeyIdentityDictionary.hxx   |   14 +
+ include/altair/WriteStream.hxx                 |    2 +-
+ include/altair/WrongClassError.hxx             |   24 ++
+ include/altair/altair_prefix.h                 |    5 +
+ include/altair/macro.h                         |   36 +-
+ src/Array.cpp                                  |   28 ++
+ src/ArrayedCollection.cpp                      |    2 +-
+ src/Bag.cpp                                    |   48 ++-
+ src/Class.cpp                                  |    9 +
+ src/Collection.cpp                             |   22 +-
+ src/Dictionary.cpp                             |  125 +++++++
+ src/HashedCollection.cpp                       |  405 ++++++++++++++++++++
+ src/Iteratable.cpp                             |   17 +-
+ src/Makefile.am                                |    5 +
+ src/Object.cpp                                 |  182 +++++----
+ src/ObjectMemory.cpp                           |   36 +-
+ src/OrderedCollection.cpp                      |  472 ++++++++++++++++++++++++
+ src/Random.cpp                                 |  197 +++++++---
+ src/SequenceableCollection.cpp                 |  176 +++++----
+ src/Set.cpp                                    |   77 ++++
+ src/Stream.cpp                                 |  285 ++++++++++++--
+ src/String.cpp                                 |   18 +-
+ 64 files changed, 3696 insertions(+), 354 deletions(-)
+
+commit 993d443e612747c85a95185f21f55130c6dd5349
+Author: ned rihine <ned.rihine@gmail.com>
+Date:   Sat Apr 28 14:40:31 2012 +0900
+
+    返り値の `*' の後ろの `const' を削除しました。
+
+ ChangeLog                                 |   92 +++++++++++++++++++++++++++++
+ include/altair/Array.hxx                  |    8 +--
+ include/altair/ArrayedCollection.hxx      |   36 +++++------
+ include/altair/Association.hxx            |   27 +++++++++
+ include/altair/Bag.hxx                    |   50 ++++++++++++++--
+ include/altair/ByteArray.hxx              |   10 ++--
+ include/altair/Collection.hxx             |   36 +++++------
+ include/altair/HashedCollection.hxx       |   13 ++++
+ include/altair/InvalidArgumentError.hxx   |   32 ++++++++++
+ include/altair/LookupKey.hxx              |   42 +++++++++++++
+ include/altair/Makefile.am                |   20 ++++++-
+ include/altair/OrderedCollection.hxx      |    8 +--
+ include/altair/PositionableStream.hxx     |   20 +++----
+ include/altair/SequenceableCollection.hxx |   42 ++++++-------
+ include/altair/Stream.hxx                 |   32 +++++-----
+ include/altair/String.hxx                 |    8 +--
+ include/altair/UnicodeString.hxx          |    8 +--
+ include/altair/macro.h                    |    3 +
+ src/Array.cpp                             |   14 ++---
+ src/ArrayedCollection.cpp                 |   52 ++++++++--------
+ src/Bag.cpp                               |   58 +++++++++++++-----
+ src/ByteArray.cpp                         |   30 +++++-----
+ src/Collection.cpp                        |   33 +++++------
+ src/Makefile.am                           |    1 +
+ src/OrderedCollection.cpp                 |    8 +--
+ src/PositionableStream.cpp                |   20 +++----
+ src/SequenceableCollection.cpp            |   44 +++++++-------
+ src/Stream.cpp                            |   26 ++++----
+ src/String.cpp                            |   14 +++--
+ 29 files changed, 537 insertions(+), 250 deletions(-)
+
 commit 96772218ccd7c1fd59f143103a9633d12a134cb5
 Author: ned rihine <ned.rihine@gmail.com>
 Date:   Sat Apr 28 00:34:59 2012 +0900

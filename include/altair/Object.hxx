@@ -23,6 +23,8 @@
 #ifndef altair_Object_hxx
 #define altair_Object_hxx
 
+#include "altair/altair_prefix.h"
+
 
 BEGIN_NAMESPACE_ALTAIR
 
