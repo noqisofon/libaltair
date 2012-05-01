@@ -1,5 +1,5 @@
 //  
-//  LookupTable.hxx
+//  ReadWriteStream.hxx
 //  altair
 //  
 //  Auther:
@@ -20,59 +20,36 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-#ifndef altair_LookupTable_hxx
-#define altair_LookupTable_hxx
+#ifndef altair_ReadWriteStream_hxx
+#define altair_ReadWriteStream_hxx
 
-#include "altair/Dictionary.hxx"
+#include "altair/PositionableStream.hxx"
 
 
 BEGIN_NAMESPACE_ALTAIR
 
 
+class Collection;
+class String;
+
+
 /*!
- *
+ * 
  */
-class LookupTable : public Dictionary
+class ReadWriteStream : public PositionableStream
 {
  public:
-#if defined(ALTAIR_TRANSPLANTLY)
-    /*!
-     *
-     */
-    static Class* getCurrentClass();
-#endif  /* defined(ALTAIR_TRANSPLANTLY) */
-
- public:
-    /*!
-     *
-     */
-    explicit LookupTable(size_t);
-
- public:
-
-
-#ifndef ALTAIR_TRANSPLANTLY
-    /*!
-      \name copying collections
-     */
-    /*! @{ */
     /*!
      * 
      */
-    virtual Collection* copyEmpty() const;
-    /*!
-     * 
-     */
-    virtual Collection* copyEmpty(int new_size) const;
-    /*! @} */
-#endif  /* ndef ALTAIR_TRANSPLANTLY */
+    static ReadWriteStream* on(Collection* const& a_collection);
 };
 
 
 END_NAMESPACE_ALTAIR
 
 
-#endif  /* altair_LookupTable_hxx */
+#endif  /* altair_ReadWriteStream_hxx */
 // Local Variables:
 //   coding: utf-8
 // End:

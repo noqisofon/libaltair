@@ -32,6 +32,7 @@
 USING_NAMESPACE_ALTAIR;
 
 
+#if defined(ALTAIR_TRANSPLANTLY)
 class Array_class : public Class
 {
     typedef Class _Super;
@@ -44,6 +45,42 @@ class Array_class : public Class
  private:
     Array_class() : _Super("Array") {}
 
+ public:
+    /*! \name instance creation
+     */
+    /*! @{ */
+    /*!
+     *
+     */
+    virtual Object* createInstance() const {
+        return new Array();
+    }
+
+
+    /*!
+     *
+     */
+    virtual Object* createInstance(size_t size) const {
+        return new Array( size );
+    }
+
+
+    /*!
+     *
+     */
+    virtual Object* basicNew() const {
+        return new Array();
+    }
+
+
+    /*!
+     *
+     */
+    virtual Object* basicNew(size_t size) const {
+        return new Array( size );
+    }
+    /*! @} */
+
  private:
     static Array_class ARRAY_CLASS;
 
@@ -51,6 +88,13 @@ class Array_class : public Class
 
 
 Array_class Array_class::ARRAY_CLASS;
+
+
+Class* Array::getClassInstance()
+{
+    return Array_class::getInstance();
+}
+#endif  /* defined(ALTAIR_TRANSPLANTLY) */
 
 
 Array* Array::with(Object* const& an_object)
@@ -127,12 +171,6 @@ Array* Array::withAll(Collection* const& a_collection)
     it->release();
 
     return ret;
-}
-
-
-Class* Array::getClassInstance()
-{
-    return Array_class::getInstance();
 }
 
 
@@ -219,6 +257,12 @@ void Array::replaceFrom(int start, int stop, ByteArray* const& byte_array, int r
 }
 
 
+Object* Array::shallowCopy() const
+{
+    return new Array( *this );
+}
+
+
 void Array::printOn(Stream* const& a_stream) const
 {
     a_stream->nextPut( '(' );
@@ -236,7 +280,7 @@ void Array::printOn(Stream* const& a_stream) const
 }
 
 
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
 void Array::storeLiteralOn(Stream* const& a_stream) const
 {
     if ( !getClass()->identityEquals( Array::getClass() ) )
@@ -268,7 +312,7 @@ void Array::storeOn(Stream* const& a_stream) const
     if ( !isReadOnly() )
         a_stream->nextPutAll( " copy" );
 }
-#endif  /*  defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /*  defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
 Object* Array::multiBecome(Array* const& an_array)
@@ -284,6 +328,18 @@ Object* Array::multiBecome(Array* const& an_array)
     }
     return this;
 }
+
+
+#ifndef ALTAIR_TRANSPLANTLY
+Collection* Array::copyEmpty() const
+{
+    return new Array();
+}
+Collection* Array::copyEmpty(int new_size) const
+{
+    return new Array( new_size );
+}
+#endif  /* ndef ALTAIR_TRANSPLANTLY */
 // Local Variables:
 //   coding: utf-8
 // End:

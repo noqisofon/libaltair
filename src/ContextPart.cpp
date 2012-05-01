@@ -1,5 +1,5 @@
 //  
-//  LookupTable.hxx
+//  ContextPart.cpp
 //  altair
 //  
 //  Auther:
@@ -20,59 +20,38 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-#ifndef altair_LookupTable_hxx
-#define altair_LookupTable_hxx
+#include "config.h"
 
-#include "altair/Dictionary.hxx"
+#include "altair/altair_prefix.h"
+#include "altair/Class.hxx"
+#include "altair/SequenceableCollection.hxx"
+#include "altair/String.hxx"
+#include "altair/Symbol.hxx"
+#include "altair/Stream.hxx"
+#include "altair/Transcript.hxx"
+
+#include "altair/ContextPart.hxx"
+USING_NAMESPACE_ALTAIR;
 
 
-BEGIN_NAMESPACE_ALTAIR
-
-
-/*!
- *
- */
-class LookupTable : public Dictionary
+void ContextPart::_backtrace()
 {
- public:
-#if defined(ALTAIR_TRANSPLANTLY)
-    /*!
-     *
-     */
-    static Class* getCurrentClass();
-#endif  /* defined(ALTAIR_TRANSPLANTLY) */
-
- public:
-    /*!
-     *
-     */
-    explicit LookupTable(size_t);
-
- public:
+    thisContext()->parentContext()->backtraceOn( Transcript::instanceOf() );
+}
 
 
-#ifndef ALTAIR_TRANSPLANTLY
-    /*!
-      \name copying collections
-     */
-    /*! @{ */
-    /*!
-     * 
-     */
-    virtual Collection* copyEmpty() const;
-    /*!
-     * 
-     */
-    virtual Collection* copyEmpty(int new_size) const;
-    /*! @} */
-#endif  /* ndef ALTAIR_TRANSPLANTLY */
-};
+void ContextPart::_backtraceOn(Stream* const& a_stream)
+{
+    thisContext()->parentContext()->backtraceOn( a_stream );
+}
 
 
-END_NAMESPACE_ALTAIR
+ContextPart* ContextPart::thisContext()
+{
+    return NULL;
+}
 
 
-#endif  /* altair_LookupTable_hxx */
 // Local Variables:
 //   coding: utf-8
 // End:

@@ -29,15 +29,38 @@
 BEGIN_NAMESPACE_ALTAIR
 
 
+class SequenceableCollection;
+class String;
+
+
 /*!
  * 
  */
 class Behavior : public Object
 {
  public:
+    /*! \name instance variables
+     */
+    /*! @{ */
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
+    /*!
+     * 
+     */
+    virtual Object* addInstVarName(const String* const& a_string);
+
+
+    /*!
+     * 
+     */
+    virtual void removeInstVarName(const String* const& a_string);
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
+    /*! @} */
+
+
     /*! \name accessing instences and variables
      */
     /*! @{ */
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     /*!
      * 
      */
@@ -48,6 +71,11 @@ class Behavior : public Object
      * 
      */
     virtual int indexOfInstVar(const String* const& a_string) const;
+    /*!
+     * 
+     */
+    virtual int indexOfInstVar(const String* const& a_string, int (*exception_block)(const Object* const&, const Object* const&)) const;
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
     /*! @} */
 
 
@@ -98,11 +126,26 @@ class Behavior : public Object
     /*! \name testing the method dictionary
      */
     /*! @{ */
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     /*!
      * 
      */
     virtual bool canUnderstand(const Symbol* const& selector) const;
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
     /*! @} */
+
+
+    /*! \name built ins
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Object* someInstance() const { return nil; }
+    /*! @} */
+
+ protected:
+    SequenceableCollection* instance_varialbes_;
 };
 
 

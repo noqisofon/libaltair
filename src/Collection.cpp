@@ -617,6 +617,7 @@ Collection* Collection::copyWithout(Object* const& old_element) const
 }
 
 
+#if defined(ALTAIR_TRANSPLANTLY)
 Collection* Collection::copyEmpty() const
 {
     Collection* ret;
@@ -639,6 +640,7 @@ Collection* Collection::copyEmpty(int new_size) const
 
     return ret;
 }
+#endif  /* defined(ALTAIR_TRANSPLANTLY) */
 
 
 Collection* Collection::copyEmptyForCollect() const

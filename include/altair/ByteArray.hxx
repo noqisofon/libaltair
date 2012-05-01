@@ -147,6 +147,12 @@ class ByteArray : public ArrayedCollection
      * 
      */
     virtual void replaceFrom(int start, int stop, const String* const& a_string, int replace_start);
+
+
+    /*!
+     * 
+     */
+    virtual Object* shallowCopy() const { return new ByteArray( *this ); }
     /*! @} */
 
 
@@ -169,6 +175,23 @@ class ByteArray : public ArrayedCollection
      */
     virtual int indexOf(Object* const& an_element, int an_index, int (*a_block)(const Object* const&)) const;
     /*! @} */
+
+
+#ifndef ALTAIR_TRANSPLANTLY
+    /*!
+      \name copying collections
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Collection* copyEmpty() const;
+    /*!
+     * 
+     */
+    virtual Collection* copyEmpty(int new_size) const;
+    /*! @} */
+#endif  /* ndef ALTAIR_TRANSPLANTLY */
 
  protected:
     /*!

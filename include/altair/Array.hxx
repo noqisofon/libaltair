@@ -90,10 +90,12 @@ class Array : public ArrayedCollection
     /*! @} */
 
 
+#if defined(ALTAIR_TRANSPLANTLY)
     /*!
      * 
      */
     static Class* getClassInstance();
+#endif  /* defined(ALTAIR_TRANSPLANTLY) */
 
  public:
     /*!
@@ -138,6 +140,12 @@ class Array : public ArrayedCollection
      * 
      */
     virtual void replaceFrom(int start, int stop, ByteArray* const& byte_array, int replace_start);
+
+
+    /*!
+     * 
+     */
+    virtual Object* shallowCopy() const;
     /*! @} */
 
 
@@ -151,7 +159,7 @@ class Array : public ArrayedCollection
     virtual void printOn(Stream* const& a_stream) const;
 
 
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     /*!
      * 
      */
@@ -168,7 +176,7 @@ class Array : public ArrayedCollection
      * 
      */
     virtual void storeOn(Stream* const& a_stream) const;
-#endif  /*  defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /*  defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
     /*! @} */
 
 
@@ -192,6 +200,23 @@ class Array : public ArrayedCollection
      */
     virtual bool isArray() const { return true; }
     /*! @} */
+
+
+#ifndef ALTAIR_TRANSPLANTLY
+    /*!
+      \name copying collections
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Collection* copyEmpty() const;
+    /*!
+     * 
+     */
+    virtual Collection* copyEmpty(int new_size) const;
+    /*! @} */
+#endif  /* ndef ALTAIR_TRANSPLANTLY */
 
  private:
     Object** content_;

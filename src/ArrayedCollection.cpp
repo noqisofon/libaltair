@@ -215,7 +215,7 @@ Collection* ArrayedCollection::withCollect( const SequenceableCollection* const&
 }
 
 
-Collection* ArrayedCollection::copyReplaceFrom(int start, int stop, Object* const& an_object) const
+SequenceableCollection* ArrayedCollection::copyReplaceFrom(int start, int stop, Object* const& an_object) const
 {
     if ( ( stop - start ) < 0 ) {
         ArgumentOutOfRangeError::signalOn( stop,
@@ -236,7 +236,7 @@ Collection* ArrayedCollection::copyReplaceFrom(int start, int stop, Object* cons
 
     return new_collection;
 }
-Collection* ArrayedCollection::copyReplaceFrom(int start, int stop, Collection* const& replacement_collection) const
+SequenceableCollection* ArrayedCollection::copyReplaceFrom(int start, int stop, SequenceableCollection* const& replacement_collection) const
 {
     if ( ( stop - start ) < 0 ) {
         ArgumentOutOfRangeError::signalOn( stop,
@@ -267,7 +267,7 @@ Collection* ArrayedCollection::copyReplaceFrom(int start, int stop, Collection* 
 }
 
 
-Collection* ArrayedCollection::copyReplaceAll(const SequenceableCollection* const& old_subcollection, const SequenceableCollection* const& new_subcollection) const
+SequenceableCollection* ArrayedCollection::copyReplaceAll(const SequenceableCollection* const& old_subcollection, const SequenceableCollection* const& new_subcollection) const
 {
     int num_old = _Super::countSubCollectionOccurrencesOf( old_subcollection );
 
@@ -311,12 +311,13 @@ Collection* ArrayedCollection::copyReplaceAll(const SequenceableCollection* cons
 }
 
 
-Collection* ArrayedCollection::reverse() const
+SequenceableCollection* ArrayedCollection::reverse() const
 {
+    int self_size = __STATIC_CAST(int, size());
     SequenceableCollection* result = __REINTERPRET_CAST(SequenceableCollection *, copyEmpty());
-    int complement = __STATIC_CAST(int, size()) + 1;
+    int complement = self_size + 1;
 
-    int arrived = __STATIC_CAST(int, size());
+    int arrived = self_size;
     for ( int i = 0; i < arrived; ++ i ) {
         result->Object::put( i, Object::at( complement - i ) );
     }

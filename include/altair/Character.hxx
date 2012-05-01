@@ -69,6 +69,16 @@ class Character : public Magunitude
      * 
      */
     static Character* nl();
+
+ public:
+    /*! \name testing
+     */
+    /*! @{ */
+    /*!
+     *
+     */
+    virtual bool isVowel() const;
+    /*! @} */
 };
 
 

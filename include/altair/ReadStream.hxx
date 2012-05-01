@@ -42,13 +42,13 @@ class ReadStream : public PositionableStream
     /*!
      * 
      */
-    static Stream* on(Collection* const& a_collection);
+    static Stream* on(const Collection* const& a_collection);
 
 
     /*!
      * 
      */
-    static Stream* on(Collection* const& a_collection, int start, int stop);
+    static Stream* on(const Collection* const& a_collection, int start, int stop);
 };
 
 

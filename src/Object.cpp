@@ -34,10 +34,10 @@
 #include "altair/Association.hxx"
 #include "altair/Transcript.hxx"
 #include "altair/WriteStream.hxx"
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
 #   include "altair/ObjectMemory.hxx"
 #   include "altair/WeakKeyIdentityDictionary.hxx"
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 #include "altair/ArgumentOutOfRangeError.hxx"
 #include "altair/NotIndexableError.hxx"
 #include "altair/IndexOutOfRangeError.hxx"
@@ -56,7 +56,7 @@
 USING_NAMESPACE_ALTAIR;
 
 
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
 class Object_class : public Class
 {
  public:
@@ -127,7 +127,7 @@ class Object_class : public Class
 
 
 const Object_class Object_class::OBJECT_CLASS
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
 Object::Object()
@@ -173,6 +173,7 @@ bool Object::isInstanceOf(const Class* const& a_class) const
 }
 
 
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
 bool Object::respondsTo(const Symbol* const& a_symbol) const
 {
     bool ret;
@@ -185,6 +186,7 @@ bool Object::respondsTo(const Symbol* const& a_symbol) const
 
     return ret;
 }
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
 Object* Object::copy() const
@@ -203,15 +205,16 @@ Object* Object::deepCopy() const
         num = self_class->instanceSize() + self_class->basicSize();
     else
         num = self_class->instanceSize();
-
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     for ( int i = 0; i < num; ++ i ) {
         a_copy->instVarPut( i, instVarAt( i )->copy() );
     }
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
     return a_copy;
 }
 
 
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
 void Object::addDependent(Object* const& an_object)
 {
     Dictionary* const all_dependencies = getClass()->dependencies();
@@ -260,21 +263,21 @@ OrderedCollection* const Object::dependants() const
 
     return dependencies;
 }
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
 void Object::release()
 {
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     Dictionary* const all_dependencies = getClass()->dependencies();
 
     if ( all_dependencies->isHasKey( this ) )
         all_dependencies->removeKey( this );
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 }
 
 
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
 void Object::changed(Object* const& a_parameter)
 {
     Dictionary* const all_dependencies = getClass()->dependencies();
@@ -286,10 +289,10 @@ void Object::changed(Object* const& a_parameter)
         dependencies = nil;
 
     if ( dependencies->notNil() ) {
-        Iterator* it = dependencies->iterator();
+        Stream* it = dependencies->readStream();
 
-        for ( ; it->finished(); it->next() ) {
-            Object* dependent = it->current();
+        while ( !it->atEnd() ) {
+            Object* dependent = it->next();
 
             dependant->update( a_parameter );
         }
@@ -309,10 +312,10 @@ void Object::broadcast(const Symbol* const& a_symbol)
         dependencies = nil;
 
     if ( dependencies->notNil() ) {
-        Iterator* it = dependencies->iterator();
+        Stream* it = dependencies->readStream();
 
-        for ( ; it->finished(); it->next() ) {
-            Object* dependent = it->current();
+        while ( !it->atEnd() ) {
+            Object* dependent = it->next();
 
             dependant->perform( a_symbol );
         }
@@ -330,10 +333,10 @@ void Object::broadcast(const Symbol* const& a_symbol, Object* const& arg1, Objec
         dependencies = nil;
 
     if ( dependencies->notNil() ) {
-        Iterator* it = dependencies->iterator();
+        Stream* it = dependencies->readStream();
 
-        for ( ; it->finished(); it->next() ) {
-            Object* dependent = it->current();
+        while ( !it->atEnd() ) {
+            Object* dependent = it->next();
 
             dependant->perform( a_symbol, arg1, arg2 );
         }
@@ -353,17 +356,17 @@ void Object::broadcastWithArguments(const Symbol* const& a_symbol, const Array* 
         dependencies = nil;
 
     if ( dependencies->notNil() ) {
-        Iterator* it = dependencies->iterator();
+        Stream* it = dependencies->readStream();
 
-        for ( ; it->finished(); it->next() ) {
-            Object* dependent = it->current();
+        while ( !it->atEnd() ) {
+            Object* dependent = it->next();
 
             dependant->performWithArray( a_symbol, an_array );
         }
         it->release();
     }
 }
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
 Association* Object::createAssociation(Object* const& an_object) const
@@ -372,7 +375,7 @@ Association* Object::createAssociation(Object* const& an_object) const
 }
 
 
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
 String* Object::displayString() const
 {
     Stream* stream = WriteStream::on( new String() );
@@ -409,7 +412,7 @@ void Object::displayNl() const
 
     display_string->release();
 }
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
 String* Object::printString() const
@@ -475,7 +478,7 @@ void Object::basicPrintNl() const
 }
 
 
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
 String* Object::storeString() const
 {
     Stream* const& write_stream = WriteStream::on( new String() );
@@ -566,10 +569,10 @@ void Object::reconstructOriginalObject()
 {
     subclassResponsibility();
 }
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
 void Object::examine() const
 {
     /*
@@ -578,12 +581,12 @@ void Object::examine() const
      */
     examineOn( Transcript::instanceOf() );
 }
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
 void Object::inspect() const
 {
-#if !defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#ifndef ALTAIR_TRANSPLANTLY
     printOn( Transcript::instanceOf() );
 #else
     Class* const self_class = getClass();
@@ -622,11 +625,11 @@ void Object::inspect() const
         Transcript::nextPutAll( output_text );
         Transcript::nl();
     }
-#endif  /* !defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* ndef ALTAIR_TRANSPLANTLY */
 }
 
 
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
 void Object::examineOn(Stream* const& a_stream) const
 {
     Class* const self_class = getClass();
@@ -666,8 +669,405 @@ void Object::examineOn(Stream* const& a_stream) const
         a_stream->nl();
     }
 }
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
+
+Object* Object::become(const Object* const&/* other_object */)
+{
+    ReadOnlyObjectError::signal();
+
+    return this;
+}
+
+
+Object* Object::becomeForward(const Object* const&/* other_object */)
+{
+    ReadOnlyObjectError::signal();
+
+    return this;
+}
+
+
+#ifdef ALTAIR_TRANSPLANTLY
+Object* Object::shallowCopy() const
+{
+    Class* self_class = getClass();
+    Object* a_copy;
+
+    if ( self_class->isVariable() )
+        a_copy = self_class->basicNew( basicSize() );
+    else
+        a_copy = self_class->basicNew();
+
+    self_class->release();
+
+    return a_copy;
+}
+#endif  /* def ALTAIR_TRANSPLANTLY */
+
+
+void Object::makeFixed()
+{
+    InvalidValueError::signalOn( this, "Instances of Integer cannot be tenured!" );
+}
+
+
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
+Object* Object::instVarAt(int index) const
+{
+    if ( index < 0 ) {
+        IndexOutOfRangeError::signalOn( this, index );
+
+        return NULL;
+    }
+    
+    Class* self_class = getClass();
+    if ( index > __STATIC_CAST(int, basicSize()) + __STATIC_CAST(int, self_class->instanceSize()) ) {
+        IndexOutOfRangeError::signalOn( this, index );
+
+        return NULL;
+    }
+
+    Object* ret = basicAt( index - self_class->instanceSize() );
+
+    self_class->release();
+
+    return ret;
+}
+
+
+void Object::instVarPut(int index, Object* const value)
+{
+    if ( index < 0 ) {
+        IndexOutOfRangeError::signalOn( this, index );
+
+        return ;
+    }
+
+    Class* self_class = getClass();
+
+    if ( index > __STATIC_CAST(int, basicSize()) + __STATIC_CAST(int, self_class->instanceSize()) ) {
+        IndexOutOfRangeError::signalOn( this, index );
+
+        return ;
+    }
+
+    /* Object* ret = */basicPut( index - __STATIC_CAST(int, self_class->instanceSize()), value );
+
+    self_class->release();
+
+    //return ret;
+}
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
+
+
+void Object::makeReadOnly(bool a_boolean)
+{
+    WrongClassError::signalOn( Boolean::valueOf( a_boolean ),
+                               Boolean::getCurrentClass() );
+}
+
+
+void Object::makeUntrusted(bool a_boolean)
+{
+    WrongClassError::signalOn( Boolean::valueOf( a_boolean ),
+                               Boolean::getCurrentClass() );
+}
+
+
+void Object::makeEphemeron()
+{
+    InvalidValueError::signalOn( this, "ephemerons should have at least one instance variables" );
+}
+
+
+Object* Object::asOop() const
+{
+    InvalidValueError::signalOn( this, "Instance of Integer have no associated OOP!" );
+
+    return NULL;
+}
+
+
+int Object::identityHash() const
+{
+    return *__REINTERPRET_CAST(const int *, this);
+}
+
+
+int Object::hash() const
+{
+    return *__REINTERPRET_CAST(const int *, this);
+}
+
+
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
+Object* Object::perform(const Object* const& selector_or_message_or_method) const
+{
+    if ( selector_or_message_or_method->isSymbol() ) {
+        if ( respondsTo( __REINTERPRET_CAST(const Symbol * const, selector_or_message_or_method) ) ) {
+            WrongArgumentCountError::signal();
+
+            return NULL;
+        } else
+            return doseNotUnderstand( Message::selector( selector_or_message_or_method, ALTAIR_ARRAY0 ) );
+    }
+
+    if ( selector_or_message_or_method->isKindOf( CompiledMethod::getCurrentClass() ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    }
+    return selector_or_message_or_method->sendTo( this );
+}
+Object* Object::perform(const Object* const& selector_or_method, Object* const& arg1) const
+{
+    if ( selector_or_method->isKindOf( CompiledMethod::getCurrentClass() ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    }
+    if ( !selector_or_method->isSymbol() ) {
+        WrongClassError::signalOn( selector_or_method, Symbol::getCurrentClass() );
+
+        return NULL;
+    }
+
+    if ( respondsTo( __REINTERPRET_CAST(const Symbol * const, selector_or_method) ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    } else
+        return doseNotUnderstand( Message::selector( selector_or_message_or_method,
+                                                     ALTAIR_ARRAY1( arg1 ) ) );
+}
+Object* Object::perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2) const
+{
+    if ( selector_or_method->isKindOf( CompiledMethod::getCurrentClass() ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    }
+    if ( !selector_or_method->isSymbol() ) {
+        WrongClassError::signalOn( selector_or_method, Symbol::getCurrentClass() );
+
+        return NULL;
+    }
+
+    if ( respondsTo( __REINTERPRET_CAST(const Symbol * const, selector_or_method) ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    } else
+        return doseNotUnderstand( Message::selector( selector_or_message_or_method,
+                                                     ALTAIR_ARRAY2( arg1, arg2 ) ) );
+}
+Object* Object::perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2, Object* const& arg3) const
+{
+    if ( selector_or_method->isKindOf( CompiledMethod::getCurrentClass() ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    }
+    if ( !selector_or_method->isSymbol() ) {
+        WrongClassError::signalOn( selector_or_method, Symbol::getCurrentClass() );
+
+        return NULL;
+    }
+
+    if ( respondsTo( __REINTERPRET_CAST(const Symbol * const, selector_or_method) ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    } else
+        return doseNotUnderstand( Message::selector( selector_or_message_or_method,
+                                                     ALTAIR_ARRAY3( arg1, arg2, arg3 ) ) );
+}
+Object* Object::perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2, Object* const& arg3, Object* const& arg4) const
+{
+    if ( selector_or_method->isKindOf( CompiledMethod::getCurrentClass() ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    }
+    if ( !selector_or_method->isSymbol() ) {
+        WrongClassError::signalOn( selector_or_method, Symbol::getCurrentClass() );
+
+        return NULL;
+    }
+
+    if ( respondsTo( __REINTERPRET_CAST(const Symbol * const, selector_or_method) ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    } else
+        return doseNotUnderstand( Message::selector( selector_or_message_or_method,
+                                                     ALTAIR_ARRAY4( arg1, arg2, arg3, arg4 ) ) );
+}
+
+
+Object* Object::performWithArguments(const Object* const& selector_or_method, const Array* const& arguments_array) const
+{
+    if ( selector_or_method->isKindOf( CompiledMethod::getCurrentClass() ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    }
+    if ( !selector_or_method->isSymbol() ) {
+        WrongClassError::signalOn( selector_or_method, Symbol::getCurrentClass() );
+
+        return NULL;
+    }
+
+    if ( respondsTo( __REINTERPRET_CAST(const Symbol * const, selector_or_method) ) ) {
+        WrongArgumentCountError::signal();
+
+        return NULL;
+    } else
+        return doseNotUnderstand( Message::selector( selector_or_message_or_method, arguments_array ) );
+}
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
+
+
+bool Object::equals(const Object* const& arg) const
+{
+    return this == arg;
+}
+
+
+bool Object::identityEquals(const Object* const& arg) const
+{
+    return this == arg;
+}
+
+
+Class* Object::getClass() const
+{
+    primitiveFailed();
+
+    return NULL;
+}
+
+
+Object* Object::error(const String* const& message) const
+{
+    return NULL;
+}
+
+
+void Object::basicPrint() const
+{
+}
+
+
+Object* Object::halt()
+{
+    return halt( new String( "halt encountered" ) );
+}
+Object* Object::halt(const String* const& a_string)
+{
+    return error( a_string );
+}
+
+
+const Object* Object::primitiveFailed() const
+{
+    PrimitiveFailed::signal();
+
+    return this;
+}
+
+
+const Object* Object::shouldNotImplement() const
+{
+    ShouldNotImplementError::signal();
+
+    return this;
+}
+
+
+const Object* Object::subclassResponsibility() const
+{
+    SubclassResponsibilityError::signal();
+
+    return this;
+}
+
+
+const Object* Object::notYetImplemented() const
+{
+    NotYetImplementedError::signal();
+
+    return this;
+}
+
+
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
+Object* Object::instVarNamed(const String* const& a_string) const
+{
+    Object* ret;
+    Class* self_class = getClass();
+
+    ret = instVarAt( self_class->indexOfInstVar( a_string ) );
+
+    self_class->release();
+
+    return ret;
+}
+
+
+void Object::instVarNamedPut(const String* const& a_string, Object* const& an_object)
+{
+    Class* self_class = getClass();
+
+    instVarPut( self_class->indexOfInstVar( a_string ),
+                an_object );
+
+    self_class->release();
+}
+
+
+Object* Object::doseNotUnderstand(const Message* const& message) const
+{
+    return this;
+}
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
+
+
+const Object* Object::badReturnError() const
+{
+    BadReturnError::signal();
+
+    return this;
+}
+
+
+bool Object::mustBeBoolean() const
+{
+    // bool result = MustBeBoolenError::signalOn( this );
+
+    // if ( result == false )
+    //     result = true;
+
+    // return result;
+    return false;
+}
+
+
+const Object* Object::noRunnableProcess() const
+{
+    NoRunnableProcessError::signal();
+
+    return this;
+}
+
+
+const Object* Object::userInterrupt() const
+{
+    UserInterruptError::signal();
+
+    return this;
+}
 
 
 Object* Object::checkIndexableBounds(int index) const
@@ -798,401 +1198,7 @@ void Object::checkIndexableBoundsPut(int index, Object* const& object)
 }
 
 
-Object* Object::become(const Object* const&/* other_object */)
-{
-    ReadOnlyObjectError::signal();
-
-    return this;
-}
-
-
-Object* Object::becomeForward(const Object* const&/* other_object */)
-{
-    ReadOnlyObjectError::signal();
-
-    return this;
-}
-
-
-Object* Object::shallowCopy() const
-{
-    Class* self_class = getClass();
-    Object* a_copy;
-
-    if ( self_class->isVariable() )
-        a_copy = self_class->basicNew( basicSize() );
-    else
-        a_copy = self_class->basicNew();
-
-    self_class->release();
-
-    return a_copy;
-}
-
-
-void Object::makeFixed()
-{
-    InvalidValueError::signalOn( this, "Instances of Integer cannot be tenured!" );
-}
-
-
-Object* Object::instVarAt(int index) const
-{
-    if ( index < 0 ) {
-        IndexOutOfRangeError::signalOn( this, index );
-
-        return NULL;
-    }
-    
-    Class* self_class = getClass();
-    if ( index > __STATIC_CAST(int, basicSize()) + __STATIC_CAST(int, self_class->instanceSize()) ) {
-        IndexOutOfRangeError::signalOn( this, index );
-
-        return NULL;
-    }
-
-    Object* ret = basicAt( index - self_class->instanceSize() );
-
-    self_class->release();
-
-    return ret;
-}
-
-
-void Object::instVarPut(int index, Object* const value)
-{
-    if ( index < 0 ) {
-        IndexOutOfRangeError::signalOn( this, index );
-
-        return ;
-    }
-
-    Class* self_class = getClass();
-
-    if ( index > __STATIC_CAST(int, basicSize()) + __STATIC_CAST(int, self_class->instanceSize()) ) {
-        IndexOutOfRangeError::signalOn( this, index );
-
-        return ;
-    }
-
-    /* Object* ret = */basicPut( index - __STATIC_CAST(int, self_class->instanceSize()), value );
-
-    self_class->release();
-
-    //return ret;
-}
-
-
-void Object::makeReadOnly(bool a_boolean)
-{
-    WrongClassError::signalOn( Boolean::valueOf( a_boolean ),
-                               Boolean::getCurrentClass() );
-}
-
-
-void Object::makeUntrusted(bool a_boolean)
-{
-    WrongClassError::signalOn( Boolean::valueOf( a_boolean ),
-                               Boolean::getCurrentClass() );
-}
-
-
-void Object::makeEphemeron()
-{
-    InvalidValueError::signalOn( this, "ephemerons should have at least one instance variables" );
-}
-
-
-Object* Object::asOop() const
-{
-    InvalidValueError::signalOn( this, "Instance of Integer have no associated OOP!" );
-
-    return NULL;
-}
-
-
-int Object::identityHash() const
-{
-    return *__REINTERPRET_CAST(const int *, this);
-}
-
-
-int Object::hash() const
-{
-    return *__REINTERPRET_CAST(const int *, this);
-}
-
-
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
-Object* Object::perform(const Object* const& selector_or_message_or_method) const
-{
-    if ( selector_or_message_or_method->isSymbol() ) {
-        if ( respondsTo( __REINTERPRET_CAST(const Symbol * const, selector_or_message_or_method) ) ) {
-            WrongArgumentCountError::signal();
-
-            return NULL;
-        } else
-            return doseNotUnderstand( Message::selector( selector_or_message_or_method, ALTAIR_ARRAY0 ) );
-    }
-
-    if ( selector_or_message_or_method->isKindOf( CompiledMethod::getCurrentClass() ) ) {
-        WrongArgumentCountError::signal();
-
-        return NULL;
-    }
-    return selector_or_message_or_method->sendTo( this );
-}
-Object* Object::perform(const Object* const& selector_or_method, Object* const& arg1) const
-{
-    if ( selector_or_method->isKindOf( CompiledMethod::getCurrentClass() ) ) {
-        WrongArgumentCountError::signal();
-
-        return NULL;
-    }
-    if ( !selector_or_method->isSymbol() ) {
-        WrongClassError::signalOn( selector_or_method, Symbol::getCurrentClass() );
-
-        return NULL;
-    }
-
-    if ( respondsTo( __REINTERPRET_CAST(const Symbol * const, selector_or_method) ) ) {
-        WrongArgumentCountError::signal();
-
-        return NULL;
-    } else
-        return doseNotUnderstand( Message::selector( selector_or_message_or_method,
-                                                     ALTAIR_ARRAY1( arg1 ) ) );
-}
-Object* Object::perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2) const
-{
-    if ( selector_or_method->isKindOf( CompiledMethod::getCurrentClass() ) ) {
-        WrongArgumentCountError::signal();
-
-        return NULL;
-    }
-    if ( !selector_or_method->isSymbol() ) {
-        WrongClassError::signalOn( selector_or_method, Symbol::getCurrentClass() );
-
-        return NULL;
-    }
-
-    if ( respondsTo( __REINTERPRET_CAST(const Symbol * const, selector_or_method) ) ) {
-        WrongArgumentCountError::signal();
-
-        return NULL;
-    } else
-        return doseNotUnderstand( Message::selector( selector_or_message_or_method,
-                                                     ALTAIR_ARRAY2( arg1, arg2 ) ) );
-}
-Object* Object::perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2, Object* const& arg3) const
-{
-    if ( selector_or_method->isKindOf( CompiledMethod::getCurrentClass() ) ) {
-        WrongArgumentCountError::signal();
-
-        return NULL;
-    }
-    if ( !selector_or_method->isSymbol() ) {
-        WrongClassError::signalOn( selector_or_method, Symbol::getCurrentClass() );
-
-        return NULL;
-    }
-
-    if ( respondsTo( __REINTERPRET_CAST(const Symbol * const, selector_or_method) ) ) {
-        WrongArgumentCountError::signal();
-
-        return NULL;
-    } else
-        return doseNotUnderstand( Message::selector( selector_or_message_or_method,
-                                                     ALTAIR_ARRAY3( arg1, arg2, arg3 ) ) );
-}
-Object* Object::perform(const Object* const& selector_or_method, Object* const& arg1, Object* const& arg2, Object* const& arg3, Object* const& arg4) const
-{
-    if ( selector_or_method->isKindOf( CompiledMethod::getCurrentClass() ) ) {
-        WrongArgumentCountError::signal();
-
-        return NULL;
-    }
-    if ( !selector_or_method->isSymbol() ) {
-        WrongClassError::signalOn( selector_or_method, Symbol::getCurrentClass() );
-
-        return NULL;
-    }
-
-    if ( respondsTo( __REINTERPRET_CAST(const Symbol * const, selector_or_method) ) ) {
-        WrongArgumentCountError::signal();
-
-        return NULL;
-    } else
-        return doseNotUnderstand( Message::selector( selector_or_message_or_method,
-                                                     ALTAIR_ARRAY4( arg1, arg2, arg3, arg4 ) ) );
-}
-
-
-Object* Object::performWithArguments(const Object* const& selector_or_method, const Array* const& arguments_array) const
-{
-    if ( selector_or_method->isKindOf( CompiledMethod::getCurrentClass() ) ) {
-        WrongArgumentCountError::signal();
-
-        return NULL;
-    }
-    if ( !selector_or_method->isSymbol() ) {
-        WrongClassError::signalOn( selector_or_method, Symbol::getCurrentClass() );
-
-        return NULL;
-    }
-
-    if ( respondsTo( __REINTERPRET_CAST(const Symbol * const, selector_or_method) ) ) {
-        WrongArgumentCountError::signal();
-
-        return NULL;
-    } else
-        return doseNotUnderstand( Message::selector( selector_or_message_or_method, arguments_array ) );
-}
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
-
-
-bool Object::equals(const Object* const& arg) const
-{
-    return this == arg;
-}
-
-
-bool Object::identityEquals(const Object* const& arg) const
-{
-    return this == arg;
-}
-
-
-Class* Object::getClass() const
-{
-    primitiveFailed();
-
-    return NULL;
-}
-
-
-Object* Object::error(const String* const& message) const
-{
-    return NULL;
-}
-
-
-void Object::basicPrint() const
-{
-}
-
-
-Object* Object::halt()
-{
-    return halt( new String( "halt encountered" ) );
-}
-Object* Object::halt(const String* const& a_string)
-{
-    return error( a_string );
-}
-
-
-const Object* Object::primitiveFailed() const
-{
-    PrimitiveFailed::signal();
-
-    return this;
-}
-
-
-const Object* Object::shouldNotImplement() const
-{
-    ShouldNotImplementError::signal();
-
-    return this;
-}
-
-
-const Object* Object::subclassResponsibility() const
-{
-    SubclassResponsibilityError::signal();
-
-    return this;
-}
-
-
-const Object* Object::notYetImplemented() const
-{
-    NotYetImplementedError::signal();
-
-    return this;
-}
-
-
-Object* Object::instVarNamed(const String* const& a_string) const
-{
-    Object* ret;
-    Class* self_class = getClass();
-
-    ret = instVarAt( self_class->indexOfInstVar( a_string ) );
-
-    self_class->release();
-
-    return ret;
-}
-
-
-void Object::instVarNamedPut(const String* const& a_string, Object* const& an_object)
-{
-    Class* self_class = getClass();
-
-    instVarPut( self_class->indexOfInstVar( a_string ),
-                an_object );
-
-    self_class->release();
-}
-
-
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
-Object* Object::doseNotUnderstand(const Message* const& message) const
-{
-    return this;
-}
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
-
-
-const Object* Object::badReturnError() const
-{
-    BadReturnError::signal();
-
-    return this;
-}
-
-
-bool Object::mustBeBoolean() const
-{
-    // bool result = MustBeBoolenError::signalOn( this );
-
-    // if ( result == false )
-    //     result = true;
-
-    // return result;
-    return false;
-}
-
-
-const Object* Object::noRunnableProcess() const
-{
-    NoRunnableProcessError::signal();
-
-    return this;
-}
-
-
-const Object* Object::userInterrupt() const
-{
-    UserInterruptError::signal();
-
-    return this;
-}
-
-
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
 void Object::addToBeFinalized()
 {
     Collection* finalizable_objects = getClass()->finalizableObjects();
@@ -1216,7 +1222,7 @@ void Object::removeToBeFinalized()
     if ( finalizable_objects->isHasElement( assoc ) )
         finalizable_objects->remove( assoc );
 }
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
 // Local Variables:

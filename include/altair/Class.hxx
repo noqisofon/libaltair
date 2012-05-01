@@ -40,7 +40,21 @@ class Error;
  */
 class Class : public ClassDescription
 {
+    typedef ClassDescription _Super;
+
  public:
+#if ALTAIR_TRANSPLANTLY >= LT_NEAR_COMPLETE_TRANSPLANT_RATE
+    /*! \name private
+     */
+    /*! @{ */
+    /*!
+     *
+     */
+    static void allPoolDictionaries(List* const& list, Error* const& in_white, const CompiledBlock& a_block);
+    /*! @{ */
+#endif  /* ALTAIR_TRANSPLANTLY >= LT_NEAR_COMPLETE_TRANSPLANT_RATE */
+
+
     /*! \name initialize
      */
     /*! @{ */
@@ -56,62 +70,76 @@ class Class : public ClassDescription
      */
     Class(const char* const& class_name);
 
-
+ public:
     /**
      * 
      */
     virtual ~Class();
 
  public:
-    /**
+    /*! \name accessing instance and variables
+     */
+    /*! @{ */
+    /*!
      * このクラスの名前を返します。
      */
     virtual String* name() const { return name_; }
 
 
 #if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
-    /**
+    /*!
      * 
      */
     virtual String* comment() const { return comment_; }
 
 
-    /**
+    /*!
      * 
      */
     virtual Namespace* environment() const { return envinronment_; }
-    /**
+    /*!
      * 
      */
     virtual void environment(Namespace* const& a_namespace);
 #endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
+    /*!
+     * レシーバーのスーパークラスを a_class に変更します。
+     */
+    virtual void superclass(Class* const& a_class);
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
+    /*! @{ */
+
+
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_MINIMUM_TRANSPLANT_RATE
     /*! \name instance creation
      */
     /*! @{ */
     /*!
      *
      */
-    virtual Object* createInstance() const;
+    virtual Object* createInstance() const = 0;
 
 
     /*!
      *
      */
-    virtual Object* createInstance(size_t size) const;
+    virtual Object* createInstance(size_t size) const = 0;
 
 
     /*!
      *
      */
-    virtual Object* basicNew() const;
+    virtual Object* basicNew() const = 0;
 
 
     /*!
      *
      */
-    virtual Object* basicNew(size_t size) const;
+    virtual Object* basicNew(size_t size) const = 0;
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_MINIMUM_TRANSPLANT_RATE */
     /*! @} */
 
 
@@ -163,10 +191,7 @@ class Class : public ClassDescription
     virtual Encoding* defaultEncoding();
 
  private:
-    /**
-     * \ingroup private
-     */
-    static void allPoolDictionaries(List* const& list, Error* const& in_white, const CompiledBlock& a_block);
+    
 
  private:
     String* name_;

@@ -49,6 +49,10 @@ class UnicodeString : public CharacterArray
      * 
      */
     UnicodeString(const char* const& cstring);
+    /*!
+     * 
+     */
+    UnicodeString(const UnicodeString& other);
 
  public:
     /**
@@ -75,6 +79,17 @@ class UnicodeString : public CharacterArray
     virtual bool isUnicodeString() const { return true; }
 
 
+    /*!
+      \name built ins
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Object* shallowCopy() const { return new UnicodeString( *this ); }
+    /*! @} */
+
+
     /**
      * 
      */
@@ -85,6 +100,23 @@ class UnicodeString : public CharacterArray
      * 
      */
     virtual void displayOn(Stream* const a_stream) const;
+
+
+#ifndef ALTAIR_TRANSPLANTLY
+    /*!
+      \name copying collections
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Collection* copyEmpty() const;
+    /*!
+     * 
+     */
+    virtual Collection* copyEmpty(int new_size) const;
+    /*! @} */
+#endif  /* ndef ALTAIR_TRANSPLANTLY */
 };
 
 

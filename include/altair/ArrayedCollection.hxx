@@ -137,23 +137,23 @@ class ArrayedCollection : public SequenceableCollection
     /*!
      * 
      */
-    virtual Collection* copyReplaceFrom(int start, int stop, Object* const& an_object) const;
+    virtual SequenceableCollection* copyReplaceFrom(int start, int stop, Object* const& an_object) const;
     /*!
      * 
      */
-    virtual Collection* copyReplaceFrom(int start, int stop, Collection* const& replacement_collection) const;
-
-
-    /*!
-     * 
-     */
-    virtual Collection* copyReplaceAll(const SequenceableCollection* const& old_subcollection, const SequenceableCollection* const& new_subcollection) const;
+    virtual SequenceableCollection* copyReplaceFrom(int start, int stop, SequenceableCollection* const& replacement_collection) const;
 
 
     /*!
      * 
      */
-    virtual Collection* reverse() const;
+    virtual SequenceableCollection* copyReplaceAll(const SequenceableCollection* const& old_subcollection, const SequenceableCollection* const& new_subcollection) const;
+
+
+    /*!
+     * 
+     */
+    virtual SequenceableCollection* reverse() const;
     /*! @} */
 
 

@@ -29,6 +29,9 @@
 BEGIN_NAMESPACE_ALTAIR
 
 
+class SequenceableCollection;
+
+
 /*!
  * 
  */
@@ -49,6 +52,9 @@ class Number : public Magunitude
      */
     virtual long asLong() const;
     /*! @} */
+
+
+    virtual SequenceableCollection* to(const Number* const&) const;
 };
 
 

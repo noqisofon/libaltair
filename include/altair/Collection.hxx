@@ -362,11 +362,19 @@ class Collection : public Iteratable
     /*!
      * 
      */
+#if defined(ALTAIR_TRANSPLANTLY)
     virtual Collection* copyEmpty() const;
+#else
+    virtual Collection* copyEmpty() const = 0;
+#endif  /* defined(ALTAIR_TRANSPLANTLY) */
     /*!
      * 
      */
+#if defined(ALTAIR_TRANSPLANTLY)
     virtual Collection* copyEmpty(int new_size) const;
+#else
+    virtual Collection* copyEmpty(int new_size) const = 0;
+#endif  /* defined(ALTAIR_TRANSPLANTLY) */
 
 
     /*!

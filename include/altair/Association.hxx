@@ -38,7 +38,21 @@ class String;
 class Association : public LookupKey
 {
  public:
-    Association(const altair::Object* const, altair::Object* const&);
+    /*!
+     *
+     */
+    Association(const Object* const, Object* const&);
+
+ public:
+    /*!
+      \name built ins
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Object* shallowCopy() const;
+    /*! @} */ 
 };
 
 

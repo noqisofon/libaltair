@@ -77,6 +77,10 @@ class Random : public Stream
      *
      */
     Random(int seed);
+    /*!
+     *
+     */
+    Random(const Random& other);
 
  public:
     /*! /name testing
@@ -156,6 +160,17 @@ class Random : public Stream
      * 
      */
     virtual uint32_t primNextLimit(int an_integer);
+    /*! @} */
+
+
+    /*!
+      \name built ins
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Object* shallowCopy() const { return new Random( *this ); }
     /*! @} */
 
 

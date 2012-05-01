@@ -32,7 +32,7 @@
  * 今はそこまで実装することもないと思います。
  * </p>
  */
-#define    LT_NEAR_COMPLETE_TRANSPLANT_RATE       10000
+#define    ALT_NEAR_COMPLETE_TRANSPLANT_RATE       10000
 /**
  * \def LT_STANDARD_TRANSPLANT_RATE
  * 標準の移植率を表します。
@@ -40,16 +40,17 @@
  * 簡単なリフレクションやシリアライズなどが可能です。
  * </p>
  */
-#define    LT_STANDARD_TRANSPLANT_RATE             5000
+#define    ALT_STANDARD_TRANSPLANT_RATE             5000
 /**
  * \def LT_MINIMUM_TRANSPLANT_RATE
  * 必要最低限の移植率を表します。
  * <p>
- * メソッドを数え上げるなどのリフレクションや、関数にブロックを渡すなどといったことはできません。
+ * メソッドを数え上げるなどのリフレクションや、メンバ関数にブロックを渡すなどといったことはできません。
+ * メンバ関数に関数ポインタを渡すということはできますが、かなりの制限があります。
  * また、定義されたメソッドの数も少なめです。
  * </p>
  */
-#define    LT_MINIMUM_TRANSPLANT_RATE              1000
+#define    ALT_MINIMUM_TRANSPLANT_RATE              1000
 
 
 #endif  /* altair_transplant_h */

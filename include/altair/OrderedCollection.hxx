@@ -43,6 +43,10 @@ class OrderedCollection : public SequenceableCollection
      * 
      */
     OrderedCollection(int an_integer);
+    /*!
+     * 
+     */
+    OrderedCollection(const OrderedCollection& other);
 
 
     /*!
@@ -82,6 +86,18 @@ class OrderedCollection : public SequenceableCollection
      * 
      */
     virtual size_t size() const { return last_index_ - first_index_; }
+    /*! @} */
+
+
+    /*!
+      \name built ins
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Object* shallowCopy() const { return new OrderedCollection( *this ); }
+    /*! @} */
 
 
     /*! \name adding
@@ -208,6 +224,23 @@ class OrderedCollection : public SequenceableCollection
      */
     virtual Object* removeAtIndex(int an_index);
     /*! @} */
+
+
+#ifndef ALTAIR_TRANSPLANTLY
+    /*!
+      \name copying collections
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Collection* copyEmpty() const;
+    /*!
+     * 
+     */
+    virtual Collection* copyEmpty(int new_size) const;
+    /*! @} */
+#endif  /* ndef ALTAIR_TRANSPLANTLY */
 
  protected:
     /*! \name private methods

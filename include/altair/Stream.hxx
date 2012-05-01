@@ -426,6 +426,18 @@ class Stream : public Iteratable
     virtual Object* fileInLine(int line_num, File* const& a_file, int char_pos_int);
 #endif
     /*! @} */
+
+ protected:
+#ifndef ALTAIR_TRANSPLANTLY
+    /*! \basic
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual SequenceableCollection* contentSpeciesFor(int size);
+    /*! @} */
+#endif  /* def ALTAIR_TRANSPLANTLY */
 };
 
 

@@ -34,7 +34,57 @@ BEGIN_NAMESPACE_ALTAIR
  */
 class SequenceableCollection : public Collection
 {
- public:
+ public:/*! \name testing
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual bool isSequenceable() const { return true; }
+
+
+    /*!
+     * 
+     */
+    virtual bool equals(const Collection* const& a_collection) const;
+
+
+    /*!
+     * 
+     */
+    virtual int hash() const;
+    /*! @} */
+
+
+    /*!
+     \name comparing
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual bool startsWith(const SequenceableCollection& other) const {
+        return startsWith( &other );
+    }
+    /*!
+     * 
+     */
+    virtual bool startsWith(const SequenceableCollection* const& other) const;
+
+
+    /*!
+     * 
+     */
+    virtual bool endsWith(const SequenceableCollection& other) const {
+        return endsWith( &other );
+    }
+    /*!
+     * 
+     */
+    virtual bool endsWith(const SequenceableCollection* const& other) const;
+    /*! @} */
+
+
     /*!
      \name basic
      */
@@ -244,96 +294,6 @@ class SequenceableCollection : public Collection
 
 
     /*!
-     \name comparing
-     */
-    /*! @{ */
-    /*!
-     * 
-     */
-    virtual bool startsWith(const SequenceableCollection& other) const {
-        return startsWith( &other );
-    }
-    /*!
-     * 
-     */
-    virtual bool startsWith(const SequenceableCollection* const& other) const;
-
-
-    /*!
-     * 
-     */
-    virtual bool endsWith(const SequenceableCollection& other) const {
-        return endsWith( &other );
-    }
-    /*!
-     * 
-     */
-    virtual bool endsWith(const SequenceableCollection* const& other) const;
-    /*! @} */
-
-
-    /*!
-     \name copying SequenceableCollections
-     */
-    /*! @{ */
-    /*!
-     * 
-     */
-    virtual SequenceableCollection* copyAfter(const Object* const& an_object) const;
-
-
-    /*!
-     * 
-     */
-    virtual SequenceableCollection* copyAfterLast(const Object* const& an_object) const;
-
-
-    /*!
-     * 
-     */
-    virtual SequenceableCollection* copyFrom(int start) const;
-    /*!
-     * 
-     */
-    virtual SequenceableCollection* copyFrom(int start, int stop) const;
-    /*! @} */
-
-
-    /*! \name concatenating
-     */
-    /*! @{ */
-    /*! @} */
-
-
-    /*!
-     * 
-     */
-    virtual void nextPutAllOn(Stream* const& a_stream);
-
-
-    /*! \name testing
-     */
-    /*! @{ */
-    /*!
-     * 
-     */
-    virtual bool isSequenceable() const { return true; }
-
-
-    /*!
-     * 
-     */
-    virtual bool equals(const Collection* const& a_collection) const;
-
-
-    /*!
-     * 
-     */
-    virtual int hash() const;
-    /*! @} */
-
-
-    /*!
      \name replacing items
      */
     /*! @{ */
@@ -360,13 +320,153 @@ class SequenceableCollection : public Collection
     /*! @} */
 
 
-    /*! \name testing collections
+    /*!
+     \name copying SequenceableCollections
      */
     /*! @{ */
     /*!
-     *
+     * 
      */
-    virtual size_t size() const { return 0; }
+    virtual SequenceableCollection* copyAfter(const Object* const& an_object) const;
+
+
+    /*!
+     * 
+     */
+    virtual SequenceableCollection* copyAfterLast(const Object* const& an_object) const;
+
+
+    /*!
+     * 
+     */
+    virtual SequenceableCollection* copyUpTo(const Object* const& an_object) const;
+
+
+    /*!
+     * 
+     */
+    virtual SequenceableCollection* copyUpToLast(const Object* const& an_object) const;
+
+    
+    /*!
+     * 
+     */
+    virtual SequenceableCollection* copyReplaceFrom(int start, int stop, Object* const& an_object) const;
+
+
+    /*!
+     * 
+     */
+    virtual SequenceableCollection* copyWithFirst(Object* const& an_object) const;
+
+
+    /*!
+     * 
+     */
+    virtual SequenceableCollection* copyFrom(int start) const;
+    /*!
+     * 
+     */
+    virtual SequenceableCollection* copyFrom(int start, int stop) const;
+
+
+    /*!
+     * 
+     */
+    virtual SequenceableCollection* copyReplaceAll( const SequenceableCollection* const& old_sub_collection,
+                                                    SequenceableCollection* const& new_sub_collection ) const;
+    /*!
+     * 
+     */
+    virtual SequenceableCollection* copyReplaceAll(int start, int stop, SequenceableCollection* const& replacement_collection) const;
+    /*! @} */
+
+
+    /*! \name concatenating
+     */
+    /*! @{ */
+    /*! @} */
+
+
+    /*!
+     * 
+     */
+    virtual void nextPutAllOn(Stream* const& a_stream);
+
+
+    /*! \name enumerating
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Stream* readStream() const;
+
+
+    /*!
+     * 
+     */
+    virtual Stream* writeStream();
+
+
+    /*!
+     * 
+     */
+    virtual Stream* readWriteStream();
+
+
+    /*!
+     * 
+     */
+    virtual Object* anyOne() const { return first(); }
+
+
+    /*!
+     * 
+     */
+    virtual SequenceableCollection* keys() const;
+
+
+    /*!
+     * 
+     */
+    virtual int findFirst(bool (*a_block)(const Object* const&, Object* const&)) const;
+
+
+    /*!
+     * 
+     */
+    virtual int findLast(bool (*a_block)(const Object* const&, Object* const&)) const;
+
+
+    /*!
+     * 
+     */
+    virtual SequenceableCollection* reverse() const;
+    /*! @} */
+
+
+    /*! \name private methods
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Collection* sorted() const;
+    /*!
+     * 
+     */
+    virtual Collection* sorted(int (*a_block)(const Object* const&, const Object* const&)) const;
+
+
+    /*!
+     * 
+     */
+    virtual void sort();
+    /*!
+     * 
+     */
+    virtual void sort(int (*a_block)(const Object* const&, const Object* const&));
     /*! @} */
 
 
@@ -383,8 +483,32 @@ class SequenceableCollection : public Collection
      * 
      */
     virtual int countSubCollectionOccurrencesOf(const SequenceableCollection* const& a_subcollection) const;
+    /*! @} */
 
 
+    /*! \name testing collections
+     */
+    /*! @{ */
+    /*!
+     *
+     */
+    virtual size_t size() const = 0;
+    /*! @} */
+
+
+    /*! \name manipulation
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual void swap(int an_index, int another_index);
+    /*! @} */
+
+ protected:
+    /*! \name private methods
+     */
+    /*! @{ */
     /*!
      * 
      */

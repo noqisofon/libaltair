@@ -94,12 +94,17 @@ int Stream::nextPutAllOn(int an_integer, Stream* const& a_stream)
 SequenceableCollection* Stream::nextAvailable(int an_integer)
 {
     int n;
+#ifdef ALTAIR_TRANSPLANTLY
     Class* self_species = species();
     SequenceableCollection* answer = __STATIC_CAST(SequenceableCollection *, self_species->createInstance( an_integer ));
+#else
+    SequenceableCollection* answer = contentSpeciesFor( an_integer );
+#endif  /* def ALTAIR_TRANSPLANTLY */
 
     n = nextAvailableInto( an_integer, answer, 0 );
-
+#ifdef ALTAIR_TRANSPLANTLY
     self_species->release();
+#endif  /* def ALTAIR_TRANSPLANTLY */
 
     if ( n < an_integer ) {
         SequenceableCollection* temp_answer = answer;
@@ -114,13 +119,17 @@ SequenceableCollection* Stream::nextAvailable(int an_integer)
 int Stream::nextAvailable(int an_integer, Stream* const& a_stream)
 {
     int n = ALTAIR_MIN(an_integer, 1024);
+#ifdef ALTAIR_TRANSPLANTLY
     Class* self_species = species();
     SequenceableCollection* collection = __STATIC_CAST(SequenceableCollection *, self_species->createInstance( n ));
+#else
+    SequenceableCollection* collection = contentSpeciesFor( an_integer );
+#endif  /* def ALTAIR_TRANSPLANTLY */
 
     n = nextAvailableInto( n, collection, 0 );
-
+#ifdef ALTAIR_TRANSPLANTLY
     self_species->release();
-
+#endif  /* def ALTAIR_TRANSPLANTLY */
     a_stream->nextPutAll( n, collection, 0 );
 
     collection->release();
@@ -160,14 +169,19 @@ OrderedCollection* Stream::splitAt(const Object* const& an_object)
 
 SequenceableCollection* Stream::contents()
 {
+    WriteStream* write_stream;
+#ifdef ALTAIR_TRANSPLANTLY
     Class* self_species = species();
-    WriteStream* write_stream = WriteStream::on( __REINTERPRET_CAST(SequenceableCollection *, self_species->createInstance( 8 )) );
+    write_stream = WriteStream::on( __REINTERPRET_CAST(SequenceableCollection *, self_species->createInstance( 8 )) );
+#else
+    write_stream = WriteStream::on( contentSpeciesFor( 8 ) );
+#endif  /* def ALTAIR_TRANSPLANTLY */
     SequenceableCollection* ret;
 
     nextPutAllOn( write_stream );
-
+#ifdef ALTAIR_TRANSPLANTLY
     self_species->release();
-
+#endif  /* def ALTAIR_TRANSPLANTLY */
     ret = write_stream->contents();
 
     write_stream->release();
@@ -178,8 +192,13 @@ SequenceableCollection* Stream::contents()
 
 SequenceableCollection* Stream::nextLine()
 {
+    WriteStream* write_stream;
+#ifdef ALTAIR_TRANSPLANTLY
     Class* self_species = species();
-    WriteStream* write_stream = WriteStream::on( __REINTERPRET_CAST(SequenceableCollection *, self_species->createInstance( 40 )) );
+    write_stream = WriteStream::on( __REINTERPRET_CAST(SequenceableCollection *, self_species->createInstance( 40 )) );
+#else
+    write_stream = WriteStream::on( contentSpeciesFor( 8 ) );
+#endif  /* def ALTAIR_TRANSPLANTLY */
     Character* next_that;
     SequenceableCollection* ret;
 
@@ -192,9 +211,9 @@ SequenceableCollection* Stream::nextLine()
             break;
         write_stream->nextPut( next_that );
     }
-
+#ifdef ALTAIR_TRANSPLANTLY
     self_species->release();
-
+#endif  /* def ALTAIR_TRANSPLANTLY */
     if ( next_that->identityEquals( Character::cr() ) )
         peekFor( Character::nl() );
 
@@ -208,12 +227,19 @@ SequenceableCollection* Stream::nextLine()
 
 SequenceableCollection* Stream::upTo(const Object* const& an_object)
 {
+    WriteStream* write_stream;
+#ifdef ALTAIR_TRANSPLANTLY
     Class* self_species = species();
-    WriteStream* write_stream = WriteStream::on( __REINTERPRET_CAST(SequenceableCollection *, self_species->createInstance( 8 )) );
+    write_stream = WriteStream::on( __REINTERPRET_CAST(SequenceableCollection *, self_species->createInstance( 8 )) );
+#else
+    write_stream = WriteStream::on( contentSpeciesFor( 8 ) );
+#endif  /* def ALTAIR_TRANSPLANTLY */
     SequenceableCollection* ret;
     Object* next_that;
 
+#ifdef ALTAIR_TRANSPLANTLY
     self_species->release();
+#endif  /* def ALTAIR_TRANSPLANTLY */
 
     while ( atEnd() ) {
         next_that = next();
@@ -235,24 +261,40 @@ SequenceableCollection* Stream::upTo(const Object* const& an_object)
 SequenceableCollection* Stream::upToAll(const SequenceableCollection* const& a_collection)
 {
     SequenceableCollection* ret;
+#ifdef ALTAIR_TRANSPLANTLY
     Class* self_species = species();
+#endif  /* def ALTAIR_TRANSPLANTLY */
 
     if ( atEnd() ) {
+#ifdef ALTAIR_TRANSPLANTLY
         ret = __REINTERPRET_CAST(SequenceableCollection *, self_species->createInstance());
         self_species->release();
+#else
+        ret = contentSpeciesFor( 8 );
+#endif  /* def ALTAIR_TRANSPLANTLY */
 
         return ret;
     }
     if ( a_collection->isEmpty() ) {
+#ifdef ALTAIR_TRANSPLANTLY
         ret = __REINTERPRET_CAST(SequenceableCollection *, self_species->createInstance());
         self_species->release();
+#else
+        ret = contentSpeciesFor( 8 );
+#endif  /* def ALTAIR_TRANSPLANTLY */
 
         return ret;
     }
-    WriteStream* result_write_stream = WriteStream::on( __REINTERPRET_CAST(SequenceableCollection *, self_species->createInstance( 20 )) );
+    WriteStream* result_write_stream;
+#ifdef ALTAIR_TRANSPLANTLY
+    result_write_stream = WriteStream::on( __REINTERPRET_CAST(SequenceableCollection *, self_species->createInstance( 20 )) );
+#else
+    result_write_stream = WriteStream::on( contentSpeciesFor( 20 ) );
+#endif  /* def ALTAIR_TRANSPLANTLY */
 
+#ifdef ALTAIR_TRANSPLANTLY
     self_species->release();
-
+#endif  /* def ALTAIR_TRANSPLANTLY */
     SequenceableCollection* prefix = prefixTableFor( a_collection );
     Object* ch = next();
     int j = 0;
@@ -263,7 +305,7 @@ SequenceableCollection* Stream::upToAll(const SequenceableCollection* const& a_c
         ++ j;
 
         if ( j > prefix->size() ) {
-            result_write_stream->skip( ALTAIR_NEGATED((int)a_collection->size()) );
+            result_write_stream->skip( ALTAIR_NEGATED(__STATIC_CAST(int, a_collection->size())) );
 
             ret = result_write_stream->contents();
             result_write_stream->release();
@@ -357,25 +399,35 @@ Stream* Stream::readStream() const
 }
 
 
+#ifdef ALTAIR_TRANSPLANTLY
 Class* Stream::species() const
 {
     return Array::getClassInstance();
     //return ALTA_CLASS_OF(Array);
 }
+#endif  /* def ALTAIR_TRANSPLANTLY */
 
 
 bool Stream::isUnicode() const
 {
+#ifdef ALTAIR_TRANSPLANTLY
     return species()->isUnicode();
+#else
+    return true;
+#endif  /* def ALTAIR_TRANSPLANTLY */
 }
 
 
 Encoding* Stream::encoding() const
 {
+#ifdef ALTAIR_TRANSPLANTLY
     if ( species()->isUnicode() )
         return Encoding::searchOf( "Unicode" );
 
     return species()->defaultEncoding();
+#else
+    return NULL;
+#endif  /* def ALTAIR_TRANSPLANTLY */
 }
 
 

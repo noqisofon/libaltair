@@ -1,5 +1,5 @@
 //  
-//  LookupTable.hxx
+//  ContextPart.hxx
 //  altair
 //  
 //  Auther:
@@ -20,59 +20,65 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-#ifndef altair_LookupTable_hxx
-#define altair_LookupTable_hxx
+#ifndef altair_ContextPart_hxx
+#define altair_ContextPart_hxx
 
-#include "altair/Dictionary.hxx"
+#include "altair/Object.hxx"
 
 
 BEGIN_NAMESPACE_ALTAIR
 
 
+class Stream;
+
+
 /*!
- *
+ * 
  */
-class LookupTable : public Dictionary
+class ContextPart : public Object
 {
  public:
-#if defined(ALTAIR_TRANSPLANTLY)
-    /*!
-     *
-     */
-    static Class* getCurrentClass();
-#endif  /* defined(ALTAIR_TRANSPLANTLY) */
-
- public:
-    /*!
-     *
-     */
-    explicit LookupTable(size_t);
-
- public:
-
-
-#ifndef ALTAIR_TRANSPLANTLY
-    /*!
-      \name copying collections
+    /*! \name private
      */
     /*! @{ */
     /*!
      * 
      */
-    virtual Collection* copyEmpty() const;
+    static int spIndex() { return 4; }
+    /*! @} */
+
+
+    /*! \name exception handling
+     */
+    /*! @{ */
     /*!
      * 
      */
-    virtual Collection* copyEmpty(int new_size) const;
+    static void _backtrace();
+
+
+    /*!
+     * 
+     */
+    static void _backtraceOn(Stream* const& a_stream);
     /*! @} */
-#endif  /* ndef ALTAIR_TRANSPLANTLY */
+
+
+    /*! \name built ins
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    static ContextPart* thisContext();
+    /*! @} */
 };
 
 
 END_NAMESPACE_ALTAIR
 
 
-#endif  /* altair_LookupTable_hxx */
+#endif  /* altair_ContextPart_hxx */
 // Local Variables:
 //   coding: utf-8
 // End:

@@ -100,10 +100,12 @@ class Object
     virtual bool isInstanceOf(const Class* const& a_class) const;
 
 
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     /*!
      * 
      */
     virtual bool respondsTo(const Symbol* const& a_symbol) const;
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
     /*!
@@ -261,7 +263,7 @@ class Object
       \name dependents access
      */
     /*! @{ */
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     /*!
      * 
      */
@@ -278,7 +280,7 @@ class Object
      * 
      */
     virtual OrderedCollection* const dependants() const;
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
     /*!
@@ -310,7 +312,7 @@ class Object
     virtual void update(Object* const& /* a_parameter */) {}
 
 
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     /*!
      * 
      */
@@ -329,7 +331,7 @@ class Object
      * 
      */
     virtual void broadcastWithArguments(const Symbol* const& a_symbol, const Array* const& an_array);
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
     /*! @} */
 
 
@@ -348,7 +350,7 @@ class Object
       \name printing
      */
     /*! @{ */
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     /*!
      * 
      */
@@ -371,7 +373,7 @@ class Object
      * 
      */
     void displayNl() const;
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
     /*!
@@ -411,7 +413,7 @@ class Object
     /*! @} */
 
 
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     /*!
       \name storing
      */
@@ -445,8 +447,10 @@ class Object
      */
     virtual void storeNl() const;
     /*! @} */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     /*!
       \name saving and loading
      */
@@ -480,7 +484,7 @@ class Object
      */
     virtual void reconstructOriginalObject();
     /*! @} */
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
 
@@ -488,12 +492,12 @@ class Object
       \name debugging
      */
     /*! @{ */
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     /*!
      * 
      */
     virtual void examine() const;
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
     /*!
@@ -502,12 +506,12 @@ class Object
     virtual void inspect() const;
 
 
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     /*!
      * 
      */
     virtual void examineOn(Stream* const& a_stream) const;
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
     /*!
@@ -521,34 +525,20 @@ class Object
       \name built ins
      */
     /*! @{ */
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     /*!
      * 
      */
     virtual Collection* allOwners() const { return NULL; }
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
-#ifdef LT_NEAR_COMPLETE_TRANSPLANT_RATE
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_NEAR_COMPLETE_TRANSPLANT_RATE
     /*!
      * 
      */
     virtual void changeClassTo(const Behavior* const& a_behavior);
-#endif  /* def LT_NEAR_COMPLETE_TRANSPLANT_RATE */
-
-
-    /*!
-     * 
-     */
-    virtual Object* checkIndexableBounds(int index) const;
-    /*!
-     * 
-     */
-    virtual Object* checkIndexableBounds(int index, Object* (*a_block)(const Object* const&)) const;
-
-
-    /*!
-     * 
-     */
-    virtual void checkIndexableBoundsPut(int index, Object* const& object);
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_NEAR_COMPLETE_TRANSPLANT_RATE */
 
 
     /*!
@@ -610,7 +600,11 @@ class Object
     /*!
      * 
      */
+#ifdef ALTAIR_TRANSPLANTLY
     virtual Object* shallowCopy() const;
+#else
+    virtual Object* shallowCopy() const = 0;
+#endif  /* def ALTAIR_TRANSPLANTLY */
 
 
     /*!
@@ -625,6 +619,7 @@ class Object
     virtual void tenure() {}
 
 
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     /*!
      * 
      */
@@ -635,6 +630,7 @@ class Object
      * 
      */
     virtual void instVarPut(int index, Object* const value);
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
     /*!
@@ -697,7 +693,7 @@ class Object
     virtual Object* nextInstance() const { return NULL; }
 
 
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     /*!
      * 
      */
@@ -724,7 +720,7 @@ class Object
      * 
      */
     virtual Object* performWithArguments(const Object* const& selector_or_method, const Array* const& arguments_array) const;
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
     /*!
@@ -797,7 +793,8 @@ class Object
     virtual const Object* notYetImplemented() const;
     /*! @} */
 
-
+    
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     /*!
       \name introspection
      */
@@ -813,18 +810,19 @@ class Object
      */
     virtual void instVarNamedPut(const String* const& a_string, Object* const& an_object);
     /*! @} */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
     /*!
       \name VM callbacks
      */
     /*! @{ */
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     /*!
      * 
      */
     virtual Object* doseNotUnderstand(const Message* const& message) const;
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
     /*!
@@ -852,10 +850,30 @@ class Object
     /*! @} */
 
  protected:
+    /*! \name built ins
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Object* checkIndexableBounds(int index) const;
+    /*!
+     * 
+     */
+    virtual Object* checkIndexableBounds(int index, Object* (*a_block)(const Object* const&)) const;
+
+
+    /*!
+     * 
+     */
+    virtual void checkIndexableBoundsPut(int index, Object* const& object);
+    /*! @} */
+
+
     /*! \name finalization
      */
     /*! @{ */
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     /*!
      * 
      */
@@ -872,7 +890,7 @@ class Object
      * 
      */
     virtual void mourn() {}
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
     /*!

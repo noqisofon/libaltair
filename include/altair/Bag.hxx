@@ -48,8 +48,23 @@ class Bag : public Collection
      * 
      */
     explicit Bag(size_t size);
+    /*!
+     * 
+     */
+    Bag(const Bag& other);
 
  public:
+    /*!
+      \name built ins
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Object* shallowCopy() const { return new Bag( *this ); }
+    /*! @} */
+
+
     /*! \name adding
      */
     /*! @{ */
@@ -134,7 +149,7 @@ class Bag : public Collection
     /*! @} */
 
 
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
     /*! \name storing
      */
     /*! @{ */
@@ -143,7 +158,7 @@ class Bag : public Collection
      */
     virtual void storeOn(Stream* const& a_stream) const;
     /*! @} */
-#endif  /*  defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /*  defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 
 
     /*! \name printing
@@ -159,10 +174,12 @@ class Bag : public Collection
     /*! \name private
      */
     /*! @{ */
+#if defined(ALTAIR_TRANSPLANTLY)
     /*!
      * 
      */
     virtual Class* dictionaryClass() const;
+#endif  /* defined(ALTAIR_TRANSPLANTLY) */
 
 
     /*!
@@ -176,6 +193,23 @@ class Bag : public Collection
      */
     virtual Dictionary* contents() const;
     /*! @} */
+
+
+#ifndef ALTAIR_TRANSPLANTLY
+    /*!
+      \name copying collections
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Collection* copyEmpty() const;
+    /*!
+     * 
+     */
+    virtual Collection* copyEmpty(int new_size) const;
+    /*! @} */
+#endif  /* ndef ALTAIR_TRANSPLANTLY */
 
  protected:
     /*! \name private

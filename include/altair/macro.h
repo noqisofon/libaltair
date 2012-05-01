@@ -72,8 +72,13 @@
 #define    ALTAIR_SCRAMBLE(_n_)                (_n_)
 #define    ALTAIR_NEGATED(_n_)                 ALTAIR_TYPED_NEGATED(_n_, int)
 
-#define    ALTAIR_ISNIL(_self_)                ((_self_) == NULL)
-#define    ALTAIR_NOTNIL(_self_)               ((_self_) != NULL)
+
+#define    nil                                 NULL
+
+#define    ALTAIR_ISNIL(_self_)                ((_self_) == nil)
+#define    ALTAIR_NOTNIL(_self_)               ((_self_) != nil)
+
+#define    ALTAIR_ARRAY0(_arg0_)               altair::Array::with( (_arg0_) )
 
 
 #endif  /* altair_macro_h */

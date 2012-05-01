@@ -24,7 +24,7 @@
 
 #include "altair/altair_prefix.h"
 #include "altair/CompiledBlock.hxx"
-#include "altair/Object.hxx"
+#include "altair/Character.hxx"
 #include "altair/List.hxx"
 #include "altair/Error.hxx"
 #include "altair/InvalidValueError.hxx"
@@ -97,28 +97,54 @@ Class::Class(const char* const& class_name)
 }
 
 
+Class::~Class()
+{
+}
+
+
 #if defined(ALTAIR_TRANSPLANTLY)
 #   if ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
 void Class::environment(Namespace* const& a_namespace)
 {
     environment_ = a_namespace;
 #       if ALTAIR_TRANSPLANTLY >= LT_NEAR_COMPLETE_TRANSPLANT_RATE
-    Class* as_class = asClass();
+    Class* a_class = asClass();
 
-    as_class->compileAll();
-    as_class->compileAllSubclasses();
-    as_class->release();
+    a_class->compileAll();
+    a_class->compileAllSubclasses();
+    a_class->release();
 
-    Metaclass* as_metaclass = asMetaclass();
+    Metaclass* a_metaclass = asMetaclass();
 
-    as_metaclass->compileAll();
-    as_metaclass->compileAllSubclasses();
+    a_metaclass->compileAll();
+    a_metaclass->compileAllSubclasses();
 
-    as_metaclass->relase();
+    a_metaclass->release();
 #       endif  /* ALTAIR_TRANSPLANTLY >= LT_NEAR_COMPLETE_TRANSPLANT_RATE */
 }
 #   endif  /* ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
 #endif  /* defined(ALTAIR_TRANSPLANTLY) */
+
+
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
+void Class::superclass(Class* const& a_class)
+{
+    if ( ALTAIR_ISNIL(a_class) && ALTAIR_NOTNIL(superclass()) )
+        initializeAsRootClass();
+
+    _Super::superclass( a_class );
+}
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
+
+
+String* Class::article() const
+{
+    String* class_name = name();
+
+    return __REINTERPRET_CAST(Character *, class_name->Object::at( 0 ))->isVowel()
+        ? new String( "an" )
+        : new String( "a" );
+}
 
 
 bool Class::equals(const Class* const& a_class) const

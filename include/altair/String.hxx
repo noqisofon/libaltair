@@ -101,6 +101,34 @@ class String : public CharacterArray
      */
     virtual void displayOn(Stream* const a_stream) const;
 #endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+
+
+    /*!
+      \name built ins
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Object* shallowCopy() const;
+    /*! @} */
+
+
+#ifndef ALTAIR_TRANSPLANTLY
+    /*!
+      \name copying collections
+     */
+    /*! @{ */
+    /*!
+     * 
+     */
+    virtual Collection* copyEmpty() const;
+    /*!
+     * 
+     */
+    virtual Collection* copyEmpty(int new_size) const;
+    /*! @} */
+#endif  /* ndef ALTAIR_TRANSPLANTLY */
 };
 
 

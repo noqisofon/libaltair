@@ -5,6 +5,7 @@ libaltair_la_SOURCES =   \
 	Array.cpp  \
 	ArrayedCollection.cpp  \
 	Bag.cpp  \
+	Behavior.cpp  \
 	ByteArray.cpp  \
 	Class.cpp  \
 	Collection.cpp  \

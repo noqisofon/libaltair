@@ -195,11 +195,11 @@ Set* Bag::asSet() const
 void Bag::printOn(Stream* const& a_stream) const
 {
     a_stream->nextPutAll(
-#if defined(ALTAIR_ENABLE_REDUNDANT_METHODS)
+#if defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE
         getClass()->storeString()
 #else
         getClass()->printString()
-#endif  /* defined(ALTAIR_ENABLE_REDUNDANT_METHODS) */
+#endif  /* defined(ALTAIR_TRANSPLANTLY) && ALTAIR_TRANSPLANTLY < LT_STANDARD_TRANSPLANT_RATE */
     );
 
     a_stream->nextPut( '(' );
@@ -219,10 +219,12 @@ void Bag::printOn(Stream* const& a_stream) const
 }
 
 
+#if defined(ALTAIR_TRANSPLANTLY)
 Class* Bag::dictionaryClass() const
 {
     return LookupTable::getCurrentClass();
 }
+#endif  /* defined(ALTAIR_TRANSPLANTLY) */
 
 
 Dictionary* Bag::valuesAndCounts() const
@@ -239,7 +241,11 @@ Dictionary* Bag::contents() const
 
 void Bag::initContents(size_t size)
 {
+#if defined(ALTAIR_TRANSPLANTLY)
     contents_ = __REINTERPRET_CAST(Dictionary *, dictionaryClass()->createInstance( size ));
+#else
+    contents_ = new LookupTable( size );
+#endif  /* defined(ALTAIR_TRANSPLANTLY) */
 }
 // Local Variables:
 //   coding: utf-8
